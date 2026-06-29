@@ -1,0 +1,14 @@
+variable_a,variable_b,correlation
+materias_reprobadas,materias_reprobadas_acumuladas,1.0
+materias_en_curso,materias_en_curso_periodo,1.0
+creditos_acumulados,porcentaje_avance,0.9988633365567896
+materias_aprobadas,creditos_acumulados,0.9658989681335355
+materias_aprobadas,porcentaje_avance,0.9653108449918492
+porcentaje_avance,periodos_cursados,0.9534339464061222
+creditos_acumulados,periodos_cursados,0.9516026104673179
+num_permisos,permisos_aprobados,0.9453847171930152
+porcentaje_asistencia,faltas,-0.934179226391875
+creditos_inscritos_periodo,materias_en_curso_periodo,0.9278347291763697
+materias_en_curso,creditos_inscritos_periodo,0.9278347291763697
+materias_aprobadas,periodos_cursados,0.9170032125478315
+creditos_inscritos_periodo,creditos_aprobados_periodo,0.9096091149327931

@@ -1,0 +1,1 @@
+"""Academic segmentation application package."""

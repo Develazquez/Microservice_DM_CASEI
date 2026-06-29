@@ -1,0 +1,4 @@
+cluster,registros,promedio_general,porcentaje_asistencia,materias_reprobadas,rezago_materias,variables_distintivas,perfil_sugerido
+0,283,67.48226148409896,57.873992932862194,2.5406360424028267,1.9964664310954063,"promedio_periodo (-14.05), promedio_general (-8.53), tendencia_promedio (-5.43), porcentaje_asistencia (-5.16), varianza_calificaciones (+4.36)",Riesgo academico moderado
+1,644,79.84653726708075,71.1298602484472,0.6413043478260869,0.9192546583850931,"porcentaje_asistencia (+8.10), promedio_periodo (+6.11), creditos_aprobados_periodo (+4.91), promedio_general (+3.83), creditos_inscritos_periodo (+2.97)",Regular / seguimiento preventivo
+2,73,75.2841095890411,11.617671232876713,1.1232876712328768,2.7260273972602738,"porcentaje_asistencia (-51.42), creditos_inscritos_periodo (-33.37), creditos_aprobados_periodo (-31.04), materias_en_curso_periodo (-5.12), porcentaje_avance (-3.94)",Riesgo academico moderado

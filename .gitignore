@@ -1,0 +1,37 @@
+# ── Python ──────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# ── Entornos virtuales ──────────────────────────────
+.venv/
+venv/
+env/
+
+# ── Variables de entorno ────────────────────────────
+.env
+
+# ── IDEs / Editores ────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Sistema operativo ──────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Carpeta scripts (entrypoints CLI, no necesarios) ─
+/scripts/
+
+# ── Datos y artefactos ─────────────────────────────
+# Mantener resultados sinteticos versionables durante la fase academica.
+# Si se usan datos reales, descomentar estas lineas antes de publicar:
+# data/raw/
+# data/processed/
+# artifacts/

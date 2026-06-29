@@ -1,0 +1,42 @@
+{
+  "method": "numpy.linalg.svd",
+  "input_features": [
+    "promedio_general",
+    "promedio_periodo",
+    "porcentaje_avance",
+    "porcentaje_asistencia",
+    "retardos",
+    "num_asesorias",
+    "num_incidencias",
+    "recursamientos",
+    "rezago_materias",
+    "creditos_inscritos_periodo",
+    "creditos_aprobados_periodo",
+    "periodos_cursados",
+    "periodos_sin_inscripcion",
+    "materias_reprobadas_periodo",
+    "materias_reprobadas_acumuladas",
+    "materias_en_curso_periodo",
+    "tendencia_promedio",
+    "varianza_calificaciones",
+    "tutorias_abiertas",
+    "tutorias_cerradas",
+    "compromisos_pendientes",
+    "compromisos_cumplidos",
+    "permisos_aprobados",
+    "permisos_rechazados",
+    "bandera_dato_incompleto"
+  ],
+  "n_input_features": 25,
+  "n_components_total": 25,
+  "n_components_90_variance": 15,
+  "n_components_95_variance": 17,
+  "recommended_use": "PCA puede usarse como entrada compacta para clustering porque alcanza 90% de varianza con una reduccion relevante de dimensiones. Aun asi, se debe comparar contra las variables escaladas originales en la fase de seleccion de K.",
+  "outputs": {
+    "scaler_params": "artifacts\\scaler_params.csv",
+    "pca_components": "artifacts\\pca_components.csv",
+    "pca_scores": "data\\processed\\pca_scores.csv",
+    "pca_scores_90": "data\\processed\\pca_scores_90.csv",
+    "pca_scores_95": "data\\processed\\pca_scores_95.csv"
+  }
+}

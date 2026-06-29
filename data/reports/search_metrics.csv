@@ -1,0 +1,9 @@
+query_id,query,total_relevant,precision@10,recall@10,mrr@10,ndcg@10
+critical_lag,estudiantes criticos con rezago alto,15,1.0,0.6666666666666666,1.0,1.0
+atypical_attendance,buen promedio baja asistencia atipico,79,1.0,0.12658227848101267,1.0,1.0
+moderate_risk,riesgo academico moderado,356,1.0,0.028089887640449437,1.0,1.0
+regular_preventive,alumnos regulares seguimiento preventivo,644,1.0,0.015527950310559006,1.0,1.0
+software_lag,desarrollo de software rezago alto,61,1.0,0.16393442622950818,1.0,1.0
+biomedical_low_attendance,biomedica baja asistencia,87,1.0,0.11494252873563218,1.0,1.0
+energy_low_average,energia promedio bajo reprobadas,8,0.4,0.5,1.0,0.5206888446176334
+agro_high_performance,agroindustrial asistencia alta promedio alto,19,0.6,0.3157894736842105,0.5,0.5266128295913879
