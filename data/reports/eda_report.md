@@ -2,8 +2,9 @@
 
 ## Resumen del dataset
 
-- Archivo fuente: `data\raw\dataset_sintetico_alumnos_v2.csv`
-- Registros: 1000
+- Archivo fuente: `data\raw\dataset_crudo_cardex_2000.csv`
+- Dataset analitico generado: `data\processed\student_period_features.csv`
+- Registros: 1277
 - Columnas: 38
 - Unidad analitica asumida: un estudiante en un periodo academico.
 - Columnas sin nulos: 36 de 38
@@ -12,69 +13,70 @@
 
 | variable | dtype | null_count | null_rate | unique_count |
 | --- | --- | --- | --- | --- |
-| id_estudiante | str | 0 | 0 | 1000 |
-| id_periodo | str | 0 | 0 | 6 |
+| id_estudiante | str | 0 | 0 | 387 |
+| id_periodo | str | 0 | 0 | 7 |
 | programa | str | 0 | 0 | 4 |
 | cohorte | int64 | 0 | 0 | 5 |
-| promedio_general | float64 | 0 | 0 | 882 |
-| promedio_periodo | float64 | 36 | 0.036 | 861 |
-| materias_aprobadas | int64 | 0 | 0 | 51 |
-| materias_reprobadas | int64 | 0 | 0 | 9 |
-| materias_en_curso | int64 | 0 | 0 | 7 |
-| creditos_acumulados | int64 | 0 | 0 | 250 |
-| porcentaje_avance | float64 | 0 | 0 | 594 |
-| porcentaje_asistencia | float64 | 0 | 0 | 907 |
-| faltas | int64 | 0 | 0 | 33 |
-| retardos | int64 | 0 | 0 | 10 |
-| num_tutorias | int64 | 0 | 0 | 10 |
-| num_asesorias | int64 | 0 | 0 | 10 |
-| num_incidencias | int64 | 0 | 0 | 7 |
-| num_permisos | int64 | 0 | 0 | 9 |
-| recursamientos | int64 | 0 | 0 | 7 |
-| rezago_materias | int64 | 0 | 0 | 8 |
+| promedio_general | float64 | 0 | 0 | 796 |
+| promedio_periodo | float64 | 97 | 0.07596 | 560 |
+| materias_aprobadas | int64 | 0 | 0 | 10 |
+| materias_reprobadas | int64 | 0 | 0 | 8 |
+| materias_en_curso | int64 | 0 | 0 | 4 |
+| creditos_acumulados | float64 | 0 | 0 | 52 |
+| porcentaje_avance | float64 | 0 | 0 | 165 |
+| porcentaje_asistencia | float64 | 0 | 0 | 1056 |
+| faltas | int64 | 0 | 0 | 25 |
+| retardos | int64 | 0 | 0 | 7 |
+| num_tutorias | int64 | 0 | 0 | 8 |
+| num_asesorias | int64 | 0 | 0 | 9 |
+| num_incidencias | int64 | 0 | 0 | 5 |
+| num_permisos | int64 | 0 | 0 | 8 |
+| recursamientos | int64 | 0 | 0 | 4 |
+| rezago_materias | int64 | 0 | 0 | 9 |
 
 ## Distribucion de estatus academico
 
 | estatus_academico | registros |
 | --- | --- |
-| Regular | 854 |
-| Baja Temporal | 73 |
-| Irregular | 73 |
+| Regular | 782 |
+| Irregular | 422 |
+| Baja Temporal | 39 |
+| Egresado | 34 |
 
 ## Estadistica descriptiva de variables numericas
 
 | variable | mean | std | min | 25% | 50% | 75% | max |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| promedio_general | 76.01 | 11.24 | 41 | 68.53 | 76.15 | 84.41 | 98 |
-| promedio_periodo | 72.55 | 14.59 | 26.1 | 63.06 | 72.56 | 83.19 | 100 |
-| materias_aprobadas | 19.47 | 12.23 | 1 | 9 | 19 | 28 | 51 |
-| materias_reprobadas | 1.214 | 1.421 | 0 | 0 | 1 | 2 | 8 |
-| materias_en_curso | 5.121 | 1.804 | 0 | 4 | 5 | 6 | 8 |
-| creditos_acumulados | 125 | 75.58 | 11 | 57 | 123 | 189 | 276 |
-| porcentaje_avance | 45.81 | 27.67 | 3.9 | 21.04 | 45.08 | 69.19 | 98.15 |
-| porcentaje_asistencia | 63.03 | 23.27 | 0.01 | 49.72 | 66.32 | 80.75 | 99 |
-| faltas | 11 | 7.054 | 0 | 6 | 10 | 15 | 32 |
-| retardos | 2.093 | 1.536 | 0 | 1 | 2 | 3 | 10 |
-| num_tutorias | 2.619 | 1.735 | 0 | 1 | 2 | 4 | 9 |
-| num_asesorias | 1.106 | 1.254 | 0 | 0 | 1 | 2 | 9 |
-| num_incidencias | 0.345 | 0.6786 | 0 | 0 | 0 | 1 | 6 |
-| num_permisos | 1.428 | 1.386 | 0 | 0 | 1 | 2 | 8 |
-| recursamientos | 0.629 | 1.009 | 0 | 0 | 0 | 1 | 6 |
-| rezago_materias | 1.356 | 1.324 | 0 | 0 | 1 | 2 | 8 |
-| creditos_inscritos_periodo | 33.37 | 12.59 | 0 | 28 | 34 | 41 | 56 |
-| creditos_aprobados_periodo | 31.04 | 13.06 | 0 | 25 | 32 | 39 | 56 |
-| creditos_totales_plan | 272.9 | 6.58 | 264 | 270 | 270 | 282 | 282 |
-| periodos_cursados | 5.034 | 2.85 | 1 | 2.75 | 5 | 7 | 12 |
-| periodos_sin_inscripcion | 0.274 | 0.5893 | 0 | 0 | 0 | 0 | 4 |
-| materias_reprobadas_periodo | 0.382 | 0.8525 | 0 | 0 | 0 | 0 | 7 |
-| materias_reprobadas_acumuladas | 1.214 | 1.421 | 0 | 0 | 1 | 2 | 8 |
-| materias_en_curso_periodo | 5.121 | 1.804 | 0 | 4 | 5 | 6 | 8 |
-| tendencia_promedio | -3.545 | 9.168 | -31.64 | -9.69 | -3.245 | 2.518 | 25.54 |
-| varianza_calificaciones | 29.4 | 15.15 | 3.13 | 18.52 | 26.66 | 36.94 | 85 |
-| tutorias_abiertas | 1.189 | 1.209 | 0 | 0 | 1 | 2 | 7 |
-| tutorias_cerradas | 1.43 | 1.305 | 0 | 0 | 1 | 2 | 8 |
-| compromisos_pendientes | 1.146 | 1.368 | 0 | 0 | 1 | 2 | 9 |
-| compromisos_cumplidos | 1.716 | 1.714 | 0 | 0 | 1 | 2 | 10 |
+| promedio_general | 76.75 | 8.656 | 36.7 | 71.1 | 77.57 | 82.45 | 100 |
+| promedio_periodo | 77.36 | 10.26 | 19.7 | 72.38 | 78.3 | 84.01 | 100 |
+| materias_aprobadas | 2.46 | 1.92 | 0 | 1 | 2 | 3 | 9 |
+| materias_reprobadas | 0.6139 | 1.087 | 0 | 0 | 0 | 1 | 7 |
+| materias_en_curso | 0.1809 | 0.4576 | 0 | 0 | 0 | 0 | 3 |
+| creditos_acumulados | 14.25 | 11.21 | 0 | 6 | 12 | 20 | 57 |
+| porcentaje_avance | 5.245 | 4.141 | 0 | 2.17 | 4.35 | 7.25 | 21.11 |
+| porcentaje_asistencia | 74.96 | 10.91 | 12 | 70.09 | 77.19 | 82.53 | 94.77 |
+| faltas | 8.011 | 3.619 | 1 | 6 | 7 | 10 | 26 |
+| retardos | 1.387 | 1.07 | 0 | 1 | 1 | 2 | 6 |
+| num_tutorias | 1.558 | 1.241 | 0 | 1 | 1 | 2 | 8 |
+| num_asesorias | 1.446 | 1.292 | 0 | 0 | 1 | 2 | 8 |
+| num_incidencias | 0.2482 | 0.7513 | 0 | 0 | 0 | 0 | 4 |
+| num_permisos | 2.013 | 1.26 | 0 | 1 | 2 | 3 | 8 |
+| recursamientos | 0.1425 | 0.4172 | 0 | 0 | 0 | 0 | 3 |
+| rezago_materias | 1.37 | 1.311 | 0 | 0 | 1 | 2 | 8 |
+| creditos_inscritos_periodo | 8.855 | 4.425 | 4 | 6 | 7 | 12 | 30 |
+| creditos_aprobados_periodo | 6.265 | 4.718 | 0 | 4 | 6 | 8 | 29 |
+| creditos_totales_plan | 272.2 | 6.745 | 264 | 264 | 270 | 276 | 282 |
+| periodos_cursados | 2.411 | 1.281 | 1 | 1 | 2 | 3 | 7 |
+| periodos_sin_inscripcion | 2.015 | 2.077 | 0 | 0 | 2 | 4 | 8 |
+| materias_reprobadas_periodo | 0.2686 | 0.5506 | 0 | 0 | 0 | 0 | 4 |
+| materias_reprobadas_acumuladas | 0.6139 | 1.087 | 0 | 0 | 0 | 1 | 7 |
+| materias_en_curso_periodo | 0.1809 | 0.4576 | 0 | 0 | 0 | 0 | 3 |
+| tendencia_promedio | 0.2103 | 8.125 | -40.15 | -2.4 | 0 | 3.163 | 31.6 |
+| varianza_calificaciones | 18.6 | 42.6 | 0 | 4.19 | 6.86 | 9.69 | 678.6 |
+| tutorias_abiertas | 0.4973 | 0.912 | 0 | 0 | 0 | 1 | 6 |
+| tutorias_cerradas | 1.061 | 0.8254 | 0 | 0 | 1 | 2 | 3 |
+| compromisos_pendientes | 0.5818 | 1.027 | 0 | 0 | 0 | 1 | 6 |
+| compromisos_cumplidos | 1.239 | 0.8906 | 0 | 1 | 1 | 2 | 4 |
 
 ## Correlaciones fuertes
 
@@ -82,84 +84,86 @@ Umbral usado: `abs(correlacion) >= 0.85`.
 
 | variable_a | variable_b | correlation |
 | --- | --- | --- |
-| materias_reprobadas | materias_reprobadas_acumuladas | 1 |
 | materias_en_curso | materias_en_curso_periodo | 1 |
-| creditos_acumulados | porcentaje_avance | 0.9989 |
-| materias_aprobadas | creditos_acumulados | 0.9659 |
-| materias_aprobadas | porcentaje_avance | 0.9653 |
-| porcentaje_avance | periodos_cursados | 0.9534 |
-| creditos_acumulados | periodos_cursados | 0.9516 |
-| num_permisos | permisos_aprobados | 0.9454 |
-| porcentaje_asistencia | faltas | -0.9342 |
-| creditos_inscritos_periodo | materias_en_curso_periodo | 0.9278 |
-| materias_en_curso | creditos_inscritos_periodo | 0.9278 |
-| materias_aprobadas | periodos_cursados | 0.917 |
-| creditos_inscritos_periodo | creditos_aprobados_periodo | 0.9096 |
+| materias_reprobadas | materias_reprobadas_acumuladas | 1 |
+| creditos_acumulados | porcentaje_avance | 0.9993 |
+| materias_aprobadas | creditos_acumulados | 0.9851 |
+| materias_aprobadas | porcentaje_avance | 0.9849 |
+| porcentaje_asistencia | faltas | -0.9429 |
+| tutorias_abiertas | compromisos_pendientes | 0.9372 |
+| materias_en_curso | bandera_dato_incompleto | 0.9069 |
+| materias_en_curso_periodo | bandera_dato_incompleto | 0.9069 |
+| materias_reprobadas_periodo | tutorias_abiertas | 0.9059 |
+| tutorias_cerradas | compromisos_cumplidos | 0.9023 |
+| num_permisos | permisos_aprobados | 0.8869 |
+| promedio_general | promedio_periodo | 0.876 |
+| materias_reprobadas_periodo | compromisos_pendientes | 0.8519 |
 
 ## Outliers por regla IQR
 
 | variable | outlier_count | outlier_rate | lower_bound | upper_bound |
 | --- | --- | --- | --- | --- |
-| promedio_general | 3 | 0.003 | 44.72 | 108.2 |
-| promedio_periodo | 5 | 0.005 | 32.87 | 113.4 |
-| materias_aprobadas | 0 | 0 | -19.5 | 56.5 |
-| materias_reprobadas | 18 | 0.018 | -3 | 5 |
-| materias_en_curso | 73 | 0.073 | 1 | 9 |
-| creditos_acumulados | 0 | 0 | -141 | 387 |
-| porcentaje_avance | 0 | 0 | -51.19 | 141.4 |
-| porcentaje_asistencia | 8 | 0.008 | 3.172 | 127.3 |
-| faltas | 18 | 0.018 | -7.5 | 28.5 |
-| retardos | 13 | 0.013 | -2 | 6 |
-| num_tutorias | 1 | 0.001 | -3.5 | 8.5 |
-| num_asesorias | 10 | 0.01 | -3 | 5 |
-| num_incidencias | 15 | 0.015 | -1.5 | 2.5 |
-| num_permisos | 16 | 0.016 | -3 | 5 |
-| recursamientos | 62 | 0.062 | -1.5 | 2.5 |
-| rezago_materias | 9 | 0.009 | -3 | 5 |
-| creditos_inscritos_periodo | 73 | 0.073 | 8.5 | 60.5 |
-| creditos_aprobados_periodo | 79 | 0.079 | 4 | 60 |
-| creditos_totales_plan | 0 | 0 | 252 | 300 |
-| periodos_cursados | 0 | 0 | -3.625 | 13.38 |
-| periodos_sin_inscripcion | 214 | 0.214 | 0 | 0 |
-| materias_reprobadas_periodo | 235 | 0.235 | 0 | 0 |
-| materias_reprobadas_acumuladas | 18 | 0.018 | -3 | 5 |
-| materias_en_curso_periodo | 73 | 0.073 | 1 | 9 |
-| tendencia_promedio | 6 | 0.006 | -28 | 20.83 |
-| varianza_calificaciones | 29 | 0.029 | -9.126 | 64.58 |
-| tutorias_abiertas | 5 | 0.005 | -3 | 5 |
-| tutorias_cerradas | 16 | 0.016 | -3 | 5 |
-| compromisos_pendientes | 13 | 0.013 | -3 | 5 |
-| compromisos_cumplidos | 43 | 0.043 | -3 | 5 |
+| promedio_general | 19 | 0.01488 | 54.07 | 99.48 |
+| promedio_periodo | 38 | 0.02976 | 54.92 | 101.5 |
+| materias_aprobadas | 57 | 0.04464 | -2 | 6 |
+| materias_reprobadas | 83 | 0.065 | -1.5 | 2.5 |
+| materias_en_curso | 194 | 0.1519 | 0 | 0 |
+| creditos_acumulados | 34 | 0.02662 | -15 | 41 |
+| porcentaje_avance | 40 | 0.03132 | -5.45 | 14.87 |
+| porcentaje_asistencia | 50 | 0.03915 | 51.43 | 101.2 |
+| faltas | 39 | 0.03054 | 0 | 16 |
+| retardos | 28 | 0.02193 | -0.5 | 3.5 |
+| num_tutorias | 98 | 0.07674 | -0.5 | 3.5 |
+| num_asesorias | 12 | 0.009397 | -3 | 5 |
+| num_incidencias | 140 | 0.1096 | 0 | 0 |
+| num_permisos | 2 | 0.001566 | -2 | 6 |
+| recursamientos | 151 | 0.1182 | 0 | 0 |
+| rezago_materias | 8 | 0.006265 | -3 | 5 |
+| creditos_inscritos_periodo | 22 | 0.01723 | -3 | 21 |
+| creditos_aprobados_periodo | 65 | 0.0509 | -2 | 14 |
+| creditos_totales_plan | 0 | 0 | 246 | 294 |
+| periodos_cursados | 1 | 0.0007831 | -2 | 6 |
+| periodos_sin_inscripcion | 0 | 0 | -6 | 10 |
+| materias_reprobadas_periodo | 283 | 0.2216 | 0 | 0 |
+| materias_reprobadas_acumuladas | 83 | 0.065 | -1.5 | 2.5 |
+| materias_en_curso_periodo | 194 | 0.1519 | 0 | 0 |
+| tendencia_promedio | 186 | 0.1457 | -10.74 | 11.51 |
+| varianza_calificaciones | 225 | 0.1762 | -4.06 | 17.94 |
+| tutorias_abiertas | 64 | 0.05012 | -1.5 | 2.5 |
+| tutorias_cerradas | 0 | 0 | -3 | 5 |
+| compromisos_pendientes | 107 | 0.08379 | -1.5 | 2.5 |
+| compromisos_cumplidos | 20 | 0.01566 | -0.5 | 3.5 |
 
 ## Comparacion por programa
 
 | programa | promedio_general | porcentaje_asistencia | rezago_materias | materias_reprobadas |
 | --- | --- | --- | --- | --- |
-| Ingenieria Agroindustrial | 75.13 | 62.07 | 1.5 | 1.24 |
-| Ingenieria Biomedica | 76.42 | 65.37 | 1.3 | 1.17 |
-| Ingenieria en Desarrollo de Software | 76.47 | 61.75 | 1.36 | 1.2 |
-| Ingenieria en Energia | 75.55 | 63.1 | 1.3 | 1.27 |
+| Ingeniería Agroindustrial | 76.41 | 75.79 | 1.27 | 0.65 |
+| Ingeniería Biomédica | 75.14 | 73.72 | 1.6 | 0.76 |
+| Ingeniería en Desarrollo de Software | 77.23 | 75.28 | 1.27 | 0.56 |
+| Ingeniería en Energía | 77.79 | 74.87 | 1.37 | 0.52 |
 
 ## Comparacion por cohorte
 
 | cohorte | promedio_general | porcentaje_asistencia | rezago_materias | materias_reprobadas |
 | --- | --- | --- | --- | --- |
-| 2020 | 74.71 | 64.68 | 1.54 | 1.75 |
-| 2021 | 75.36 | 60.85 | 1.49 | 1.48 |
-| 2022 | 76.3 | 62.57 | 1.42 | 1.24 |
-| 2023 | 77.44 | 63.34 | 1.14 | 0.82 |
-| 2024 | 75.74 | 64.65 | 1.19 | 0.81 |
+| 2020 | 77.39 | 69.12 | 2.65 | 0.56 |
+| 2021 | 77 | 74.07 | 1.66 | 0.52 |
+| 2022 | 76.35 | 76.19 | 0.9 | 0.65 |
+| 2023 | 76.1 | 78.91 | 0.55 | 0.6 |
+| 2024 | 76.68 | 78.85 | 0.6 | 0.77 |
 
 ## Comparacion por periodo
 
 | id_periodo | promedio_general | porcentaje_asistencia | rezago_materias | materias_reprobadas |
 | --- | --- | --- | --- | --- |
-| 2022-2 | 75.76 | 62.08 | 1.15 | 0.92 |
-| 2023-1 | 76.1 | 62.84 | 1.14 | 0.88 |
-| 2023-2 | 74.67 | 63.17 | 1.3 | 1.11 |
-| 2024-1 | 76.16 | 63.38 | 1.4 | 1.27 |
-| 2024-2 | 76.62 | 63.67 | 1.42 | 1.3 |
-| 2025-1 | 76.61 | 62.29 | 1.56 | 1.58 |
+| 2022-1 | 75.04 | 76.05 | 0.89 | 0.21 |
+| 2022-2 | 77.61 | 76.37 | 1.06 | 0.39 |
+| 2023-1 | 76.96 | 74.9 | 1.29 | 0.64 |
+| 2023-2 | 77.24 | 75 | 1.41 | 0.77 |
+| 2024-1 | 76.5 | 73.98 | 1.75 | 0.97 |
+| 2024-2 | 77.59 | 72.64 | 2.05 | 0.9 |
+| 2025-1 | 77.17 | 72.51 | 2.19 | 1.08 |
 
 ## Graficas generadas
 
@@ -170,7 +174,8 @@ Umbral usado: `abs(correlacion) >= 0.85`.
 
 ## Hallazgos accionables
 
-- El dataset sintetico no presenta nulos, por lo que la primera version del pipeline puede enfocarse en escalado, colinealidad y seleccion de variables.
+- El dataset fuente es cardex crudo por materia. El pipeline lo agrega a estudiante-periodo antes del EDA, seleccion de variables, PCA y clustering.
+- Como el cardex no contiene asistencia ni seguimiento tutorial directo, esas senales se estiman de forma deterministica a partir de calificaciones, estatus, creditos, reprobadas y rezago. En una integracion institucional real se recomienda sustituirlas por datos operativos reales.
 - `materias_aprobadas`, `creditos_acumulados` y `porcentaje_avance` son variables derivadas entre si. Conviene conservar solo una para clustering.
 - `porcentaje_asistencia` y `faltas` describen dimensiones muy cercanas en sentido inverso. Para la primera version se conserva el porcentaje por ser normalizado e interpretable.
 - Las variables de acompanamiento (`num_tutorias`, `num_asesorias`) e incidencias deben mantenerse porque ayudan a diferenciar perfiles academicos mas alla del promedio.

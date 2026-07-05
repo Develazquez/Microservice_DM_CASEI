@@ -20,26 +20,26 @@
 
 | representation | k | inertia | silhouette | calinski_harabasz | davies_bouldin | min_cluster_size | max_cluster_size | combined_rank |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| pca_90 | 3 | 17366 | 0.17536 | 158.35 | 2.0209 | 73 | 644 | 2.6 |
+| pca_90 | 2 | 21597 | 0.34664 | 443.47 | 1.3958 | 244 | 1033 | 1.3 |
 
 ## Comparativo completo
 
 | representation | k | inertia | silhouette | calinski_harabasz | davies_bouldin | min_cluster_size | max_cluster_size | n_samples | iterations |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| pca_90 | 2 | 19794 | 0.24873 | 155.67 | 2.2375 | 216 | 784 | 1000 | 9 |
-| pca_90 | 3 | 17366 | 0.17536 | 158.35 | 2.0209 | 73 | 644 | 1000 | 13 |
-| pca_90 | 4 | 16243 | 0.10013 | 135.7 | 2.263 | 72 | 394 | 1000 | 16 |
-| pca_90 | 5 | 15430 | 0.092839 | 120.12 | 2.177 | 72 | 292 | 1000 | 39 |
-| pca_90 | 6 | 14868 | 0.088391 | 107.16 | 2.1999 | 72 | 268 | 1000 | 24 |
-| pca_90 | 7 | 14387 | 0.089609 | 97.719 | 2.1041 | 65 | 261 | 1000 | 13 |
-| pca_90 | 8 | 13948 | 0.087604 | 90.775 | 2.1313 | 46 | 227 | 1000 | 22 |
-| scaled_features | 2 | 21908 | 0.23721 | 140.85 | 2.3568 | 216 | 784 | 1000 | 11 |
-| scaled_features | 3 | 19476 | 0.17027 | 141.4 | 2.1192 | 73 | 666 | 1000 | 14 |
-| scaled_features | 4 | 18353 | 0.086318 | 120.24 | 2.4125 | 72 | 396 | 1000 | 32 |
-| scaled_features | 5 | 17524 | 0.081765 | 106.12 | 2.3187 | 72 | 296 | 1000 | 18 |
-| scaled_features | 6 | 16952 | 0.078451 | 94.372 | 2.3193 | 71 | 285 | 1000 | 11 |
-| scaled_features | 7 | 16444 | 0.079753 | 86.117 | 2.2159 | 52 | 274 | 1000 | 23 |
-| scaled_features | 8 | 15930 | 0.076226 | 80.69 | 2.2992 | 36 | 252 | 1000 | 36 |
+| pca_90 | 2 | 21597 | 0.34664 | 443.47 | 1.3958 | 244 | 1033 | 1277 | 4 |
+| pca_90 | 3 | 18724 | 0.23809 | 353.28 | 1.4378 | 191 | 849 | 1277 | 18 |
+| pca_90 | 4 | 17227 | 0.15817 | 292.65 | 1.8537 | 190 | 473 | 1277 | 26 |
+| pca_90 | 5 | 15904 | 0.15449 | 264.01 | 1.9195 | 102 | 432 | 1277 | 14 |
+| pca_90 | 6 | 15015 | 0.15074 | 238.59 | 1.8602 | 98 | 397 | 1277 | 15 |
+| pca_90 | 7 | 14371 | 0.15089 | 217.06 | 1.7864 | 50 | 369 | 1277 | 22 |
+| pca_90 | 8 | 13843 | 0.13375 | 199.92 | 1.8569 | 54 | 273 | 1277 | 23 |
+| scaled_features | 2 | 24408 | 0.32755 | 392.68 | 1.5137 | 252 | 1025 | 1277 | 8 |
+| scaled_features | 3 | 21533 | 0.21474 | 307.43 | 1.5506 | 191 | 849 | 1277 | 11 |
+| scaled_features | 4 | 20036 | 0.13726 | 251.8 | 1.9971 | 190 | 467 | 1277 | 10 |
+| scaled_features | 5 | 18654 | 0.13436 | 226.23 | 2.0776 | 109 | 431 | 1277 | 22 |
+| scaled_features | 6 | 17748 | 0.12734 | 203.05 | 1.9742 | 113 | 328 | 1277 | 14 |
+| scaled_features | 7 | 16970 | 0.13272 | 186.52 | 1.9157 | 38 | 369 | 1277 | 21 |
+| scaled_features | 8 | 16457 | 0.1366 | 170.39 | 1.9706 | 29 | 385 | 1277 | 13 |
 
 ## Graficas generadas
 
@@ -50,4 +50,4 @@
 
 ## Decision tecnica
 
-Se selecciona `K=3` usando la representacion `pca_90`. La decision combina metricas internas y balance de tamanos. Si en una revision academica se prioriza interpretabilidad por encima de compactacion, debe compararse este resultado con `scaled_features` antes de nombrar perfiles definitivos.
+Se selecciona `K=2` usando la representacion `pca_90`. La decision combina metricas internas y balance de tamanos. Si en una revision academica se prioriza interpretabilidad por encima de compactacion, debe compararse este resultado con `scaled_features` antes de nombrar perfiles definitivos.

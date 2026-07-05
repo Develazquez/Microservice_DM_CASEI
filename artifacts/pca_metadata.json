@@ -29,8 +29,8 @@
   ],
   "n_input_features": 25,
   "n_components_total": 25,
-  "n_components_90_variance": 15,
-  "n_components_95_variance": 17,
+  "n_components_90_variance": 12,
+  "n_components_95_variance": 14,
   "recommended_use": "PCA puede usarse como entrada compacta para clustering porque alcanza 90% de varianza con una reduccion relevante de dimensiones. Aun asi, se debe comparar contra las variables escaladas originales en la fase de seleccion de K.",
   "outputs": {
     "scaler_params": "artifacts\\scaler_params.csv",

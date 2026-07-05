@@ -6,7 +6,7 @@
   "max_iter": 300,
   "tol": 0.0001,
   "selected_representation": "pca_90",
-  "selected_k": 3,
+  "selected_k": 2,
   "features": [
     "PC1",
     "PC2",
@@ -19,18 +19,15 @@
     "PC9",
     "PC10",
     "PC11",
-    "PC12",
-    "PC13",
-    "PC14",
-    "PC15"
+    "PC12"
   ],
   "metrics": {
-    "inertia": 17365.55500144122,
-    "silhouette": 0.17536442031583274,
-    "calinski_harabasz": 158.34997660894194,
-    "davies_bouldin": 2.020871607823743,
-    "min_cluster_size": 73,
-    "max_cluster_size": 644
+    "inertia": 21596.523310054,
+    "silhouette": 0.3466360623521399,
+    "calinski_harabasz": 443.46798797095164,
+    "davies_bouldin": 1.3957850999644126,
+    "min_cluster_size": 244,
+    "max_cluster_size": 1033
   },
   "outputs": {
     "metrics": "data\\reports\\k_selection_metrics.csv",

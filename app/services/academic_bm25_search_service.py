@@ -8,7 +8,7 @@ import unicodedata
 import numpy as np
 import pandas as pd
 
-from app.models.config import PROCESSED_DIR, PROJECT_ROOT, RAW_DATASET, REPORTS_DIR
+from app.models.config import PROCESSED_DIR, PROJECT_ROOT, RAW_DATASET, REPORTS_DIR, STUDENT_PERIOD_DATASET
 from app.models.search_config import BM25_B, BM25_K1, SEARCH_TOP_K, SPANISH_STOPWORDS
 from app.views.report_view import markdown_table, write_markdown
 
@@ -83,7 +83,10 @@ def numeric_bucket(value: float, thresholds: tuple[float, float], labels: tuple[
 
 
 def load_search_documents() -> pd.DataFrame:
-    raw = pd.read_csv(RAW_DATASET)
+    if STUDENT_PERIOD_DATASET.exists():
+        raw = pd.read_csv(STUDENT_PERIOD_DATASET)
+    else:
+        raw = pd.read_csv(RAW_DATASET, encoding="utf-8-sig")
     assignments_path = PROCESSED_DIR / "cluster_assignments.csv"
     summary_path = REPORTS_DIR / "cluster_summary.csv"
     if not assignments_path.exists() or not summary_path.exists():
@@ -294,7 +297,8 @@ Implementar un motor de busqueda por keywords para recuperar alumnos segmentados
 - Motor: BM25.
 - Unidad indexada: un documento por estudiante-periodo.
 - Corpus indexado: {len(documents)} documentos.
-- Fuente base: `{RAW_DATASET.relative_to(REPO_ROOT)}`.
+- Fuente base cruda: `{RAW_DATASET.relative_to(REPO_ROOT)}`.
+- Fuente analitica indexada: `{STUDENT_PERIOD_DATASET.relative_to(REPO_ROOT)}`.
 - Enriquecimiento: `cluster_assignments.csv` y `cluster_summary.csv`.
 - Dependencias: implementacion propia con Python, pandas y numpy.
 

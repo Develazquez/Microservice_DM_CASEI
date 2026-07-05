@@ -5,20 +5,19 @@
 - Algoritmo: K-Means.
 - Implementacion: numpy, con inicializacion tipo k-means++.
 - Representacion usada: `pca_90`.
-- K final: 3.
-- Registros asignados: 1000.
-- Inercia final: 17365.55500.
-- Silhouette: 0.17536.
-- Calinski-Harabasz: 158.34998.
-- Davies-Bouldin: 2.02087.
+- K final: 2.
+- Registros asignados: 1277.
+- Inercia final: 21596.52331.
+- Silhouette: 0.34664.
+- Calinski-Harabasz: 443.46799.
+- Davies-Bouldin: 1.39579.
 
 ## Distribucion e interpretacion inicial de clusters
 
 | cluster | registros | promedio_general | porcentaje_asistencia | materias_reprobadas | rezago_materias | variables_distintivas | perfil_sugerido |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 0 | 283 | 67.482 | 57.874 | 2.5406 | 1.9965 | promedio_periodo (-14.05), promedio_general (-8.53), tendencia_promedio (-5.43), porcentaje_asistencia (-5.16), varianza_calificaciones (+4.36) | Riesgo academico moderado |
-| 1 | 644 | 79.847 | 71.13 | 0.6413 | 0.91925 | porcentaje_asistencia (+8.10), promedio_periodo (+6.11), creditos_aprobados_periodo (+4.91), promedio_general (+3.83), creditos_inscritos_periodo (+2.97) | Regular / seguimiento preventivo |
-| 2 | 73 | 75.284 | 11.618 | 1.1233 | 2.726 | porcentaje_asistencia (-51.42), creditos_inscritos_periodo (-33.37), creditos_aprobados_periodo (-31.04), materias_en_curso_periodo (-5.12), porcentaje_avance (-3.94) | Riesgo academico moderado |
+| 0 | 1033 | 79.279 | 78.741 | 0.24105 | 1.0581 | varianza_calificaciones (-5.91), porcentaje_asistencia (+3.79), promedio_periodo (+3.66), promedio_general (+2.53), tendencia_promedio (+1.29) | Regular / seguimiento preventivo |
+| 1 | 244 | 66.044 | 58.931 | 2.1926 | 2.6926 | varianza_calificaciones (+25.02), porcentaje_asistencia (-16.03), promedio_periodo (-14.10), promedio_general (-10.71), tendencia_promedio (-4.99) | Riesgo academico moderado |
 
 ## Artefactos generados
 

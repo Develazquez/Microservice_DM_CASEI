@@ -14,7 +14,25 @@ ARTIFACTS_DIR = PROJECT_ROOT / "artifacts"
 
 RAW_DATASET_V1 = RAW_DIR / "dataset_sintetico_alumnos.csv"
 RAW_DATASET_V2 = RAW_DIR / "dataset_sintetico_alumnos_v2.csv"
-RAW_DATASET = RAW_DATASET_V2
+RAW_CARDEX_DATASET = RAW_DIR / "dataset_crudo_2000_estudiantes.csv"
+RAW_DATASET = RAW_CARDEX_DATASET
+STUDENT_PERIOD_DATASET = PROCESSED_DIR / "student_period_features.csv"
+
+CARDEX_COLUMNS = [
+    "Matricula",
+    "Carrera",
+    "EstatusAlumno",
+    "CuatrimestreActual",
+    "Materia",
+    "Periodo",
+    "EstatusMateria",
+    "Final",
+    "Extr",
+    "EstatusCardex",
+    "PeriodoCursado",
+    "PlanEstudiosClave",
+    "Credito",
+]
 
 METADATA_COLUMNS = ["id_estudiante", "id_periodo", "programa", "cohorte", "estatus_academico"]
 
