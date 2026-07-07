@@ -1,0 +1,38 @@
+{
+  "algorithm": "kmeans",
+  "implementation": "numpy",
+  "random_seed": 42,
+  "n_init": 20,
+  "max_iter": 300,
+  "tol": 0.0001,
+  "selected_representation": "pca_90",
+  "selected_k": 2,
+  "features": [
+    "PC1",
+    "PC2",
+    "PC3",
+    "PC4",
+    "PC5",
+    "PC6",
+    "PC7",
+    "PC8",
+    "PC9",
+    "PC10",
+    "PC11",
+    "PC12"
+  ],
+  "metrics": {
+    "inertia": 21596.523310054,
+    "silhouette": 0.3466360623521399,
+    "calinski_harabasz": 443.46798797095164,
+    "davies_bouldin": 1.3957850999644126,
+    "min_cluster_size": 244,
+    "max_cluster_size": 1033
+  },
+  "outputs": {
+    "metrics": "data\\reports\\k_selection_metrics.csv",
+    "assignments": "data\\processed\\cluster_assignments.csv",
+    "centroids": "artifacts\\kmeans_centroids.csv",
+    "cluster_summary": "data\\reports\\cluster_summary.csv"
+  }
+}

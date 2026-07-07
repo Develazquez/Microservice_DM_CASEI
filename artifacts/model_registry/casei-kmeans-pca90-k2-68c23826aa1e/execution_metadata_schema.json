@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CASEI academic segmentation execution metadata",
+  "type": "object",
+  "required": [
+    "execution_id",
+    "model_version",
+    "mode",
+    "executed_at_utc",
+    "input_dataset",
+    "outputs",
+    "metrics"
+  ],
+  "properties": {
+    "execution_id": {
+      "type": "string",
+      "description": "Identificador unico de ejecucion o inferencia."
+    },
+    "model_version": {
+      "type": "string",
+      "description": "Version del bundle usado."
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "training",
+        "inference",
+        "evaluation",
+        "api_request"
+      ]
+    },
+    "executed_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "input_dataset": {
+      "type": "object",
+      "required": [
+        "path",
+        "records"
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "records": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sha256": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {
+        "assignments_path": {
+          "type": "string"
+        },
+        "summary_path": {
+          "type": "string"
+        },
+        "report_path": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}
