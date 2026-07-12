@@ -14,6 +14,10 @@ Este modulo contiene los entregables iniciales de analisis del pipeline:
 - Fase 8: persistencia local del modelo en bundle versionado y verificable.
 - Fase 9: API REST local con FastAPI y documentacion OpenAPI/Swagger.
 - Fase 10: persistencia local de inferencias con historial por corrida y estudiante.
+- Fase 11: documentacion formal Swagger/OpenAPI con modelos request/response.
+- Fase 12: suite automatizada de pruebas unitarias, integracion, endpoints, datos y regresion.
+- Fase 15: contrato de contexto controlado para futura integracion con LLM/RAG.
+- Integracion Supabase inicial: repositorios y sincronizacion preliminar desde Supabase PostgreSQL.
 - Extra roadmap: motor de busqueda academica BM25 con metricas de recuperacion.
 
 ## Requisitos
@@ -60,6 +64,12 @@ python scripts/run_phase_7.py
 python scripts/run_phase_8.py
 python scripts/run_phase_10.py
 python scripts/run_search_engine.py
+```
+
+Para ejecutar pruebas:
+
+```bash
+python -m unittest discover -s tests -v
 ```
 
 Para levantar la API local:
@@ -118,6 +128,14 @@ data/reports/search_metrics.csv
 data/reports/search_results_sample.csv
 data/storage/segmentation_inference_history.sqlite
 data/storage/segmentation_inference_schema.sql
+docs/openapi_casei_segmentation.json
+docs/openapi_reference.md
+docs/testing_reference.md
+docs/CONTRATO_CONTEXTO_LLM_RAG.md
+docs/DISENO_MICROSERVICIO_CLUSTERING_ACADEMICO.md
+docs/GUIA_USO_MICROSERVICIO_CLUSTERING_ACADEMICO.md
+docs/BITACORA_DECISIONES_DISENO.md
+tests/
 data/processed/student_period_features.csv
 data/processed/selected_features.csv
 data/processed/scaled_features.csv
@@ -151,10 +169,15 @@ Endpoints principales:
 GET  /health
 POST /api/v1/segmentation/run
 GET  /api/v1/segmentation/summary
+GET  /api/v1/segmentation/context/contract
+GET  /api/v1/segmentation/sync/status
+POST /api/v1/segmentation/sync/from-supabase
 GET  /api/v1/segmentation/students
 GET  /api/v1/segmentation/students/{id}
+GET  /api/v1/segmentation/students/{id}/llm-context
 GET  /api/v1/segmentation/students/{id}/history
 GET  /api/v1/segmentation/search
+GET  /api/v1/segmentation/rag/documents
 GET  /api/v1/segmentation/clusters
 GET  /api/v1/segmentation/history
 GET  /api/v1/segmentation/history/{execution_id}
@@ -166,6 +189,34 @@ GET  /api/v1/segmentation/history/{execution_id}
 - `retrain_local`: regenera fases 2-8 usando el dataset crudo local activo.
 
 La API no usa Supabase Storage como fuente actual. Solo lee archivos locales y el bundle versionado de Fase 8.
+
+La especificacion OpenAPI exportada queda en:
+
+```text
+docs/openapi_casei_segmentation.json
+```
+
+La referencia tecnica resumida queda en:
+
+```text
+docs/openapi_reference.md
+```
+
+## Documentacion tecnica final
+
+La Fase 13 concentra la documentacion tecnica y operativa en:
+
+```text
+docs/DISENO_MICROSERVICIO_CLUSTERING_ACADEMICO.md
+docs/GUIA_USO_MICROSERVICIO_CLUSTERING_ACADEMICO.md
+docs/BITACORA_DECISIONES_DISENO.md
+```
+
+La preparacion LLM/RAG queda documentada en:
+
+```text
+docs/CONTRATO_CONTEXTO_LLM_RAG.md
+```
 
 ## Historial de inferencias
 
@@ -203,3 +254,45 @@ El bundle conserva parametros de escalamiento, componentes PCA, centroides K-Mea
 La version actual usa pandas y numpy para evitar depender de paquetes externos no disponibles en el runtime local. El pipeline parte del cardex crudo, genera una vista alumno-periodo, entrena K-Means sobre `pca_90` y produce una lectura academica provisional de los clusters.
 
 Los perfiles son apoyo tutorial y analitico, no diagnostico automatico definitivo. La API REST local carga el bundle versionado y conserva la web desacoplada del microservicio.
+
+## Despliegue en Vercel
+
+El microservicio incluye compatibilidad basica para Vercel mediante:
+
+```text
+api/index.py
+vercel.json
+```
+
+`api/index.py` expone la aplicacion ASGI de FastAPI y `vercel.json` redirige las rutas publicas hacia esa funcion serverless.
+
+Variables recomendadas en Vercel para la API:
+
+```text
+CASEI_API_PUBLIC_URL=https://<tu-api>.vercel.app
+CASEI_WEB_URL=https://<tu-web>.vercel.app
+CASEI_CORS_ORIGINS=https://<tu-web>.vercel.app,http://localhost:3000
+CASEI_DB_MODE=local
+```
+
+Si se habilita lectura/escritura directa contra Supabase PostgreSQL desde la API, agregar tambien:
+
+```text
+CASEI_DB_MODE=supabase
+CASEI_SUPABASE_URL=<url-del-proyecto>
+CASEI_SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
+```
+
+No usar Supabase Storage como fuente actual de artefactos. La API sigue cargando el bundle local versionado y los archivos locales incluidos en el despliegue.
+
+En la web CASEI, configurar la URL publica de la API con:
+
+```text
+ACADEMIC_SEGMENTATION_API_URL=https://<tu-api>.vercel.app
+```
+
+Notas operativas:
+
+- Los endpoints de consulta (`/health`, `/summary`, `/students`, `/clusters`, `/search`) son los mas adecuados para Vercel.
+- Los endpoints que reentrenan o regeneran artefactos pueden exceder limites serverless; para produccion conviene ejecutarlos en un job externo y sincronizar resultados a Supabase PostgreSQL.
+- Mantener `CASEI_CORS_ORIGINS` restringido a los dominios reales de la web, no usar comodin si se envian credenciales.

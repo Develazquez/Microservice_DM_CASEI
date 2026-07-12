@@ -5,14 +5,34 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+*.so
+*.egg
+
+# ── Logs y Reportes ────────────────────────────────
+*.log
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+
+# ── Pruebas y Tipado ───────────────────────────────
+.pytest_cache/
+.mypy_cache/
+
+# ── Notebooks ──────────────────────────────────────
+.ipynb_checkpoints/
 
 # ── Entornos virtuales ──────────────────────────────
 .venv/
 venv/
 env/
+ENV/
 
 # ── Variables de entorno ────────────────────────────
 .env
+
+# ── Plataformas / Deploy ───────────────────────────
+.vercel/
 
 # ── IDEs / Editores ────────────────────────────────
 .vscode/
@@ -30,8 +50,9 @@ desktop.ini
 /scripts/
 
 # ── Datos y artefactos ─────────────────────────────
-# Mantener resultados sinteticos versionables durante la fase academica.
-# Si se usan datos reales, descomentar estas lineas antes de publicar:
+# Mantener resultados sintéticos versionables durante la fase académica.
+# Si se usan datos reales, descomentar estas líneas antes de publicar:
 # data/raw/
 # data/processed/
 # artifacts/
+/docs

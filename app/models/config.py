@@ -1,9 +1,60 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 
+def _strip_inline_comment(value: str) -> str:
+    value = value.strip()
+    if not value:
+        return value
+    quote: str | None = None
+    escaped = False
+    for index, char in enumerate(value):
+        if escaped:
+            escaped = False
+            continue
+        if char == "\\":
+            escaped = True
+            continue
+        if char in {"'", '"'}:
+            quote = None if quote == char else char if quote is None else quote
+            continue
+        if char == "#" and quote is None:
+            return value[:index].strip()
+    return value.strip().strip('"').strip("'")
+
+
+def _load_env_file(path: Path) -> None:
+    if not path.exists() or not path.is_file():
+        return
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        if not key or key in os.environ:
+            continue
+        os.environ[key] = _strip_inline_comment(value)
+
+
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+CASEI_ROOT = PROJECT_ROOT.parent
+
+_env_candidates = []
+if os.getenv("CASEI_ENV_FILE"):
+    _env_candidates.append(Path(os.getenv("CASEI_ENV_FILE", "")))
+_env_candidates.extend(
+    [
+        PROJECT_ROOT / ".env",
+        PROJECT_ROOT / ".env.local",
+        CASEI_ROOT / "CACEIv2" / ".env",
+        CASEI_ROOT / "CACEIv2" / ".env.local",
+    ]
+)
+for _env_file in _env_candidates:
+    _load_env_file(_env_file)
 
 DATA_DIR = PROJECT_ROOT / "data"
 RAW_DIR = DATA_DIR / "raw"
@@ -18,6 +69,15 @@ CURRENT_MODEL_POINTER = ARTIFACTS_DIR / "current_model.json"
 API_HISTORY_PATH = REPORTS_DIR / "api_execution_history.jsonl"
 INFERENCE_HISTORY_DB = STORAGE_DIR / "segmentation_inference_history.sqlite"
 INFERENCE_SCHEMA_PATH = STORAGE_DIR / "segmentation_inference_schema.sql"
+SUPABASE_SOURCE_SNAPSHOT = STORAGE_DIR / "supabase_academic_source_snapshot.json"
+SUPABASE_STUDENT_PERIOD_PREVIEW = PROCESSED_DIR / "supabase_student_period_features_preview.csv"
+SUPABASE_SYNC_VALIDATION_REPORT = REPORTS_DIR / "supabase_sync_validation_report.md"
+
+CASEI_SUPABASE_URL = os.getenv("CASEI_SUPABASE_URL") or os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+CASEI_SUPABASE_SERVICE_ROLE_KEY = os.getenv("CASEI_SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+CASEI_DB_MODE = os.getenv("CASEI_DB_MODE", "local").strip().lower()
+CASEI_ARTIFACT_MODE = os.getenv("CASEI_ARTIFACT_MODE", "local").strip().lower()
+CASEI_ALLOW_STORAGE_ARTIFACT_BACKUP = os.getenv("CASEI_ALLOW_STORAGE_ARTIFACT_BACKUP", "false").lower() == "true"
 
 RAW_DATASET_V1 = RAW_DIR / "dataset_sintetico_alumnos.csv"
 RAW_DATASET_V2 = RAW_DIR / "dataset_sintetico_alumnos_v2.csv"

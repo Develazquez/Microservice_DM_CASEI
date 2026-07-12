@@ -27,6 +27,7 @@ from app.services.model_persistence_service import (
     validate_loaded_contract,
 )
 from app.services.profile_interpretation_service import run_phase_7
+from app.services.security_audit_service import SecurityContext, apply_student_scope
 
 
 def utc_now() -> str:
@@ -219,8 +220,9 @@ def filtered_students(
     student_id: str | None = None,
     limit: int = 50,
     offset: int = 0,
+    security_context: SecurityContext | None = None,
 ) -> dict[str, Any]:
-    students = student_view()
+    students = apply_student_scope(student_view(), security_context)
     if perfil:
         students = students[students["perfil_academico"].fillna("").str.contains(perfil, case=False, na=False)]
     if programa:
@@ -240,8 +242,8 @@ def filtered_students(
     }
 
 
-def student_detail(student_id: str) -> dict[str, Any] | None:
-    result = filtered_students(student_id=student_id, limit=500, offset=0)
+def student_detail(student_id: str, security_context: SecurityContext | None = None) -> dict[str, Any] | None:
+    result = filtered_students(student_id=student_id, limit=500, offset=0, security_context=security_context)
     if result["total"] == 0:
         return None
     items = result["items"]
@@ -276,13 +278,16 @@ def cluster_catalog() -> dict[str, Any]:
     }
 
 
-def search_students(query: str, top_k: int = 10) -> dict[str, Any]:
+def search_students(query: str, top_k: int = 10, security_context: SecurityContext | None = None) -> dict[str, Any]:
     query = query.strip()
     if not query:
         raise ValueError("La consulta no puede estar vacia.")
-    documents = load_search_documents()
-    index = BM25Index(documents)
-    results = index.search(query, top_k=top_k)
+    documents = apply_student_scope(load_search_documents(), security_context)
+    if documents.empty:
+        results = documents.copy()
+    else:
+        index = BM25Index(documents)
+        results = index.search(query, top_k=top_k)
     return {
         "query": query,
         "top_k": int(top_k),

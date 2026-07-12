@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from contextlib import closing
 from datetime import datetime, timezone
 import json
 import math
@@ -128,7 +129,7 @@ def ensure_schema() -> None:
     STORAGE_DIR.mkdir(parents=True, exist_ok=True)
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     INFERENCE_SCHEMA_PATH.write_text(SCHEMA_SQL.strip() + "\n", encoding="utf-8")
-    with sqlite3.connect(INFERENCE_HISTORY_DB) as conn:
+    with closing(sqlite3.connect(INFERENCE_HISTORY_DB)) as conn:
         conn.executescript(SCHEMA_SQL)
         conn.commit()
 
@@ -262,7 +263,7 @@ def persist_inference_snapshot(
             )
         )
 
-    with connect() as conn:
+    with closing(connect()) as conn:
         conn.execute(
             """
             INSERT OR REPLACE INTO inference_runs (
@@ -299,7 +300,7 @@ def persist_inference_snapshot(
 
 
 def list_inference_runs(limit: int = 20, student_id: str | None = None) -> list[dict[str, Any]]:
-    with connect() as conn:
+    with closing(connect()) as conn:
         if student_id:
             rows = conn.execute(
                 """
@@ -333,7 +334,7 @@ def decode_run(row: sqlite3.Row) -> dict[str, Any]:
 
 
 def get_inference_run(execution_id: str, limit: int = 100, offset: int = 0) -> dict[str, Any] | None:
-    with connect() as conn:
+    with closing(connect()) as conn:
         run_row = conn.execute("SELECT * FROM inference_runs WHERE execution_id = ?", (execution_id,)).fetchone()
         if run_row is None:
             return None
@@ -361,7 +362,7 @@ def get_inference_run(execution_id: str, limit: int = 100, offset: int = 0) -> d
 
 
 def get_student_inference_history(student_id: str, limit: int = 100) -> dict[str, Any]:
-    with connect() as conn:
+    with closing(connect()) as conn:
         rows = conn.execute(
             """
             SELECT
@@ -389,7 +390,7 @@ def get_student_inference_history(student_id: str, limit: int = 100) -> dict[str
 
 
 def persistence_summary() -> dict[str, Any]:
-    with connect() as conn:
+    with closing(connect()) as conn:
         runs = conn.execute("SELECT COUNT(*) AS count FROM inference_runs").fetchone()["count"]
         inferences = conn.execute("SELECT COUNT(*) AS count FROM student_inferences").fetchone()["count"]
         students = conn.execute(
