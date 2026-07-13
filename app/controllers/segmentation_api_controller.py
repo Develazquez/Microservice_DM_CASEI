@@ -65,7 +65,7 @@ ERROR_RESPONSES = {
 }
 
 
-router = APIRouter(prefix="/api/v1/segmentation", tags=["Segmentacion academica"])
+router = APIRouter(prefix="/cacei/segmentation", tags=["Segmentacion academica"])
 
 
 def http_error(exc: Exception) -> HTTPException:
@@ -229,7 +229,7 @@ def students(
             offset=offset,
             security_context=context,
         )
-        audit_items_access(context, endpoint="GET /api/v1/segmentation/students", items=result["items"])
+        audit_items_access(context, endpoint="GET /cacei/segmentation/students", items=result["items"])
         return result
     except Exception as exc:
         raise http_error(exc) from exc
@@ -268,7 +268,7 @@ def student_context_for_llm(
             raise HTTPException(status_code=404, detail=f"Student not found: {student_id}")
         audit_context_access(
             context,
-            endpoint="GET /api/v1/segmentation/students/{student_id}/llm-context",
+            endpoint="GET /cacei/segmentation/students/{student_id}/llm-context",
             student_id=student_id,
             model_version=result.get("model_version"),
         )
@@ -301,7 +301,7 @@ def student_inference_history(
         result = student_history(student_id, limit=limit)
         audit_context_access(
             context,
-            endpoint="GET /api/v1/segmentation/students/{student_id}/history",
+            endpoint="GET /cacei/segmentation/students/{student_id}/history",
             student_id=student_id,
         )
         return result
@@ -331,7 +331,7 @@ def student(
             raise HTTPException(status_code=404, detail=f"Student not found: {student_id}")
         audit_context_access(
             context,
-            endpoint="GET /api/v1/segmentation/students/{student_id}",
+            endpoint="GET /cacei/segmentation/students/{student_id}",
             student_id=student_id,
         )
         return result
@@ -360,7 +360,7 @@ def search(
     try:
         context = security_context_from_headers(request.headers, role=role)
         result = search_students(q, top_k=top_k, security_context=context)
-        audit_items_access(context, endpoint="GET /api/v1/segmentation/search", items=result["items"])
+        audit_items_access(context, endpoint="GET /cacei/segmentation/search", items=result["items"])
         return result
     except Exception as exc:
         raise http_error(exc) from exc
@@ -406,7 +406,7 @@ def rag_document_list(
             metadata = item.get("metadata", {}) if isinstance(item, dict) else {}
             audit_context_access(
                 context,
-                endpoint="GET /api/v1/segmentation/rag/documents",
+                endpoint="GET /cacei/segmentation/rag/documents",
                 student_id=metadata.get("student_reference"),
                 model_version=metadata.get("model_version"),
             )

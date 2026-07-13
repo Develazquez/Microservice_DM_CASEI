@@ -167,23 +167,23 @@ Endpoints principales:
 
 ```text
 GET  /health
-POST /api/v1/segmentation/run
-GET  /api/v1/segmentation/summary
-GET  /api/v1/segmentation/context/contract
-GET  /api/v1/segmentation/sync/status
-POST /api/v1/segmentation/sync/from-supabase
-GET  /api/v1/segmentation/students
-GET  /api/v1/segmentation/students/{id}
-GET  /api/v1/segmentation/students/{id}/llm-context
-GET  /api/v1/segmentation/students/{id}/history
-GET  /api/v1/segmentation/search
-GET  /api/v1/segmentation/rag/documents
-GET  /api/v1/segmentation/clusters
-GET  /api/v1/segmentation/history
-GET  /api/v1/segmentation/history/{execution_id}
+POST /cacei/segmentation/run
+GET  /cacei/segmentation/summary
+GET  /cacei/segmentation/context/contract
+GET  /cacei/segmentation/sync/status
+POST /cacei/segmentation/sync/from-supabase
+GET  /cacei/segmentation/students
+GET  /cacei/segmentation/students/{id}
+GET  /cacei/segmentation/students/{id}/llm-context
+GET  /cacei/segmentation/students/{id}/history
+GET  /cacei/segmentation/search
+GET  /cacei/segmentation/rag/documents
+GET  /cacei/segmentation/clusters
+GET  /cacei/segmentation/history
+GET  /cacei/segmentation/history/{execution_id}
 ```
 
-`POST /api/v1/segmentation/run` acepta dos modos:
+`POST /cacei/segmentation/run` acepta dos modos:
 
 - `load_existing`: valida y carga el bundle activo registrado en `artifacts/current_model.json`.
 - `retrain_local`: regenera fases 2-8 usando el dataset crudo local activo.

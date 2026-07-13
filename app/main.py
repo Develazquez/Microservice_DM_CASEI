@@ -143,5 +143,5 @@ def root() -> RootResponse:
         "status": status.get("status"),
         "docs": "/docs",
         "openapi": "/openapi.json",
-        "api_prefix": "/api/v1/segmentation",
+        "api_prefix": "/cacei/segmentation",
     }

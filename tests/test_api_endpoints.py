@@ -20,21 +20,21 @@ class ApiEndpointTests(unittest.TestCase):
 
         expected_paths = {
             "/health",
-            "/api/v1/segmentation/health",
-            "/api/v1/segmentation/run",
-            "/api/v1/segmentation/summary",
-            "/api/v1/segmentation/context/contract",
-            "/api/v1/segmentation/sync/status",
-            "/api/v1/segmentation/sync/from-supabase",
-            "/api/v1/segmentation/students",
-            "/api/v1/segmentation/students/{student_id}",
-            "/api/v1/segmentation/students/{student_id}/llm-context",
-            "/api/v1/segmentation/students/{student_id}/history",
-            "/api/v1/segmentation/search",
-            "/api/v1/segmentation/rag/documents",
-            "/api/v1/segmentation/clusters",
-            "/api/v1/segmentation/history",
-            "/api/v1/segmentation/history/{execution_id}",
+            "/cacei/segmentation/health",
+            "/cacei/segmentation/run",
+            "/cacei/segmentation/summary",
+            "/cacei/segmentation/context/contract",
+            "/cacei/segmentation/sync/status",
+            "/cacei/segmentation/sync/from-supabase",
+            "/cacei/segmentation/students",
+            "/cacei/segmentation/students/{student_id}",
+            "/cacei/segmentation/students/{student_id}/llm-context",
+            "/cacei/segmentation/students/{student_id}/history",
+            "/cacei/segmentation/search",
+            "/cacei/segmentation/rag/documents",
+            "/cacei/segmentation/clusters",
+            "/cacei/segmentation/history",
+            "/cacei/segmentation/history/{execution_id}",
         }
         self.assertTrue(expected_paths.issubset(set(spec["paths"])))
         self.assertIn("RunSegmentationRequest", spec["components"]["schemas"])
@@ -53,45 +53,45 @@ class ApiEndpointTests(unittest.TestCase):
         self.assertEqual(health.status_code, 200)
         self.assertEqual(health.json()["status"], "ok")
 
-        summary = self.client.get("/api/v1/segmentation/summary")
+        summary = self.client.get("/cacei/segmentation/summary")
         self.assertEqual(summary.status_code, 200)
         self.assertEqual(summary.json()["total_records"], 1277)
         self.assertEqual(summary.json()["selected_k"], 2)
 
-        students = self.client.get("/api/v1/segmentation/students?limit=2")
+        students = self.client.get("/cacei/segmentation/students?limit=2")
         self.assertEqual(students.status_code, 200)
         self.assertEqual(len(students.json()["items"]), 2)
 
-        clusters = self.client.get("/api/v1/segmentation/clusters")
+        clusters = self.client.get("/cacei/segmentation/clusters")
         self.assertEqual(clusters.status_code, 200)
         self.assertEqual(len(clusters.json()["profiles"]), 2)
 
     def test_student_search_and_history_endpoints(self) -> None:
-        student = self.client.get("/api/v1/segmentation/students/IAG20200007")
+        student = self.client.get("/cacei/segmentation/students/IAG20200007")
         self.assertEqual(student.status_code, 200)
         self.assertEqual(student.json()["total_records"], 3)
 
-        student_history = self.client.get("/api/v1/segmentation/students/IAG20200007/history")
+        student_history = self.client.get("/cacei/segmentation/students/IAG20200007/history")
         self.assertEqual(student_history.status_code, 200)
         self.assertGreaterEqual(student_history.json()["total"], 3)
 
-        search = self.client.get("/api/v1/segmentation/search?q=riesgo%20academico&top_k=3")
+        search = self.client.get("/cacei/segmentation/search?q=riesgo%20academico&top_k=3")
         self.assertEqual(search.status_code, 200)
         self.assertEqual(len(search.json()["items"]), 3)
 
     def test_llm_context_contract_and_rag_documents(self) -> None:
-        contract = self.client.get("/api/v1/segmentation/context/contract")
+        contract = self.client.get("/cacei/segmentation/context/contract")
         self.assertEqual(contract.status_code, 200)
         self.assertEqual(contract.json()["context_version"], "casei-llm-rag-context-v1")
         self.assertIn("tutor", {role["role"] for role in contract.json()["roles"]})
 
         tutor_context = self.client.get(
-            "/api/v1/segmentation/students/IAG20200007/llm-context?role=tutor&max_history=2"
+            "/cacei/segmentation/students/IAG20200007/llm-context?role=tutor&max_history=2"
         )
         self.assertEqual(tutor_context.status_code, 403)
 
         context = self.client.get(
-            "/api/v1/segmentation/students/IAG20200007/llm-context?role=director&max_history=2"
+            "/cacei/segmentation/students/IAG20200007/llm-context?role=director&max_history=2"
         )
         self.assertEqual(context.status_code, 200)
         body = context.json()
@@ -101,14 +101,14 @@ class ApiEndpointTests(unittest.TestCase):
         self.assertIn("diagnostico automatico definitivo", body["safety"]["interpretation_limit"])
 
         analyst_context = self.client.get(
-            "/api/v1/segmentation/students/IAG20200007/llm-context?role=analista&max_history=2"
+            "/cacei/segmentation/students/IAG20200007/llm-context?role=analista&max_history=2"
         )
         self.assertEqual(analyst_context.status_code, 200)
         self.assertTrue(analyst_context.json()["student_reference"].startswith("student-"))
         self.assertNotEqual(analyst_context.json()["student_reference"], "IAG20200007")
 
         rag = self.client.get(
-            "/api/v1/segmentation/rag/documents?role=analista&student_id=IAG20200007&limit=1"
+            "/cacei/segmentation/rag/documents?role=analista&student_id=IAG20200007&limit=1"
         )
         self.assertEqual(rag.status_code, 200)
         rag_body = rag.json()
@@ -117,7 +117,7 @@ class ApiEndpointTests(unittest.TestCase):
         self.assertNotIn("IAG20200007", rag_body["items"][0]["retrieval_text"])
 
     def test_supabase_sync_status_and_contract(self) -> None:
-        status = self.client.get("/api/v1/segmentation/sync/status")
+        status = self.client.get("/cacei/segmentation/sync/status")
         self.assertEqual(status.status_code, 200)
         self.assertIn(status.json()["status"], {"configured", "missing_configuration"})
 
@@ -136,7 +136,7 @@ class ApiEndpointTests(unittest.TestCase):
 
         with patch("app.controllers.segmentation_api_controller.sync_from_supabase", return_value=fake_response):
             response = self.client.post(
-                "/api/v1/segmentation/sync/from-supabase",
+                "/cacei/segmentation/sync/from-supabase",
                 json={"limit": 10, "write_preview": True},
             )
 
@@ -168,7 +168,7 @@ class ApiEndpointTests(unittest.TestCase):
 
         with patch("app.controllers.segmentation_api_controller.sync_results_to_supabase", return_value=fake_response):
             response = self.client.post(
-                "/api/v1/segmentation/sync/to-supabase",
+                "/cacei/segmentation/sync/to-supabase",
                 json={"include_rag_documents": True, "max_rag_documents": 100, "batch_size": 250},
             )
 
@@ -200,7 +200,7 @@ class ApiEndpointTests(unittest.TestCase):
         }
 
         with patch("app.controllers.segmentation_api_controller.run_segmentation", return_value=fake_response):
-            response = self.client.post("/api/v1/segmentation/run", json={"mode": "load_existing"})
+            response = self.client.post("/cacei/segmentation/run", json={"mode": "load_existing"})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["status"], "completed")

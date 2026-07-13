@@ -351,9 +351,9 @@ def context_contract() -> dict[str, Any]:
         "safety_rules": SAFETY_RULES,
         "data_warnings": DATA_WARNINGS,
         "endpoints": [
-            "GET /api/v1/segmentation/context/contract",
-            "GET /api/v1/segmentation/students/{student_id}/llm-context",
-            "GET /api/v1/segmentation/rag/documents",
+            "GET /cacei/segmentation/context/contract",
+            "GET /cacei/segmentation/students/{student_id}/llm-context",
+            "GET /cacei/segmentation/rag/documents",
         ],
     }
 

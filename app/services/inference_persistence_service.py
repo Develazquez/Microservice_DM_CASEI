@@ -457,9 +457,9 @@ Guardar cada corrida de inferencia y conservar trazabilidad por estudiante, peri
 
 La API expone:
 
-- `GET /api/v1/segmentation/history`
-- `GET /api/v1/segmentation/history/{{execution_id}}`
-- `GET /api/v1/segmentation/students/{{id}}/history`
+- `GET /cacei/segmentation/history`
+- `GET /cacei/segmentation/history/{{execution_id}}`
+- `GET /cacei/segmentation/students/{{id}}/history`
 
 ## Reglas de trazabilidad
 
