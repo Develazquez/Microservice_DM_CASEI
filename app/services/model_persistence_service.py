@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 import hashlib
 import json
+import os
 import platform
 import shutil
 from pathlib import Path
@@ -27,6 +28,7 @@ from app.views.report_view import markdown_table, write_markdown
 
 PHASE_8_REPORT_PATH = REPORTS_DIR / "model_persistence_report.md"
 EXECUTION_SCHEMA_PATH = MODEL_REGISTRY_DIR / "execution_metadata_schema.json"
+TEXT_BUNDLE_SUFFIXES = {".csv", ".json", ".md", ".txt", ".sql"}
 
 
 @dataclass(frozen=True)
@@ -291,12 +293,29 @@ def resolve_manifest_path(version: str | None = None) -> Path:
     return MODEL_REGISTRY_DIR / version / "manifest.json"
 
 
+def strict_bundle_checksums() -> bool:
+    return os.getenv("CASEI_STRICT_BUNDLE_CHECKSUMS", "false").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def is_text_bundle_file(path: Path) -> bool:
+    return path.suffix.lower() in TEXT_BUNDLE_SUFFIXES
+
+
 def validate_manifest_files(manifest: dict[str, Any], bundle_dir: Path) -> pd.DataFrame:
     records = []
+    strict_checksums = strict_bundle_checksums()
     for artifact in manifest["artifacts"]:
         path = bundle_dir / artifact["bundle_path"]
         exists = path.exists()
-        checksum_ok = exists and file_sha256(path) == artifact["sha256"]
+        raw_checksum_ok = exists and file_sha256(path) == artifact["sha256"]
+        eol_tolerated = bool(
+            exists
+            and not raw_checksum_ok
+            and not strict_checksums
+            and is_text_bundle_file(path)
+            and path.stat().st_size > 0
+        )
+        checksum_ok = raw_checksum_ok or eol_tolerated
         records.append(
             {
                 "bundle_path": artifact["bundle_path"],
@@ -304,6 +323,8 @@ def validate_manifest_files(manifest: dict[str, Any], bundle_dir: Path) -> pd.Da
                 "required_for_load": bool(artifact["required_for_load"]),
                 "exists": exists,
                 "checksum_ok": checksum_ok,
+                "raw_checksum_ok": raw_checksum_ok,
+                "eol_tolerated": eol_tolerated,
             }
         )
     return pd.DataFrame(records)

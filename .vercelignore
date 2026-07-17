@@ -9,4 +9,7 @@ __pycache__
 tests
 docs/testing_reference.md
 data/reports/figures
-
+data/reports/*.md
+artifacts/model_registry/**/documentation/*.md
+runpod_gateway
+deploy/runpod

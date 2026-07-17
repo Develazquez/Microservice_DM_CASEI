@@ -22,7 +22,7 @@ from app.services.segmentation_api_service import health_status
 OPENAPI_DESCRIPTION = """
 API local para segmentacion academica no supervisada de CASEI.
 
-El servicio carga artefactos locales versionados, expone perfiles K-Means, consultas BM25,
+El servicio carga artefactos locales versionados, expone perfiles K-Means, consultas SLM + BM25,
 historial de inferencias y operaciones de ejecucion local del pipeline.
 
 Aviso academico: los clusters son apoyo tutorial y analitico. No representan un diagnostico

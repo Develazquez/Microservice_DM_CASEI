@@ -190,6 +190,17 @@ GET  /cacei/segmentation/history/{execution_id}
 
 La API no usa Supabase Storage como fuente actual. Solo lee archivos locales y el bundle versionado de Fase 8.
 
+### Buscador SLM + BM25
+
+`GET /cacei/segmentation/search` conserva `q` y `top_k`, y acepta `mode=auto|bm25|slm`,
+`programa`, `perfil` y `sexo`. El modo `auto` envia a Qwen solo consultas complejas. El control de
+alcance tutoral o de coordinacion se aplica antes de cualquier filtro o ranking.
+
+La respuesta agrega `search_metadata` con modo efectivo, filtros, expansiones, tiempos y advertencias.
+Si Ollama esta apagado, excede el timeout o devuelve una salida invalida, la consulta continua con BM25.
+Las busquedas por matricula o correo no se envian al SLM. El filtro `sexo` responde
+`422 filter_not_supported_by_source` mientras la fuente activa no contenga esa columna.
+
 La especificacion OpenAPI exportada queda en:
 
 ```text
@@ -273,6 +284,8 @@ CASEI_API_PUBLIC_URL=https://<tu-api>.vercel.app
 CASEI_WEB_URL=https://<tu-web>.vercel.app
 CASEI_CORS_ORIGINS=https://<tu-web>.vercel.app,http://localhost:3000
 CASEI_DB_MODE=local
+CASEI_SLM_ENABLED=false
+CASEI_SEARCH_MODE=bm25
 ```
 
 Si se habilita lectura/escritura directa contra Supabase PostgreSQL desde la API, agregar tambien:
@@ -284,6 +297,28 @@ CASEI_SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
 ```
 
 No usar Supabase Storage como fuente actual de artefactos. La API sigue cargando el bundle local versionado y los archivos locales incluidos en el despliegue.
+
+## Qwen en RunPod
+
+La configuracion para un Pod bajo demanda se encuentra en `deploy/runpod`. La imagen mantiene Ollama
+en `127.0.0.1:11434` y solo publica un gateway FastAPI autenticado en el puerto `8001`. El modelo se
+guarda bajo `/workspace/ollama/models` para sobrevivir cuando el Pod se detiene.
+
+Variables de la API cuando el Pod esta encendido:
+
+```text
+CASEI_SLM_ENABLED=true
+CASEI_SEARCH_MODE=auto
+OLLAMA_GATEWAY_URL=https://<pod-id>-8001.proxy.runpod.net
+OLLAMA_GATEWAY_API_KEY=<secreto-compartido>
+OLLAMA_MODEL=qwen3:4b-instruct-2507-q4_K_M
+OLLAMA_TIMEOUT_SECONDS=12
+OLLAMA_WARMUP_TIMEOUT_SECONDS=120
+OLLAMA_KEEP_ALIVE=30m
+```
+
+El Pod usa el mismo secreto en `CASEI_SLM_GATEWAY_API_KEY`. Antes de una demostracion se debe validar
+`/health`, consultar `/ready` y ejecutar `/warmup`. Con el Pod apagado se mantiene BM25 como ruta operativa.
 
 En la web CASEI, configurar la URL publica de la API con:
 

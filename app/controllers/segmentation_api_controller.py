@@ -31,6 +31,7 @@ from app.services.llm_context_service import (
     rag_documents,
     student_llm_context,
 )
+from app.services.academic_search_orchestrator_service import UnsupportedSourceFilterError
 from app.services.security_audit_service import (
     AuthorizationError,
     audit_context_access,
@@ -61,6 +62,7 @@ from app.services.supabase_sync_service import (
 ERROR_RESPONSES = {
     400: {"model": ErrorResponse, "description": "Solicitud invalida o parametros no soportados."},
     404: {"model": ErrorResponse, "description": "Recurso no encontrado."},
+    422: {"model": ErrorResponse, "description": "Filtro no disponible en la fuente de datos activa."},
     503: {"model": ErrorResponse, "description": "Artefactos locales requeridos no disponibles."},
 }
 
@@ -73,6 +75,11 @@ def http_error(exc: Exception) -> HTTPException:
         return HTTPException(status_code=503, detail=str(exc))
     if isinstance(exc, AuthorizationError):
         return HTTPException(status_code=403, detail=str(exc))
+    if isinstance(exc, UnsupportedSourceFilterError):
+        return HTTPException(
+            status_code=422,
+            detail={"code": "filter_not_supported_by_source", "filter": exc.filter_name},
+        )
     if isinstance(exc, ValueError):
         return HTTPException(status_code=400, detail=str(exc))
     return HTTPException(status_code=500, detail=str(exc))
@@ -352,6 +359,16 @@ def search(
     request: Request,
     q: str = Query(..., min_length=1, description="Consulta BM25 por keywords academicas."),
     top_k: int = Query(default=10, ge=1, le=50, description="Numero de resultados a devolver."),
+    mode: Literal["auto", "bm25", "slm"] = Query(
+        default="auto",
+        description="auto interpreta solo consultas complejas; bm25 omite el SLM; slm fuerza interpretacion con fallback.",
+    ),
+    programa: str | None = Query(default=None, description="Filtro explicito por programa o carrera."),
+    perfil: str | None = Query(default=None, description="Filtro explicito por perfil academico."),
+    sexo: Literal["F", "M"] | None = Query(
+        default=None,
+        description="Filtro opcional; devuelve 422 si la fuente activa no contiene sexo.",
+    ),
     role: Literal["director", "coordinador", "tutor", "analista"] = Query(
         default="director",
         description="Rol solicitante para aplicar alcance antes del ranking.",
@@ -359,7 +376,15 @@ def search(
 ) -> SearchResponse:
     try:
         context = security_context_from_headers(request.headers, role=role)
-        result = search_students(q, top_k=top_k, security_context=context)
+        result = search_students(
+            q,
+            top_k=top_k,
+            security_context=context,
+            mode=mode,
+            programa=programa,
+            perfil=perfil,
+            sexo=sexo,
+        )
         audit_items_access(context, endpoint="GET /cacei/segmentation/search", items=result["items"])
         return result
     except Exception as exc:

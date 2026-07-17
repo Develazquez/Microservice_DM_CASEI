@@ -7,7 +7,7 @@ Guardar los artefactos del pipeline de segmentacion academica en un formato loca
 ## Version activa
 
 - Version del modelo: `casei-kmeans-pca90-k2-68c23826aa1e`
-- Fecha de registro UTC: `2026-07-06T05:48:55Z`
+- Fecha de registro UTC: `2026-07-13T01:57:40Z`
 - Formato de almacenamiento: `local_filesystem_json_csv_markdown`
 - Dataset fuente activo: `data/raw/dataset_crudo_2000_estudiantes.csv`
 - Vista analitica alumno-periodo: `data/processed/student_period_features.csv`
@@ -59,7 +59,7 @@ Guardar los artefactos del pipeline de segmentacion academica en un formato loca
 
 | model_version | created_at_utc | selected_representation | selected_k | silhouette | davies_bouldin | calinski_harabasz | content_fingerprint_sha256 | bundle_dir | manifest_path |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| casei-kmeans-pca90-k2-68c23826aa1e | 2026-07-06T05:48:55Z | pca_90 | 2 | 0.34664 | 1.3958 | 443.47 | 68c23826aa1eb620a6bae8404a9cdb5674647a4db3304c1faa96876e3527d4b0 | artifacts/model_registry/casei-kmeans-pca90-k2-68c23826aa1e | artifacts/model_registry/casei-kmeans-pca90-k2-68c23826aa1e/manifest.json |
+| casei-kmeans-pca90-k2-68c23826aa1e | 2026-07-13T01:57:40Z | pca_90 | 2 | 0.34664 | 1.3958 | 443.47 | 68c23826aa1eb620a6bae8404a9cdb5674647a4db3304c1faa96876e3527d4b0 | artifacts/model_registry/casei-kmeans-pca90-k2-68c23826aa1e | artifacts/model_registry/casei-kmeans-pca90-k2-68c23826aa1e/manifest.json |
 
 ## Contrato de carga
 

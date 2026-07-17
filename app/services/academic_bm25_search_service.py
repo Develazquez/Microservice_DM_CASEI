@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections import Counter
+from collections import Counter, OrderedDict
 import math
 import re
 import unicodedata
@@ -15,6 +15,8 @@ from app.views.report_view import markdown_table, write_markdown
 
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
 REPO_ROOT = PROJECT_ROOT
+_INDEX_CACHE: OrderedDict[str, "BM25Index"] = OrderedDict()
+_INDEX_CACHE_MAX_SIZE = 8
 
 
 def normalize_text(value: object) -> str:
@@ -52,26 +54,56 @@ class BM25Index:
             for term, frequency in document_frequency.items()
         }
 
-    def search(self, query: str, top_k: int = SEARCH_TOP_K) -> pd.DataFrame:
-        query_terms = tokenize(query)
-        scores = np.array([self._score_document(tf, length, query_terms) for tf, length in zip(self.term_frequencies, self.doc_lengths)])
-        ranked_indexes = np.argsort(-scores)[:top_k]
+    def search(
+        self,
+        query: str,
+        top_k: int = SEARCH_TOP_K,
+        weighted_terms: dict[str, float] | None = None,
+    ) -> pd.DataFrame:
+        query_terms = {term: 1.0 for term in tokenize(query)}
+        for text, weight in (weighted_terms or {}).items():
+            for term in tokenize(text):
+                query_terms[term] = max(query_terms.get(term, 0.0), float(weight))
+        scores = np.array(
+            [self._score_document(tf, length, query_terms) for tf, length in zip(self.term_frequencies, self.doc_lengths)]
+        )
+        positive_indexes = np.flatnonzero(scores > 0)
+        ranked_indexes = positive_indexes[np.argsort(-scores[positive_indexes])][:top_k]
         results = self.documents.iloc[ranked_indexes].copy()
         results.insert(0, "rank", range(1, len(results) + 1))
         results.insert(1, "score_bm25", scores[ranked_indexes])
         return results
 
-    def _score_document(self, term_frequency: Counter[str], doc_length: float, query_terms: list[str]) -> float:
+    def _score_document(
+        self,
+        term_frequency: Counter[str],
+        doc_length: float,
+        query_terms: dict[str, float],
+    ) -> float:
         score = 0.0
-        for term in query_terms:
+        for term, query_weight in query_terms.items():
             frequency = term_frequency.get(term, 0)
             if frequency == 0:
                 continue
             denominator = frequency + BM25_K1 * (
                 1 - BM25_B + BM25_B * doc_length / max(self.average_doc_length, 1)
             )
-            score += self.idf.get(term, 0.0) * frequency * (BM25_K1 + 1) / denominator
+            score += query_weight * self.idf.get(term, 0.0) * frequency * (BM25_K1 + 1) / denominator
         return score
+
+
+def get_cached_index(documents: pd.DataFrame) -> BM25Index:
+    fingerprint_columns = [column for column in ["document_id", "search_text"] if column in documents.columns]
+    fingerprint = str(pd.util.hash_pandas_object(documents[fingerprint_columns], index=True).sum())
+    cached = _INDEX_CACHE.get(fingerprint)
+    if cached is not None:
+        _INDEX_CACHE.move_to_end(fingerprint)
+        return cached
+    index = BM25Index(documents)
+    _INDEX_CACHE[fingerprint] = index
+    while len(_INDEX_CACHE) > _INDEX_CACHE_MAX_SIZE:
+        _INDEX_CACHE.popitem(last=False)
+    return index
 
 
 def numeric_bucket(value: float, thresholds: tuple[float, float], labels: tuple[str, str, str]) -> str:
@@ -144,11 +176,11 @@ def build_document_text(row: pd.Series) -> str:
         [
             f"estudiante {row['id_estudiante']}",
             f"periodo {row['id_periodo']}",
-            f"programa {row['programa']}",
+            f"programa {row['programa']} {row['programa']} {row['programa']}",
             f"cohorte {row['cohorte']}",
-            f"estatus {row['estatus_academico']}",
+            f"estatus {row['estatus_academico']} {row['estatus_academico']}",
             f"cluster {row['cluster']}",
-            f"perfil {profile} {profile}",
+            f"perfil {profile} {profile} {profile}",
             row["promedio_bucket"],
             row["asistencia_bucket"],
             row["rezago_bucket"],

@@ -11,7 +11,8 @@ import numpy as np
 import pandas as pd
 
 from app.models.config import API_HISTORY_PATH, ARTIFACTS_DIR, PROCESSED_DIR, REPORTS_DIR, STUDENT_PERIOD_DATASET
-from app.services.academic_bm25_search_service import BM25Index, load_search_documents, run_search_engine
+from app.services.academic_bm25_search_service import load_search_documents, run_search_engine
+from app.services.academic_search_orchestrator_service import search_academic_documents
 from app.services.clustering_training_evaluation_service import run_phase_5_6
 from app.services.exploratory_analysis_feature_engineering_pca_service import main as run_phase_2_4
 from app.services.inference_persistence_service import (
@@ -278,21 +279,34 @@ def cluster_catalog() -> dict[str, Any]:
     }
 
 
-def search_students(query: str, top_k: int = 10, security_context: SecurityContext | None = None) -> dict[str, Any]:
+def search_students(
+    query: str,
+    top_k: int = 10,
+    security_context: SecurityContext | None = None,
+    mode: str | None = None,
+    programa: str | None = None,
+    perfil: str | None = None,
+    sexo: str | None = None,
+) -> dict[str, Any]:
     query = query.strip()
     if not query:
         raise ValueError("La consulta no puede estar vacia.")
     documents = apply_student_scope(load_search_documents(), security_context)
-    if documents.empty:
-        results = documents.copy()
-    else:
-        index = BM25Index(documents)
-        results = index.search(query, top_k=top_k)
+    search_result = search_academic_documents(
+        documents=documents,
+        query=query,
+        top_k=top_k,
+        mode=mode,
+        programa=programa,
+        perfil=perfil,
+        sexo=sexo,
+    )
     return {
         "query": query,
         "top_k": int(top_k),
         "total_indexed": int(len(documents)),
-        "items": dataframe_records(results),
+        "items": dataframe_records(search_result["results"]),
+        "search_metadata": search_result["metadata"],
     }
 
 

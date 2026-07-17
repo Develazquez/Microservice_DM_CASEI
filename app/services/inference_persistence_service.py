@@ -4,6 +4,7 @@ from contextlib import closing
 from datetime import datetime, timezone
 import json
 import math
+import os
 import sqlite3
 import time
 from typing import Any
@@ -125,7 +126,31 @@ def dataframe_records(df: pd.DataFrame) -> list[dict[str, Any]]:
     return jsonable(df.replace({np.nan: None}).to_dict(orient="records"))
 
 
+def sqlite_history_mode() -> str:
+    return os.getenv("CASEI_SQLITE_HISTORY", "auto").strip().lower()
+
+
+def sqlite_history_disabled() -> bool:
+    return sqlite_history_mode() in {"0", "false", "off", "disabled", "none"}
+
+
+def empty_history_summary(error: str | None = None) -> dict[str, Any]:
+    summary: dict[str, Any] = {
+        "database_path": str(INFERENCE_HISTORY_DB),
+        "schema_path": str(INFERENCE_SCHEMA_PATH),
+        "runs": 0,
+        "student_inferences": 0,
+        "students": 0,
+        "latest_run": None,
+    }
+    if error:
+        summary["warning"] = error
+    return summary
+
+
 def ensure_schema() -> None:
+    if sqlite_history_disabled():
+        raise RuntimeError("SQLite inference history is disabled by CASEI_SQLITE_HISTORY.")
     STORAGE_DIR.mkdir(parents=True, exist_ok=True)
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     INFERENCE_SCHEMA_PATH.write_text(SCHEMA_SQL.strip() + "\n", encoding="utf-8")
@@ -300,30 +325,33 @@ def persist_inference_snapshot(
 
 
 def list_inference_runs(limit: int = 20, student_id: str | None = None) -> list[dict[str, Any]]:
-    with closing(connect()) as conn:
-        if student_id:
-            rows = conn.execute(
-                """
-                SELECT DISTINCT r.*
-                FROM inference_runs r
-                INNER JOIN student_inferences s ON s.execution_id = r.execution_id
-                WHERE UPPER(s.id_estudiante) = UPPER(?)
-                ORDER BY r.started_at_utc DESC
-                LIMIT ?
-                """,
-                (student_id, limit),
-            ).fetchall()
-        else:
-            rows = conn.execute(
-                """
-                SELECT *
-                FROM inference_runs
-                ORDER BY started_at_utc DESC
-                LIMIT ?
-                """,
-                (limit,),
-            ).fetchall()
-    return [decode_run(row) for row in rows]
+    try:
+        with closing(connect()) as conn:
+            if student_id:
+                rows = conn.execute(
+                    """
+                    SELECT DISTINCT r.*
+                    FROM inference_runs r
+                    INNER JOIN student_inferences s ON s.execution_id = r.execution_id
+                    WHERE UPPER(s.id_estudiante) = UPPER(?)
+                    ORDER BY r.started_at_utc DESC
+                    LIMIT ?
+                    """,
+                    (student_id, limit),
+                ).fetchall()
+            else:
+                rows = conn.execute(
+                    """
+                    SELECT *
+                    FROM inference_runs
+                    ORDER BY started_at_utc DESC
+                    LIMIT ?
+                    """,
+                    (limit,),
+                ).fetchall()
+        return [decode_run(row) for row in rows]
+    except (OSError, PermissionError, RuntimeError, sqlite3.Error):
+        return []
 
 
 def decode_run(row: sqlite3.Row) -> dict[str, Any]:
@@ -334,79 +362,88 @@ def decode_run(row: sqlite3.Row) -> dict[str, Any]:
 
 
 def get_inference_run(execution_id: str, limit: int = 100, offset: int = 0) -> dict[str, Any] | None:
-    with closing(connect()) as conn:
-        run_row = conn.execute("SELECT * FROM inference_runs WHERE execution_id = ?", (execution_id,)).fetchone()
-        if run_row is None:
-            return None
-        total = conn.execute(
-            "SELECT COUNT(*) AS count FROM student_inferences WHERE execution_id = ?",
-            (execution_id,),
-        ).fetchone()["count"]
-        rows = conn.execute(
-            """
-            SELECT *
-            FROM student_inferences
-            WHERE execution_id = ?
-            ORDER BY id_estudiante, id_periodo
-            LIMIT ? OFFSET ?
-            """,
-            (execution_id, limit, offset),
-        ).fetchall()
-    return {
-        "run": decode_run(run_row),
-        "total_inferences": int(total),
-        "limit": int(limit),
-        "offset": int(offset),
-        "items": dataframe_records(pd.DataFrame([dict(row) for row in rows])),
-    }
+    try:
+        with closing(connect()) as conn:
+            run_row = conn.execute("SELECT * FROM inference_runs WHERE execution_id = ?", (execution_id,)).fetchone()
+            if run_row is None:
+                return None
+            total = conn.execute(
+                "SELECT COUNT(*) AS count FROM student_inferences WHERE execution_id = ?",
+                (execution_id,),
+            ).fetchone()["count"]
+            rows = conn.execute(
+                """
+                SELECT *
+                FROM student_inferences
+                WHERE execution_id = ?
+                ORDER BY id_estudiante, id_periodo
+                LIMIT ? OFFSET ?
+                """,
+                (execution_id, limit, offset),
+            ).fetchall()
+        return {
+            "run": decode_run(run_row),
+            "total_inferences": int(total),
+            "limit": int(limit),
+            "offset": int(offset),
+            "items": dataframe_records(pd.DataFrame([dict(row) for row in rows])),
+        }
+    except (OSError, PermissionError, RuntimeError, sqlite3.Error):
+        return None
 
 
 def get_student_inference_history(student_id: str, limit: int = 100) -> dict[str, Any]:
-    with closing(connect()) as conn:
-        rows = conn.execute(
-            """
-            SELECT
-                s.*,
-                r.run_type,
-                r.status,
-                r.model_version,
-                r.selected_representation,
-                r.selected_k,
-                r.started_at_utc,
-                r.finished_at_utc
-            FROM student_inferences s
-            INNER JOIN inference_runs r ON r.execution_id = s.execution_id
-            WHERE UPPER(s.id_estudiante) = UPPER(?)
-            ORDER BY r.started_at_utc DESC, s.id_periodo DESC
-            LIMIT ?
-            """,
-            (student_id, limit),
-        ).fetchall()
-    return {
-        "id_estudiante": student_id,
-        "total": len(rows),
-        "items": dataframe_records(pd.DataFrame([dict(row) for row in rows])),
-    }
+    try:
+        with closing(connect()) as conn:
+            rows = conn.execute(
+                """
+                SELECT
+                    s.*,
+                    r.run_type,
+                    r.status,
+                    r.model_version,
+                    r.selected_representation,
+                    r.selected_k,
+                    r.started_at_utc,
+                    r.finished_at_utc
+                FROM student_inferences s
+                INNER JOIN inference_runs r ON r.execution_id = s.execution_id
+                WHERE UPPER(s.id_estudiante) = UPPER(?)
+                ORDER BY r.started_at_utc DESC, s.id_periodo DESC
+                LIMIT ?
+                """,
+                (student_id, limit),
+            ).fetchall()
+        return {
+            "id_estudiante": student_id,
+            "total": len(rows),
+            "items": dataframe_records(pd.DataFrame([dict(row) for row in rows])),
+        }
+    except (OSError, PermissionError, RuntimeError, sqlite3.Error):
+        return {"id_estudiante": student_id, "total": 0, "items": []}
 
 
 def persistence_summary() -> dict[str, Any]:
-    with closing(connect()) as conn:
-        runs = conn.execute("SELECT COUNT(*) AS count FROM inference_runs").fetchone()["count"]
-        inferences = conn.execute("SELECT COUNT(*) AS count FROM student_inferences").fetchone()["count"]
-        students = conn.execute(
-            "SELECT COUNT(DISTINCT id_estudiante) AS count FROM student_inferences"
-        ).fetchone()["count"]
-        latest = conn.execute(
-            "SELECT * FROM inference_runs ORDER BY started_at_utc DESC LIMIT 1"
-        ).fetchone()
-    return {
-        "database_path": str(INFERENCE_HISTORY_DB),
-        "schema_path": str(INFERENCE_SCHEMA_PATH),
-        "runs": int(runs),
-        "student_inferences": int(inferences),
-        "students": int(students),
-        "latest_run": decode_run(latest) if latest else None,
-    }
+    try:
+        with closing(connect()) as conn:
+            runs = conn.execute("SELECT COUNT(*) AS count FROM inference_runs").fetchone()["count"]
+            inferences = conn.execute("SELECT COUNT(*) AS count FROM student_inferences").fetchone()["count"]
+            students = conn.execute(
+                "SELECT COUNT(DISTINCT id_estudiante) AS count FROM student_inferences"
+            ).fetchone()["count"]
+            latest = conn.execute(
+                "SELECT * FROM inference_runs ORDER BY started_at_utc DESC LIMIT 1"
+            ).fetchone()
+        return {
+            "database_path": str(INFERENCE_HISTORY_DB),
+            "schema_path": str(INFERENCE_SCHEMA_PATH),
+            "runs": int(runs),
+            "student_inferences": int(inferences),
+            "students": int(students),
+            "latest_run": decode_run(latest) if latest else None,
+        }
+    except (OSError, PermissionError, RuntimeError, sqlite3.Error) as exc:
+        return empty_history_summary(f"Historial SQLite no disponible en este entorno: {exc}")
 
 
 def build_report(summary: dict[str, Any], latest_run: dict[str, Any] | None) -> str:

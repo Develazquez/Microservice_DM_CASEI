@@ -78,6 +78,11 @@ class ApiEndpointTests(unittest.TestCase):
         search = self.client.get("/cacei/segmentation/search?q=riesgo%20academico&top_k=3")
         self.assertEqual(search.status_code, 200)
         self.assertEqual(len(search.json()["items"]), 3)
+        self.assertIn("search_metadata", search.json())
+
+        unsupported = self.client.get("/cacei/segmentation/search?q=riesgo&sexo=F")
+        self.assertEqual(unsupported.status_code, 422)
+        self.assertEqual(unsupported.json()["detail"]["code"], "filter_not_supported_by_source")
 
     def test_llm_context_contract_and_rag_documents(self) -> None:
         contract = self.client.get("/cacei/segmentation/context/contract")

@@ -123,6 +123,7 @@ class SearchResponse(ApiModel):
     top_k: int
     total_indexed: int
     items: list[dict[str, Any]]
+    search_metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 class ClusterCatalogResponse(ApiModel):
