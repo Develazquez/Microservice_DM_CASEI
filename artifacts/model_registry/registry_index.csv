@@ -1,0 +1,2 @@
+model_version,created_at_utc,selected_representation,selected_k,silhouette,davies_bouldin,calinski_harabasz,content_fingerprint_sha256,bundle_dir,manifest_path
+casei-kmeans-pca90-k2-68c23826aa1e,2026-07-13T01:57:40Z,pca_90,2,0.3466360623521399,1.3957850999644126,443.46798797095164,68c23826aa1eb620a6bae8404a9cdb5674647a4db3304c1faa96876e3527d4b0,artifacts/model_registry/casei-kmeans-pca90-k2-68c23826aa1e,artifacts/model_registry/casei-kmeans-pca90-k2-68c23826aa1e/manifest.json

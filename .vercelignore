@@ -1,0 +1,15 @@
+.env
+.venv
+venv
+env
+__pycache__
+.pytest_cache
+.mypy_cache
+.ruff_cache
+tests
+docs/testing_reference.md
+data/reports/figures
+data/reports/*.md
+artifacts/model_registry/**/documentation/*.md
+runpod_gateway
+deploy/runpod

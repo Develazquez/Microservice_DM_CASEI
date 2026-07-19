@@ -11,6 +11,7 @@ import pandas as pd
 
 from app.models.config import (
     ARTIFACTS_DIR,
+    CARDEX_COLUMNS,
     FEATURE_DECISIONS,
     FIGURES_DIR,
     FINAL_FEATURES,
@@ -21,7 +22,9 @@ from app.models.config import (
     RAW_DIR,
     RAW_DATASET,
     REPORTS_DIR,
+    STUDENT_PERIOD_DATASET,
 )
+from app.services.cardex_student_period_feature_service import build_student_period_features
 
 
 REPO_ROOT = PROJECT_ROOT
@@ -42,7 +45,23 @@ def copy_dataset() -> None:
 
 
 def read_dataset() -> pd.DataFrame:
-    df = pd.read_csv(RAW_DATASET)
+    df = pd.read_csv(RAW_DATASET, encoding="utf-8-sig")
+    if set(CARDEX_COLUMNS).issubset(df.columns):
+        cardex_quality = pd.DataFrame(
+            {
+                "variable": df.columns,
+                "dtype": [str(df[col].dtype) for col in df.columns],
+                "null_count": [int(df[col].isna().sum()) for col in df.columns],
+                "null_rate": [float(df[col].isna().mean()) for col in df.columns],
+                "unique_count": [int(df[col].nunique()) for col in df.columns],
+            }
+        )
+        analytic = build_student_period_features(df)
+        STUDENT_PERIOD_DATASET.parent.mkdir(parents=True, exist_ok=True)
+        analytic.to_csv(STUDENT_PERIOD_DATASET, index=False)
+        cardex_quality.to_csv(REPORTS_DIR / "raw_cardex_quality_summary.csv", index=False)
+        df = analytic
+
     missing = sorted(set(METADATA_COLUMNS + NUMERIC_COLUMNS) - set(df.columns))
     if missing:
         raise ValueError(f"Dataset is missing required columns: {missing}")
@@ -264,6 +283,7 @@ def run_eda(df: pd.DataFrame) -> None:
 ## Resumen del dataset
 
 - Archivo fuente: `{RAW_DATASET.relative_to(REPO_ROOT)}`
+- Dataset analitico generado: `{STUDENT_PERIOD_DATASET.relative_to(REPO_ROOT)}`
 - Registros: {len(df)}
 - Columnas: {len(df.columns)}
 - Unidad analitica asumida: un estudiante en un periodo academico.
@@ -312,7 +332,8 @@ Umbral usado: `abs(correlacion) >= 0.85`.
 
 ## Hallazgos accionables
 
-- El dataset sintetico no presenta nulos, por lo que la primera version del pipeline puede enfocarse en escalado, colinealidad y seleccion de variables.
+- El dataset fuente es cardex crudo por materia. El pipeline lo agrega a estudiante-periodo antes del EDA, seleccion de variables, PCA y clustering.
+- Como el cardex no contiene asistencia ni seguimiento tutorial directo, esas senales se estiman de forma deterministica a partir de calificaciones, estatus, creditos, reprobadas y rezago. En una integracion institucional real se recomienda sustituirlas por datos operativos reales.
 - `materias_aprobadas`, `creditos_acumulados` y `porcentaje_avance` son variables derivadas entre si. Conviene conservar solo una para clustering.
 - `porcentaje_asistencia` y `faltas` describen dimensiones muy cercanas en sentido inverso. Para la primera version se conserva el porcentaje por ser normalizado e interpretable.
 - Las variables de acompanamiento (`num_tutorias`, `num_asesorias`) e incidencias deben mantenerse porque ayudan a diferenciar perfiles academicos mas alla del promedio.

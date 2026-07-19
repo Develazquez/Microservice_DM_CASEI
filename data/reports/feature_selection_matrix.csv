@@ -1,34 +1,34 @@
 variable,decision,reason,variance,missing_rate,max_abs_correlation
-promedio_general,include,Desempeno acumulado del estudiante.,126.26158621411412,0.0,0.777984531618529
-promedio_periodo,include,Desempeno reciente; se imputa cuando no aplica por baja temporal.,212.82163081354514,0.036,0.777984531618529
-materias_aprobadas,exclude,Variable heredada; en v2 se usa creditos aprobados y avance.,149.6906016016016,0.0,0.9658989681335355
-materias_reprobadas,exclude,Alias heredado; se reemplaza por periodo y acumulado.,2.018222222222222,0.0,1.0
-materias_en_curso,exclude,Alias heredado; se reemplaza por materias_en_curso_periodo.,3.2536126126126126,0.0,1.0
-creditos_acumulados,exclude,Variable heredada; se reemplaza por creditos_aprobados_periodo y porcentaje_avance.,5711.723882882883,0.0,0.9988633365567896
-porcentaje_avance,include,Lectura academica clara del progreso curricular.,765.5839815715715,0.0,0.9988633365567896
-porcentaje_asistencia,include,Indicador normalizado de compromiso/asistencia.,541.7017260424425,0.0,0.934179226391875
-faltas,exclude,Altamente inverso a porcentaje_asistencia; se mantiene el indicador normalizado.,49.75474574574574,0.0,0.934179226391875
-retardos,include,Senal operativa distinta a la asistencia acumulada.,2.3587097097097094,0.0,0.2921075855932713
-num_tutorias,exclude,Alias heredado; en v2 se separa en abiertas y cerradas.,3.0088478478478486,0.0,0.7181129868352616
-num_asesorias,include,Mide apoyo academico complementario.,1.5723363363363365,0.0,0.5679237401192171
-num_incidencias,include,Senal de eventos que pueden afectar trayectoria.,0.4604354354354355,0.0,0.2692247194387589
-num_permisos,exclude,Alias heredado; en v2 se separa en permisos aprobados y rechazados.,1.9207367367367365,0.0,0.9453847171930152
-recursamientos,include,Historial acumulado de repeticion de materias.,1.0183773773773772,0.0,0.739695807568059
-rezago_materias,include,Indicador central de atraso academico.,1.7530170170170172,0.0,0.5283548780997722
-creditos_inscritos_periodo,include,Carga academica real del periodo.,158.3832222222222,0.0,0.9278347291763697
-creditos_aprobados_periodo,include,"Desempeno reciente en creditos, no solo materias.",170.59915515515516,0.0,0.9096091149327931
-creditos_totales_plan,exclude,"Constante por plan/programa; descriptiva, no debe dominar clustering.",43.292792792792795,0.0,0.06577818560539309
-periodos_cursados,include,Contexto temporal de avance academico.,8.122966966966969,0.0,0.9534339464061222
-periodos_sin_inscripcion,include,Explica rezago y bajas de forma academica.,0.3472712712712713,0.0,0.5340945683111722
-materias_reprobadas_periodo,include,Dificultad reciente del periodo.,0.726802802802803,0.0,0.6448765930374304
-materias_reprobadas_acumuladas,include,Dificultad historica acumulada.,2.018222222222222,0.0,1.0
-materias_en_curso_periodo,include,Carga actual validada contra estatus.,3.2536126126126126,0.0,1.0
-tendencia_promedio,include,"Diferencia recuperacion, deterioro y estabilidad.",84.04653380503957,0.036,0.6445353607452003
-varianza_calificaciones,include,Distingue desempeno estable de desempeno irregular.,229.61172821581584,0.0,0.2273124358299623
-tutorias_abiertas,include,Seguimiento tutorial pendiente.,1.4607397397397397,0.0,0.6598707037168596
-tutorias_cerradas,include,Acompanamiento tutorial completado.,1.7028028028028026,0.0,0.7181129868352616
-compromisos_pendientes,include,Accionabilidad tutorial no resuelta.,1.8705545545545548,0.0,0.6039971321137287
-compromisos_cumplidos,include,Respuesta del alumno al seguimiento.,2.9382822822822825,0.0,0.6274668113661446
-permisos_aprobados,include,Contextualiza baja asistencia sin asumir abandono.,1.731087087087087,0.0,0.9453847171930152
-permisos_rechazados,include,Senal operativa de ausencias sin soporte.,0.20410410410410412,0.0,0.31443792462143494
-bandera_dato_incompleto,include,Permite que el modelo capture incertidumbre controlada.,0.03473873873873873,0.0,0.5489108858596162
+promedio_general,include,Desempeno acumulado del estudiante.,74.92982103676573,0.0,0.8760344001924173
+promedio_periodo,include,Desempeno reciente; se imputa cuando no aplica por baja temporal.,105.28584891792813,0.0759592795614722,0.8760344001924173
+materias_aprobadas,exclude,Variable heredada; en v2 se usa creditos aprobados y avance.,3.687502301387215,0.0,0.9851083107135531
+materias_reprobadas,exclude,Alias heredado; se reemplaza por periodo y acumulado.,1.1807773410938156,0.0,1.0
+materias_en_curso,exclude,Alias heredado; se reemplaza por materias_en_curso_periodo.,0.2094151898920619,0.0,1.0
+creditos_acumulados,exclude,Variable heredada; se reemplaza por creditos_aprobados_periodo y porcentaje_avance.,125.75259412366859,0.0,0.9992510601570513
+porcentaje_avance,include,Lectura academica clara del progreso curricular.,17.147935948281997,0.0,0.9992510601570513
+porcentaje_asistencia,include,Indicador normalizado de compromiso/asistencia.,118.9819939742932,0.0,0.9428607652708121
+faltas,exclude,Altamente inverso a porcentaje_asistencia; se mantiene el indicador normalizado.,13.093923601308907,0.0,0.9428607652708121
+retardos,include,Senal operativa distinta a la asistencia acumulada.,1.1449051582986183,0.0,0.5319595504418123
+num_tutorias,exclude,Alias heredado; en v2 se separa en abiertas y cerradas.,1.5398931665369708,0.0,0.7468341699678305
+num_asesorias,include,Mide apoyo academico complementario.,1.670429076769368,0.0,0.6906551780332905
+num_incidencias,include,Senal de eventos que pueden afectar trayectoria.,0.5645051219673853,0.0,0.7822121605508489
+num_permisos,exclude,Alias heredado; en v2 se separa en permisos aprobados y rechazados.,1.5883806334890502,0.0,0.8869041474821691
+recursamientos,include,Historial acumulado de repeticion de materias.,0.17402906007663926,0.0,0.6297521113344384
+rezago_materias,include,Indicador central de atraso academico.,1.717712457930642,0.0,0.7148288381000023
+creditos_inscritos_periodo,include,Carga academica real del periodo.,19.580093184702584,0.0,0.6290708589662711
+creditos_aprobados_periodo,include,"Desempeno reciente en creditos, no solo materias.",22.257842513924928,0.0,0.6290708589662711
+creditos_totales_plan,exclude,"Constante por plan/programa; descriptiva, no debe dominar clustering.",45.48854952462546,0.0,0.11122445175962017
+periodos_cursados,include,Contexto temporal de avance academico.,1.6419765663548236,0.0,0.7160552471204303
+periodos_sin_inscripcion,include,Explica rezago y bajas de forma academica.,4.314041776008131,0.0,0.7148288381000023
+materias_reprobadas_periodo,include,Dificultad reciente del periodo.,0.3031902750127036,0.0,0.9058734772362202
+materias_reprobadas_acumuladas,include,Dificultad historica acumulada.,1.1807773410938156,0.0,1.0
+materias_en_curso_periodo,include,Carga actual validada contra estatus.,0.2094151898920619,0.0,1.0
+tendencia_promedio,include,"Diferencia recuperacion, deterioro y estabilidad.",66.01641170160002,0.0759592795614722,0.5107203265671738
+varianza_calificaciones,include,Distingue desempeno estable de desempeno irregular.,1814.8952821364483,0.0,0.3843590361698033
+tutorias_abiertas,include,Seguimiento tutorial pendiente.,0.8316931090943457,0.0,0.9371710681491529
+tutorias_cerradas,include,Acompanamiento tutorial completado.,0.6812192074390654,0.0,0.9023364461170983
+compromisos_pendientes,include,Accionabilidad tutorial no resuelta.,1.0538389593556605,0.0,0.9371710681491529
+compromisos_cumplidos,include,Respuesta del alumno al seguimiento.,0.7932237341142911,0.0,0.9023364461170983
+permisos_aprobados,include,Contextualiza baja asistencia sin asumir abandono.,1.002242471702143,0.0,0.8869041474821691
+permisos_rechazados,include,Senal operativa de ausencias sin soporte.,0.35257006650088496,0.0,0.6271921566584648
+bandera_dato_incompleto,include,Permite que el modelo capture incertidumbre controlada.,0.134334733395031,0.0,0.9069260601685556
