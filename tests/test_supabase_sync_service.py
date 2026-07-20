@@ -4,11 +4,19 @@ import unittest
 
 import pandas as pd
 
+from app.models.config import FINAL_FEATURES, SUPABASE_SNAPSHOT_REGISTRY_DIR
 from app.repositories.factory import repository_status
+from app.services import supabase_sync_service
 from app.services.supabase_sync_service import build_student_period_preview, validate_against_local_sources
 
 
 class SupabaseSyncServiceTests(unittest.TestCase):
+    def test_snapshot_registry_directory_is_available_to_sync_service(self) -> None:
+        self.assertEqual(
+            supabase_sync_service.SUPABASE_SNAPSHOT_REGISTRY_DIR,
+            SUPABASE_SNAPSHOT_REGISTRY_DIR,
+        )
+
     def test_repository_status_has_fallback_contract(self) -> None:
         status = repository_status(mode="local")
         self.assertEqual(status["mode"], "local")
@@ -65,6 +73,7 @@ class SupabaseSyncServiceTests(unittest.TestCase):
         self.assertEqual(row["materias_aprobadas"], 2)
         self.assertEqual(row["materias_reprobadas_periodo"], 0)
         self.assertEqual(row["creditos_inscritos_periodo"], 9)
+        self.assertTrue(set(FINAL_FEATURES).issubset(preview.columns))
 
     def test_validation_marks_preview_as_non_replacement(self) -> None:
         preview = pd.DataFrame(

@@ -94,6 +94,9 @@ class SupabaseRepository:
     ) -> None:
         self._request("PATCH", table, params=filters, payload=payload, prefer="return=minimal")
 
+    def rpc(self, function_name: str, parameters: dict[str, Any] | None = None) -> Any:
+        return self._request("POST", f"rpc/{function_name}", payload=parameters or {})
+
     def fetch_student_identity_lookup(self, limit: int = 10000) -> dict[str, dict[str, Any]]:
         rows = self.fetch_table(
             "profiles",

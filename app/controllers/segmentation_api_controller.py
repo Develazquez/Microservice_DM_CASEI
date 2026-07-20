@@ -6,11 +6,15 @@ from fastapi import APIRouter, HTTPException, Query, Request
 
 from app.models.api_schemas import (
     ClusterCatalogResponse,
+    ActiveModelResponse,
     ErrorResponse,
     HealthResponse,
     HistoryResponse,
     HistoryRunResponse,
     LlmContextContractResponse,
+    MlJobCreateRequest,
+    MlJobResponse,
+    ModelActivationResponse,
     RagDocumentsResponse,
     RunSegmentationRequest,
     RunSegmentationResponse,
@@ -22,6 +26,8 @@ from app.models.api_schemas import (
     StudentListResponse,
     SupabaseResultsSyncRequest,
     SupabaseResultsSyncResponse,
+    SupabasePromoteRequest,
+    SupabasePromoteResponse,
     SupabaseSyncRequest,
     SupabaseSyncResponse,
     SupabaseSyncStatusResponse,
@@ -31,13 +37,19 @@ from app.services.llm_context_service import (
     rag_documents,
     student_llm_context,
 )
+from app.services.ml_job_service import active_model, cancel_job, enqueue_job, get_job
+from app.services.candidate_model_service import activate_candidate_model
 from app.services.academic_search_orchestrator_service import UnsupportedSourceFilterError
 from app.services.security_audit_service import (
     AuthorizationError,
     audit_context_access,
     audit_items_access,
     require_student_access,
-    security_context_from_headers,
+)
+from app.services.supabase_auth_service import (
+    AuthenticationError,
+    require_roles,
+    security_context_from_request,
 )
 from app.services.segmentation_api_service import (
     cluster_catalog,
@@ -54,6 +66,7 @@ from app.services.segmentation_api_service import (
 )
 from app.services.supabase_results_sync_service import sync_results_to_supabase
 from app.services.supabase_sync_service import (
+    promote_supabase_preview,
     supabase_sync_status,
     sync_from_supabase,
 )
@@ -73,6 +86,8 @@ router = APIRouter(prefix="/cacei/segmentation", tags=["Segmentacion academica"]
 def http_error(exc: Exception) -> HTTPException:
     if isinstance(exc, FileNotFoundError):
         return HTTPException(status_code=503, detail=str(exc))
+    if isinstance(exc, AuthenticationError):
+        return HTTPException(status_code=401, detail=str(exc))
     if isinstance(exc, AuthorizationError):
         return HTTPException(status_code=403, detail=str(exc))
     if isinstance(exc, UnsupportedSourceFilterError):
@@ -106,13 +121,15 @@ def api_health() -> HealthResponse:
     ),
     responses=ERROR_RESPONSES,
 )
-def run(request: RunSegmentationRequest) -> RunSegmentationResponse:
+def run(payload: RunSegmentationRequest, request: Request) -> RunSegmentationResponse:
     try:
+        context = security_context_from_request(request)
+        require_roles(context, "director")
         return run_segmentation(
-            mode=request.mode,
-            persist_model=request.persist_model,
-            refresh_search_index=request.refresh_search_index,
-            notes=request.notes,
+            mode=payload.mode,
+            persist_model=payload.persist_model,
+            refresh_search_index=payload.refresh_search_index,
+            notes=payload.notes,
         )
     except Exception as exc:
         raise http_error(exc) from exc
@@ -125,9 +142,10 @@ def run(request: RunSegmentationRequest) -> RunSegmentationResponse:
     description="Devuelve metricas del modelo, distribucion de perfiles, programas y conteos de seguimiento.",
     responses=ERROR_RESPONSES,
 )
-def summary() -> SegmentationSummaryResponse:
+def summary(request: Request) -> SegmentationSummaryResponse:
     try:
-        return segmentation_summary()
+        context = security_context_from_request(request)
+        return segmentation_summary(security_context=context)
     except Exception as exc:
         raise http_error(exc) from exc
 
@@ -143,8 +161,9 @@ def summary() -> SegmentationSummaryResponse:
     ),
     responses=ERROR_RESPONSES,
 )
-def llm_context_contract() -> LlmContextContractResponse:
+def llm_context_contract(request: Request) -> LlmContextContractResponse:
     try:
+        security_context_from_request(request)
         return context_contract()
     except Exception as exc:
         raise http_error(exc) from exc
@@ -158,8 +177,10 @@ def llm_context_contract() -> LlmContextContractResponse:
     description="Indica si el microservicio tiene variables suficientes para leer datos academicos desde Supabase.",
     responses=ERROR_RESPONSES,
 )
-def sync_status() -> SupabaseSyncStatusResponse:
+def sync_status(request: Request) -> SupabaseSyncStatusResponse:
     try:
+        context = security_context_from_request(request)
+        require_roles(context, "director")
         return supabase_sync_status()
     except Exception as exc:
         raise http_error(exc) from exc
@@ -176,9 +197,98 @@ def sync_status() -> SupabaseSyncStatusResponse:
     ),
     responses=ERROR_RESPONSES,
 )
-def sync_from_supabase_endpoint(request: SupabaseSyncRequest) -> SupabaseSyncResponse:
+def sync_from_supabase_endpoint(payload: SupabaseSyncRequest, request: Request) -> SupabaseSyncResponse:
     try:
-        return sync_from_supabase(limit=request.limit, write_preview=request.write_preview)
+        context = security_context_from_request(request)
+        require_roles(context, "director")
+        return sync_from_supabase(limit=payload.limit, write_preview=payload.write_preview)
+    except Exception as exc:
+        raise http_error(exc) from exc
+
+
+@router.post("/jobs", response_model=MlJobResponse, summary="Encolar procesamiento de segmentacion")
+def create_ml_job(payload: MlJobCreateRequest, request: Request) -> MlJobResponse:
+    try:
+        context = security_context_from_request(request)
+        return enqueue_job(
+            context=context,
+            operation=payload.operation,
+            trigger_source=payload.trigger_source,
+            source_hash=payload.source_hash,
+            scope=payload.scope,
+            source_batch_id=payload.source_batch_id,
+            student_profile_ids=payload.student_profile_ids,
+            notes=payload.notes,
+        )
+    except Exception as exc:
+        raise http_error(exc) from exc
+
+
+@router.get("/jobs/{execution_id}", response_model=MlJobResponse, summary="Consultar estado de trabajo ML")
+def ml_job(execution_id: str, request: Request) -> MlJobResponse:
+    try:
+        return get_job(execution_id, security_context_from_request(request))
+    except Exception as exc:
+        raise http_error(exc) from exc
+
+
+@router.post("/jobs/{execution_id}/cancel", response_model=MlJobResponse, summary="Cancelar trabajo ML pendiente")
+def cancel_ml_job(execution_id: str, request: Request) -> MlJobResponse:
+    try:
+        return cancel_job(execution_id, security_context_from_request(request))
+    except Exception as exc:
+        raise http_error(exc) from exc
+
+
+@router.get("/models/active", response_model=ActiveModelResponse, summary="Consultar modelo activo")
+def active_model_endpoint(request: Request) -> ActiveModelResponse:
+    try:
+        security_context_from_request(request)
+        return active_model()
+    except Exception as exc:
+        raise http_error(exc) from exc
+
+
+@router.post(
+    "/models/{model_version}/activate",
+    response_model=ModelActivationResponse,
+    summary="Activar modelo candidato y encolar reinferencia",
+)
+def activate_model_endpoint(model_version: str, request: Request) -> ModelActivationResponse:
+    try:
+        context = security_context_from_request(request)
+        require_roles(context, "director")
+        activation = activate_candidate_model(model_version)
+        try:
+            job = enqueue_job(
+                context=context,
+                operation="inference",
+                trigger_source="model_activation",
+                scope={"model_version": model_version, "full_population": True},
+                notes=f"Reinferencia posterior a activacion de {model_version}",
+            )
+        except Exception:
+            previous = activation.get("previous_model_version")
+            if previous and previous != model_version:
+                activate_candidate_model(str(previous))
+            raise
+        return {**activation, "inference_job": job}
+    except Exception as exc:
+        raise http_error(exc) from exc
+
+
+@router.post(
+    "/sync/promote",
+    response_model=SupabasePromoteResponse,
+    tags=["Sincronizacion Supabase"],
+    summary="Promover snapshot validado como dataset activo",
+    responses=ERROR_RESPONSES,
+)
+def promote_supabase_endpoint(payload: SupabasePromoteRequest, request: Request) -> SupabasePromoteResponse:
+    try:
+        context = security_context_from_request(request)
+        require_roles(context, "director")
+        return promote_supabase_preview(payload.source_hash, reviewed_by=context.user_id)
     except Exception as exc:
         raise http_error(exc) from exc
 
@@ -196,13 +306,15 @@ def sync_from_supabase_endpoint(request: SupabaseSyncRequest) -> SupabaseSyncRes
     ),
     responses=ERROR_RESPONSES,
 )
-def sync_to_supabase_endpoint(request: SupabaseResultsSyncRequest) -> SupabaseResultsSyncResponse:
+def sync_to_supabase_endpoint(payload: SupabaseResultsSyncRequest, request: Request) -> SupabaseResultsSyncResponse:
     try:
+        context = security_context_from_request(request)
+        require_roles(context, "director")
         return sync_results_to_supabase(
-            include_rag_documents=request.include_rag_documents,
-            max_rag_documents=request.max_rag_documents,
-            batch_size=request.batch_size,
-            notes=request.notes,
+            include_rag_documents=payload.include_rag_documents,
+            max_rag_documents=payload.max_rag_documents,
+            batch_size=payload.batch_size,
+            notes=payload.notes,
         )
     except Exception as exc:
         raise http_error(exc) from exc
@@ -219,15 +331,15 @@ def students(
     perfil: str | None = Query(default=None, description="Filtro parcial por nombre de perfil academico."),
     programa: str | None = Query(default=None, description="Filtro parcial por programa/carrera."),
     cluster: int | None = Query(default=None, description="Cluster numerico asignado por K-Means."),
-    role: Literal["director", "coordinador", "tutor", "analista"] = Query(
-        default="director",
-        description="Rol solicitante para aplicar alcance antes de paginar.",
+    role: Literal["director", "coordinador", "tutor", "analista"] | None = Query(
+        default=None,
+        description="Compatibilidad local; con JWT el rol se deriva del perfil autenticado.",
     ),
     limit: int = Query(default=50, ge=1, le=500, description="Cantidad maxima de registros."),
     offset: int = Query(default=0, ge=0, description="Desplazamiento para paginacion."),
 ) -> StudentListResponse:
     try:
-        context = security_context_from_headers(request.headers, role=role)
+        context = security_context_from_request(request, requested_role=role)
         result = filtered_students(
             perfil=perfil,
             programa=programa,
@@ -257,17 +369,17 @@ def students(
 def student_context_for_llm(
     request: Request,
     student_id: str,
-    role: Literal["director", "coordinador", "tutor", "analista"] = Query(
-        default="tutor",
-        description="Rol solicitante usado para aplicar la politica de salida.",
+    role: Literal["director", "coordinador", "tutor", "analista"] | None = Query(
+        default=None,
+        description="Compatibilidad local; con JWT el rol se deriva del perfil autenticado.",
     ),
     max_history: int = Query(default=6, ge=1, le=12, description="Periodos/corridas maximas a incluir."),
 ) -> StudentLlmContextResponse:
     try:
-        context = security_context_from_headers(request.headers, role=role)
+        context = security_context_from_request(request, requested_role=role)
         result = student_llm_context(
             student_id=student_id,
-            role=role,
+            role=context.role,
             max_history=max_history,
             security_context=context,
         )
@@ -296,14 +408,14 @@ def student_context_for_llm(
 def student_inference_history(
     request: Request,
     student_id: str,
-    role: Literal["director", "coordinador", "tutor", "analista"] = Query(
-        default="director",
-        description="Rol solicitante usado para validar alcance.",
+    role: Literal["director", "coordinador", "tutor", "analista"] | None = Query(
+        default=None,
+        description="Compatibilidad local; con JWT el rol se deriva del perfil autenticado.",
     ),
     limit: int = Query(default=100, ge=1, le=500, description="Cantidad maxima de inferencias historicas."),
 ) -> StudentHistoryResponse:
     try:
-        context = security_context_from_headers(request.headers, role=role)
+        context = security_context_from_request(request, requested_role=role)
         require_student_access(student_id, context)
         result = student_history(student_id, limit=limit)
         audit_context_access(
@@ -326,13 +438,13 @@ def student_inference_history(
 def student(
     request: Request,
     student_id: str,
-    role: Literal["director", "coordinador", "tutor", "analista"] = Query(
-        default="director",
-        description="Rol solicitante usado para validar alcance.",
+    role: Literal["director", "coordinador", "tutor", "analista"] | None = Query(
+        default=None,
+        description="Compatibilidad local; con JWT el rol se deriva del perfil autenticado.",
     ),
 ) -> StudentDetailResponse:
     try:
-        context = security_context_from_headers(request.headers, role=role)
+        context = security_context_from_request(request, requested_role=role)
         result = student_detail(student_id, security_context=context)
         if result is None:
             raise HTTPException(status_code=404, detail=f"Student not found: {student_id}")
@@ -369,13 +481,13 @@ def search(
         default=None,
         description="Filtro opcional; devuelve 422 si la fuente activa no contiene sexo.",
     ),
-    role: Literal["director", "coordinador", "tutor", "analista"] = Query(
-        default="director",
-        description="Rol solicitante para aplicar alcance antes del ranking.",
+    role: Literal["director", "coordinador", "tutor", "analista"] | None = Query(
+        default=None,
+        description="Compatibilidad local; con JWT el rol se deriva del perfil autenticado.",
     ),
 ) -> SearchResponse:
     try:
-        context = security_context_from_headers(request.headers, role=role)
+        context = security_context_from_request(request, requested_role=role)
         result = search_students(
             q,
             top_k=top_k,
@@ -404,9 +516,9 @@ def search(
 )
 def rag_document_list(
     request: Request,
-    role: Literal["director", "coordinador", "tutor", "analista"] = Query(
-        default="analista",
-        description="Rol solicitante usado para visibilidad y limites de salida.",
+    role: Literal["director", "coordinador", "tutor", "analista"] | None = Query(
+        default=None,
+        description="Compatibilidad local; con JWT el rol se deriva del perfil autenticado.",
     ),
     perfil: str | None = Query(default=None, description="Filtro parcial por perfil academico."),
     programa: str | None = Query(default=None, description="Filtro parcial por programa/carrera."),
@@ -416,9 +528,9 @@ def rag_document_list(
     offset: int = Query(default=0, ge=0, description="Desplazamiento para paginacion."),
 ) -> RagDocumentsResponse:
     try:
-        context = security_context_from_headers(request.headers, role=role)
+        context = security_context_from_request(request, requested_role=role)
         result = rag_documents(
-            role=role,
+            role=context.role,
             perfil=perfil,
             programa=programa,
             cluster=cluster,
@@ -447,8 +559,9 @@ def rag_document_list(
     description="Devuelve perfiles academicos, centroides, resumen de clusters y variables mas distintivas.",
     responses=ERROR_RESPONSES,
 )
-def clusters() -> ClusterCatalogResponse:
+def clusters(request: Request) -> ClusterCatalogResponse:
     try:
+        security_context_from_request(request)
         return cluster_catalog()
     except Exception as exc:
         raise http_error(exc) from exc
@@ -462,9 +575,11 @@ def clusters() -> ClusterCatalogResponse:
     responses=ERROR_RESPONSES,
 )
 def history(
+    request: Request,
     limit: int = Query(default=20, ge=1, le=100, description="Cantidad maxima de corridas."),
     student_id: str | None = Query(default=None, description="Filtra corridas donde aparece el estudiante."),
 ) -> HistoryResponse:
+    security_context_from_request(request)
     return {
         "summary": history_summary(),
         "items": read_history(limit=limit, student_id=student_id),
@@ -479,11 +594,13 @@ def history(
     responses=ERROR_RESPONSES,
 )
 def history_run(
+    request: Request,
     execution_id: str,
     limit: int = Query(default=100, ge=1, le=500, description="Cantidad maxima de inferencias."),
     offset: int = Query(default=0, ge=0, description="Desplazamiento para paginacion."),
 ) -> HistoryRunResponse:
     try:
+        security_context_from_request(request)
         result = history_detail(execution_id=execution_id, limit=limit, offset=offset)
         if result is None:
             raise HTTPException(status_code=404, detail=f"Inference run not found: {execution_id}")

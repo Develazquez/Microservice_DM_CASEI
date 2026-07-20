@@ -229,6 +229,22 @@ class SupabaseSyncResponse(ApiModel):
     active_dataset_replaced: bool
     note: str
 
+
+class SupabasePromoteRequest(BaseModel):
+    source_hash: str = Field(min_length=64, max_length=64)
+
+
+class SupabasePromoteResponse(ApiModel):
+    status: Literal["promoted"]
+    source: Literal["supabase"]
+    source_hash: str
+    promoted_at_utc: str
+    reviewed_by: str | None = None
+    dataset_path: str
+    snapshot_path: str
+    previous_dataset_backup: str | None = None
+    records: int
+
 class SupabaseResultsSyncRequest(BaseModel):
     include_rag_documents: bool = Field(
         default=True,
@@ -250,3 +266,49 @@ class SupabaseResultsSyncResponse(ApiModel):
     counts: dict[str, int]
     active_model_version: str
     note: str
+
+
+class MlJobCreateRequest(BaseModel):
+    operation: Literal["auto", "inference", "retrain"] = "auto"
+    trigger_source: str = Field(default="director_manual", max_length=100)
+    source_hash: str | None = Field(default=None, max_length=128)
+    scope: dict[str, Any] = Field(default_factory=dict)
+    source_batch_id: str | None = None
+    student_profile_ids: list[str] = Field(default_factory=list, max_length=5000)
+    notes: str | None = Field(default=None, max_length=500)
+
+
+class MlJobResponse(ApiModel):
+    execution_id: str
+    run_type: str
+    status: str
+    progress: int | None = None
+    model_version: str | None = None
+    candidate_model_version: str | None = None
+    source_hash: str | None = None
+    trigger_source: str | None = None
+    scope: dict[str, Any] = Field(default_factory=dict)
+    metrics: dict[str, Any] = Field(default_factory=dict)
+    error_message: str | None = None
+    review_notes: str | None = None
+    created_at: str | None = None
+    started_at: str | None = None
+    finished_at: str | None = None
+
+
+class ActiveModelResponse(ApiModel):
+    model_version: str
+    algorithm: str
+    selected_representation: str | None = None
+    selected_k: int | None = None
+    metrics: dict[str, Any] = Field(default_factory=dict)
+    is_active: bool
+
+
+class ModelActivationResponse(ApiModel):
+    model_version: str
+    activated_at_utc: str
+    manifest_path: str
+    checks_passed: bool
+    previous_model_version: str | None = None
+    inference_job: dict[str, Any] | None = None

@@ -12,6 +12,7 @@ import pandas as pd
 from app.repositories.supabase_repository import SupabaseRepository
 from app.services.llm_context_service import rag_documents
 from app.services.model_persistence_service import load_persisted_model_bundle
+from app.services.model_bundle_inference_service import InferenceResult
 from app.services.segmentation_api_service import current_manifest, jsonable, student_period_df, student_view
 
 
@@ -195,6 +196,99 @@ def sync_results_to_supabase(
         except Exception:
             pass
         raise
+
+
+def ensure_model_version_registered(
+    repository: SupabaseRepository,
+    model_version: str,
+    activate_if_missing: bool = True,
+) -> dict[str, Any]:
+    loaded = load_persisted_model_bundle(model_version)
+    manifest = loaded["manifest"]
+    model = manifest["model"]
+    active_rows = repository.fetch_table(
+        "ml_model_versions",
+        select="model_version",
+        filters={"is_active": "eq.true"},
+        limit=1,
+    )
+    existing_rows = repository.fetch_table(
+        "ml_model_versions",
+        select="model_version,is_active",
+        filters={"model_version": f"eq.{model_version}"},
+        limit=1,
+    )
+    already_active = bool(existing_rows and existing_rows[0].get("is_active"))
+    should_activate = activate_if_missing and not active_rows
+    repository.insert_rows(
+        "ml_model_versions",
+        [
+            {
+                "model_version": model_version,
+                "algorithm": str(model.get("algorithm") or "kmeans"),
+                "selected_representation": model.get("selected_representation"),
+                "selected_k": model.get("selected_k"),
+                "metrics": jsonable(model.get("metrics") or {}),
+                "artifact_manifest": jsonable(manifest),
+                "is_active": already_active or should_activate,
+            }
+        ],
+        upsert=True,
+        on_conflict="model_version",
+    )
+    return {
+        "model_version": model_version,
+        "activated": already_active or should_activate,
+        "active_model_version": (
+            model_version
+            if already_active or should_activate
+            else str(active_rows[0]["model_version"]) if active_rows else None
+        ),
+    }
+
+
+def publish_inference_result(
+    result: InferenceResult,
+    execution_id: str,
+    source_hash: str,
+) -> dict[str, int]:
+    repository = SupabaseRepository()
+    repository.require_configured()
+    ensure_model_version_registered(repository, result.model_version)
+    identities = repository.fetch_student_identity_lookup()
+    programs = repository.fetch_program_lookup()
+    feature_rows = build_feature_rows(
+        features=result.features,
+        execution_id=execution_id,
+        source_hash=source_hash,
+        identities=identities,
+        programs=programs,
+    )
+    assignment_rows = build_assignment_rows(
+        view=result.assignments,
+        execution_id=execution_id,
+        model_version=result.model_version,
+        identities=identities,
+        programs=programs,
+    )
+    history_rows = build_profile_history_rows(
+        view=result.assignments,
+        execution_id=execution_id,
+        model_version=result.model_version,
+        identities=identities,
+        programs=programs,
+    )
+    counts = repository.rpc(
+        "publish_ml_inference_results",
+        {
+            "target_execution_id": execution_id,
+            "target_model_version": result.model_version,
+            "feature_rows": feature_rows,
+            "assignment_rows": assignment_rows,
+            "history_rows": history_rows,
+        },
+    )
+    return {key: int(value) for key, value in (counts or {}).items()}
 
 
 def build_feature_rows(

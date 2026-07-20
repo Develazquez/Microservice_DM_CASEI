@@ -10,8 +10,10 @@ import numpy as np
 import pandas as pd
 
 from app.models.config import (
+    ACTIVE_DATASET_POINTER,
     ARTIFACTS_DIR,
     CARDEX_COLUMNS,
+    CASEI_PIPELINE_DATA_SOURCE,
     FEATURE_DECISIONS,
     FIGURES_DIR,
     FINAL_FEATURES,
@@ -45,6 +47,14 @@ def copy_dataset() -> None:
 
 
 def read_dataset() -> pd.DataFrame:
+    if CASEI_PIPELINE_DATA_SOURCE in {"auto", "supabase_active"} and ACTIVE_DATASET_POINTER.exists():
+        pointer = json.loads(ACTIVE_DATASET_POINTER.read_text(encoding="utf-8"))
+        if pointer.get("source") == "supabase" and STUDENT_PERIOD_DATASET.exists():
+            df = pd.read_csv(STUDENT_PERIOD_DATASET, encoding="utf-8-sig")
+            missing = sorted(set(METADATA_COLUMNS + NUMERIC_COLUMNS) - set(df.columns))
+            if missing:
+                raise ValueError(f"Promoted Supabase dataset is missing required columns: {missing}")
+            return df
     df = pd.read_csv(RAW_DATASET, encoding="utf-8-sig")
     if set(CARDEX_COLUMNS).issubset(df.columns):
         cardex_quality = pd.DataFrame(
@@ -580,3 +590,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+    ACTIVE_DATASET_POINTER,
+    CASEI_PIPELINE_DATA_SOURCE,
+

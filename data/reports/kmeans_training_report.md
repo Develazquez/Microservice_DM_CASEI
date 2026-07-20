@@ -6,18 +6,18 @@
 - Implementacion: numpy, con inicializacion tipo k-means++.
 - Representacion usada: `pca_90`.
 - K final: 2.
-- Registros asignados: 1277.
-- Inercia final: 21596.52331.
-- Silhouette: 0.34664.
-- Calinski-Harabasz: 443.46799.
-- Davies-Bouldin: 1.39579.
+- Registros asignados: 999.
+- Inercia final: 17361.09891.
+- Silhouette: 0.32558.
+- Calinski-Harabasz: 310.17692.
+- Davies-Bouldin: 1.46327.
 
 ## Distribucion e interpretacion inicial de clusters
 
 | cluster | registros | promedio_general | porcentaje_asistencia | materias_reprobadas | rezago_materias | variables_distintivas | perfil_sugerido |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 0 | 1033 | 79.279 | 78.741 | 0.24105 | 1.0581 | varianza_calificaciones (-5.91), porcentaje_asistencia (+3.79), promedio_periodo (+3.66), promedio_general (+2.53), tendencia_promedio (+1.29) | Regular / seguimiento preventivo |
-| 1 | 244 | 66.044 | 58.931 | 2.1926 | 2.6926 | varianza_calificaciones (+25.02), porcentaje_asistencia (-16.03), promedio_periodo (-14.10), promedio_general (-10.71), tendencia_promedio (-4.99) | Riesgo academico moderado |
+| 0 | 812 | 79.041 | 75.47 | 0.21675 | 1.5443 | varianza_calificaciones (-9.15), porcentaje_asistencia (+3.54), promedio_periodo (+3.27), promedio_general (+2.33), tendencia_promedio (+1.00) | Regular / seguimiento preventivo |
+| 1 | 187 | 66.58 | 56.539 | 2.1283 | 1.738 | varianza_calificaciones (+39.74), porcentaje_asistencia (-15.39), promedio_periodo (-12.62), promedio_general (-10.13), tendencia_promedio (-3.85) | Riesgo academico moderado |
 
 ## Artefactos generados
 
