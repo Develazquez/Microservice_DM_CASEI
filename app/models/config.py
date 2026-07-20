@@ -49,6 +49,8 @@ _env_candidates.extend(
     [
         PROJECT_ROOT / ".env",
         PROJECT_ROOT / ".env.local",
+        CASEI_ROOT / "NuevostestsWeb" / "CASEI_Tests" / ".env.local",
+        CASEI_ROOT / "NuevostestsWeb" / "CASEI_Tests" / ".env",
         CASEI_ROOT / "CACEIv2" / ".env",
         CASEI_ROOT / "CACEIv2" / ".env.local",
     ]
@@ -72,12 +74,33 @@ INFERENCE_SCHEMA_PATH = STORAGE_DIR / "segmentation_inference_schema.sql"
 SUPABASE_SOURCE_SNAPSHOT = STORAGE_DIR / "supabase_academic_source_snapshot.json"
 SUPABASE_STUDENT_PERIOD_PREVIEW = PROCESSED_DIR / "supabase_student_period_features_preview.csv"
 SUPABASE_SYNC_VALIDATION_REPORT = REPORTS_DIR / "supabase_sync_validation_report.md"
+SUPABASE_SNAPSHOT_REGISTRY_DIR = STORAGE_DIR / "supabase_snapshots"
+DATASET_VERSION_DIR = STORAGE_DIR / "dataset_versions"
+ACTIVE_DATASET_POINTER = STORAGE_DIR / "active_dataset.json"
+ACTIVE_INFERENCE_SNAPSHOT = PROCESSED_DIR / "active_inference_assignments.csv"
+ACTIVE_INFERENCE_METADATA = STORAGE_DIR / "active_inference_metadata.json"
+SEARCH_INDEX_STATE = STORAGE_DIR / "search_index_state.json"
 
 CASEI_SUPABASE_URL = os.getenv("CASEI_SUPABASE_URL") or os.getenv("NEXT_PUBLIC_SUPABASE_URL")
 CASEI_SUPABASE_SERVICE_ROLE_KEY = os.getenv("CASEI_SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+CASEI_SUPABASE_ANON_KEY = os.getenv("CASEI_SUPABASE_ANON_KEY") or os.getenv("NEXT_PUBLIC_SUPABASE_ANON_KEY")
 CASEI_DB_MODE = os.getenv("CASEI_DB_MODE", "local").strip().lower()
 CASEI_ARTIFACT_MODE = os.getenv("CASEI_ARTIFACT_MODE", "local").strip().lower()
 CASEI_ALLOW_STORAGE_ARTIFACT_BACKUP = os.getenv("CASEI_ALLOW_STORAGE_ARTIFACT_BACKUP", "false").lower() == "true"
+CASEI_ENVIRONMENT = os.getenv("CASEI_ENVIRONMENT", "development").strip().lower()
+CASEI_ALLOW_DEV_IDENTITY_HEADERS = os.getenv(
+    "CASEI_ALLOW_DEV_IDENTITY_HEADERS",
+    "false" if CASEI_ENVIRONMENT == "production" else "true",
+).lower() == "true"
+CASEI_AUTH_TIMEOUT_SECONDS = float(os.getenv("CASEI_AUTH_TIMEOUT_SECONDS", "5"))
+CASEI_PIPELINE_DATA_SOURCE = os.getenv("CASEI_PIPELINE_DATA_SOURCE", "auto").strip().lower()
+CASEI_AUTO_INFERENCE_ENABLED = os.getenv("CASEI_AUTO_INFERENCE_ENABLED", "false").lower() == "true"
+CASEI_ML_WORKER_ENABLED = os.getenv("CASEI_ML_WORKER_ENABLED", "true").lower() == "true"
+CASEI_ML_WORKER_ID = os.getenv("CASEI_ML_WORKER_ID", "worker-local-1").strip()
+CASEI_ML_POLL_SECONDS = float(os.getenv("CASEI_ML_POLL_SECONDS", "5"))
+CASEI_ML_JOB_TIMEOUT_SECONDS = int(os.getenv("CASEI_ML_JOB_TIMEOUT_SECONDS", "900"))
+CASEI_ML_EVENT_DEBOUNCE_SECONDS = int(os.getenv("CASEI_ML_EVENT_DEBOUNCE_SECONDS", "60"))
+CASEI_MODEL_ACTIVATION_MODE = os.getenv("CASEI_MODEL_ACTIVATION_MODE", "manual").strip().lower()
 
 RAW_DATASET_V1 = RAW_DIR / "dataset_sintetico_alumnos.csv"
 RAW_DATASET_V2 = RAW_DIR / "dataset_sintetico_alumnos_v2.csv"

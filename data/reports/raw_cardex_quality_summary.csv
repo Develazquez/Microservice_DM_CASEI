@@ -4,11 +4,11 @@ Carrera,str,0,0.0,4
 EstatusAlumno,str,0,0.0,4
 CuatrimestreActual,int64,0,0.0,9
 Materia,str,0,0.0,128
-Periodo,str,0,0.0,7
+Periodo,int64,0,0.0,3
 EstatusMateria,str,0,0.0,4
 Final,float64,241,0.1205,489
 Extr,float64,1806,0.903,147
-EstatusCardex,str,0,0.0,8
-PeriodoCursado,str,0,0.0,7
-PlanEstudiosClave,str,0,0.0,4
+EstatusCardex,str,0,0.0,2
+PeriodoCursado,str,0,0.0,4
+PlanEstudiosClave,str,0,0.0,2
 Credito,int64,0,0.0,6

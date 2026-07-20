@@ -15,11 +15,30 @@ class DataQualityTests(unittest.TestCase):
         self.assertEqual(list(raw.columns), CARDEX_COLUMNS)
         self.assertGreater(raw["Matricula"].nunique(), 300)
         self.assertGreater(raw["Carrera"].nunique(), 1)
+        expected_values = {
+            "Periodo": {"1", "2", "3"},
+            "EstatusCardex": {"ordinario", "repeticion"},
+            "PeriodoCursado": {
+                "Septiembre-Diciembre 2022",
+                "Enero-Abril 2023",
+                "Mayo-Agosto 2023",
+                "Septiembre-Diciembre 2023",
+            },
+            "PlanEstudiosClave": {"004", "NME"},
+            "EstatusAlumno": {
+                "Baja Academica", "Inscrito", "Abandono Escolar", "Baja Definitiva",
+                "Egresado", "Baja Temporal", "Desconocido", "Sin Carga",
+                "Titulo Profesional Ausente", "Movilidad Academica",
+                "Proceso de Titulacion", "Activo", "Inactivo",
+            },
+        }
+        for column, allowed in expected_values.items():
+            self.assertFalse(set(raw[column].dropna().astype(str)) - allowed)
 
     def test_student_period_features_are_unique_and_complete(self) -> None:
         features = pd.read_csv(STUDENT_PERIOD_DATASET)
 
-        self.assertEqual(len(features), 1277)
+        self.assertEqual(len(features), 999)
         self.assertEqual(features.duplicated(["id_estudiante", "id_periodo"]).sum(), 0)
         self.assertTrue(features["promedio_general"].between(0, 100).all())
         self.assertTrue(features["porcentaje_asistencia"].between(0, 100).all())

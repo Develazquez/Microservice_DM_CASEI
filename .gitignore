@@ -7,6 +7,10 @@ dist/
 build/
 *.so
 *.egg
+*.tmp
+*.temp
+*.bak
+*.pid
 
 # ── Logs y Reportes ────────────────────────────────
 *.log
@@ -14,10 +18,20 @@ htmlcov/
 .coverage
 .coverage.*
 coverage.xml
+junit.xml
+test-results/
+/data/reports/*.md
+/data/reports/*.jsonl
+/data/reports/figures/
+/artifacts/model_registry/*/documentation/
 
 # ── Pruebas y Tipado ───────────────────────────────
 .pytest_cache/
 .mypy_cache/
+.ruff_cache/
+.hypothesis/
+.tox/
+.nox/
 
 # ── Notebooks ──────────────────────────────────────
 .ipynb_checkpoints/
@@ -30,9 +44,18 @@ ENV/
 
 # ── Variables de entorno ────────────────────────────
 .env
+.env.local
+.env.development
+.env.production
+.env.test
+.env.*.local
+!.env.example
+!.env.*.example
 
 # ── Plataformas / Deploy ───────────────────────────
 .vercel/
+docker-compose.override.yml
+compose.override.yml
 
 # ── IDEs / Editores ────────────────────────────────
 .vscode/
@@ -47,7 +70,9 @@ Thumbs.db
 desktop.ini
 
 # ── Carpeta scripts (entrypoints CLI, no necesarios) ─
-/scripts/
+/scripts/*
+!/scripts/run_ml_worker.py
+!/scripts/normalize_raw_cardex_contract.py
 
 # ── Datos y artefactos ─────────────────────────────
 # Mantener resultados sintéticos versionables durante la fase académica.
@@ -55,4 +80,18 @@ desktop.ini
 # data/raw/
 # data/processed/
 # artifacts/
+/data/storage/supabase_snapshots/
+/data/storage/dataset_versions/
+/data/storage/active_dataset.json
+/data/storage/active_inference_metadata.json
+/data/storage/search_index_state.json
+/data/storage/*.sqlite
+/data/storage/*.sqlite-*
+/data/storage/*snapshot*.json
+!/data/storage/segmentation_inference_schema.sql
+/data/processed/active_inference_assignments.csv
+/data/processed/supabase_student_period_features_preview.csv
 /docs
+!/docs/
+/docs/
+!/docs/flujo_ml_asincrono.md
