@@ -1,0 +1,246 @@
+{
+  "schema_version": "1.0",
+  "model_version": "casei-kmeans-pca90-k2-b0c92e1bd722",
+  "content_fingerprint_sha256": "b0c92e1bd72276d6dd1a6e17eef26be491751ada5ab1a9342f386f78f130b150",
+  "created_at_utc": "2026-07-19T16:57:06Z",
+  "pipeline_phase": "fase_8_model_persistence",
+  "project": "CASEI academic segmentation",
+  "storage_format": "local_filesystem_json_csv_markdown",
+  "source_dataset": "data/raw/dataset_crudo_2000_estudiantes.csv",
+  "student_period_dataset": "data/processed/student_period_features.csv",
+  "runtime": {
+    "python_version": "3.11.9",
+    "platform": "Windows-10-10.0.26200-SP0"
+  },
+  "model": {
+    "algorithm": "kmeans",
+    "implementation": "numpy",
+    "selected_representation": "pca_90",
+    "selected_k": 2,
+    "random_seed": 42,
+    "n_init": 20,
+    "max_iter": 300,
+    "tol": 0.0001,
+    "features": [
+      "PC1",
+      "PC2",
+      "PC3",
+      "PC4",
+      "PC5",
+      "PC6",
+      "PC7",
+      "PC8",
+      "PC9",
+      "PC10",
+      "PC11"
+    ],
+    "metrics": {
+      "inertia": 17361.098914344308,
+      "silhouette": 0.3255789062232767,
+      "calinski_harabasz": 310.1769170943589,
+      "davies_bouldin": 1.4632741329176733,
+      "min_cluster_size": 187,
+      "max_cluster_size": 812
+    }
+  },
+  "preprocessing": {
+    "scaler": "standard_scaler_params_csv",
+    "input_features": [
+      "promedio_general",
+      "promedio_periodo",
+      "porcentaje_avance",
+      "porcentaje_asistencia",
+      "retardos",
+      "num_asesorias",
+      "num_incidencias",
+      "recursamientos",
+      "rezago_materias",
+      "creditos_inscritos_periodo",
+      "creditos_aprobados_periodo",
+      "periodos_cursados",
+      "periodos_sin_inscripcion",
+      "materias_reprobadas_periodo",
+      "materias_reprobadas_acumuladas",
+      "materias_en_curso_periodo",
+      "tendencia_promedio",
+      "varianza_calificaciones",
+      "tutorias_abiertas",
+      "tutorias_cerradas",
+      "compromisos_pendientes",
+      "compromisos_cumplidos",
+      "permisos_aprobados",
+      "permisos_rechazados",
+      "bandera_dato_incompleto"
+    ],
+    "n_input_features": 25
+  },
+  "pca": {
+    "method": "numpy.linalg.svd",
+    "n_components_total": 25,
+    "n_components_90_variance": 11,
+    "n_components_95_variance": 13
+  },
+  "artifacts": [
+    {
+      "role": "preprocessing",
+      "source_path": "artifacts/scaler_params.csv",
+      "bundle_path": "preprocessing/scaler_params.csv",
+      "required_for_load": true,
+      "sha256": "923a88da7d2bff0c53637abef6937e7d61e779df789dc58e1a27583311d40ab3",
+      "bytes": 1488
+    },
+    {
+      "role": "preprocessing",
+      "source_path": "data/processed/final_feature_list.csv",
+      "bundle_path": "preprocessing/final_feature_list.csv",
+      "required_for_load": true,
+      "sha256": "8119ae4b16059023d3851d87cfe1d2a8e98b863eeffdbcc42a566c1f2a5bcad6",
+      "bytes": 547
+    },
+    {
+      "role": "pca",
+      "source_path": "artifacts/pca_metadata.json",
+      "bundle_path": "pca/pca_metadata.json",
+      "required_for_load": true,
+      "sha256": "d64fb7389a02e8f0aaebd77f4d6253ef425a0b5cd4a75799329b8bfb569f3f67",
+      "bytes": 1461
+    },
+    {
+      "role": "pca",
+      "source_path": "artifacts/pca_components.csv",
+      "bundle_path": "pca/pca_components.csv",
+      "required_for_load": true,
+      "sha256": "8264f61330e83f5bb63f84b4ac1ddefe59d942abe96a55f620036adefbf654a6",
+      "bytes": 13493
+    },
+    {
+      "role": "kmeans",
+      "source_path": "artifacts/kmeans_metadata.json",
+      "bundle_path": "kmeans/kmeans_metadata.json",
+      "required_for_load": true,
+      "sha256": "670c67b78016e853af1372fd03c76d06e50ee167fcb60a0136bb06b1360ef81e",
+      "bytes": 854
+    },
+    {
+      "role": "kmeans",
+      "source_path": "artifacts/kmeans_centroids.csv",
+      "bundle_path": "kmeans/kmeans_centroids.csv",
+      "required_for_load": true,
+      "sha256": "8cffdb914a2183bedb2376f75bfac23ce6a97d8b93ab532349dfaf58b2373570",
+      "bytes": 519
+    },
+    {
+      "role": "profiles",
+      "source_path": "artifacts/academic_profile_catalog.json",
+      "bundle_path": "profiles/academic_profile_catalog.json",
+      "required_for_load": true,
+      "sha256": "82297f5c1859fa223e0c8397f37ccb22f17f48ffe828c570e62dd903f32045aa",
+      "bytes": 2538
+    },
+    {
+      "role": "profiles",
+      "source_path": "data/reports/academic_profile_catalog.csv",
+      "bundle_path": "profiles/academic_profile_catalog.csv",
+      "required_for_load": true,
+      "sha256": "dbb318f5767b87de46324aec07e8454ed1fd2e0aeb7244c985c18ca39f5d44d3",
+      "bytes": 1719
+    },
+    {
+      "role": "profiles",
+      "source_path": "data/reports/cluster_feature_differences.csv",
+      "bundle_path": "profiles/cluster_feature_differences.csv",
+      "required_for_load": true,
+      "sha256": "3d7c37d567ea406c57c5b12b9a855cac657078a6191df65f9690bd3ef1358b91",
+      "bytes": 7444
+    },
+    {
+      "role": "profiles",
+      "source_path": "data/reports/cluster_stability_metrics.csv",
+      "bundle_path": "profiles/cluster_stability_metrics.csv",
+      "required_for_load": true,
+      "sha256": "dc50dbeff9a522c50eb12f1f6695587dc2ac85207616d448de49e633e496f78c",
+      "bytes": 916
+    },
+    {
+      "role": "evaluation",
+      "source_path": "data/reports/k_selection_metrics.csv",
+      "bundle_path": "evaluation/k_selection_metrics.csv",
+      "required_for_load": true,
+      "sha256": "6e095826e4c69ee839bb4acee03892cb0277584c91858ba34a9067f06f0fecc0",
+      "bytes": 1587
+    },
+    {
+      "role": "evaluation",
+      "source_path": "data/reports/cluster_summary.csv",
+      "bundle_path": "evaluation/cluster_summary.csv",
+      "required_for_load": true,
+      "sha256": "998f23c8f08a9d0a4bee6d25a2467fb98875a776b9ea1711a98cfdc6dd6eb76d",
+      "bytes": 647
+    },
+    {
+      "role": "inference_snapshot",
+      "source_path": "data/processed/cluster_assignments.csv",
+      "bundle_path": "inference_snapshot/cluster_assignments.csv",
+      "required_for_load": true,
+      "sha256": "0ec63320eec7da39e9895e1c66c27610feac650a112b7dbabc2ac4128360084a",
+      "bytes": 116682
+    },
+    {
+      "role": "documentation",
+      "source_path": "data/reports/pca_report.md",
+      "bundle_path": "documentation/pca_report.md",
+      "required_for_load": false,
+      "sha256": "fdb3736e62f762633a86629f847e951dcd7c5c92779a8ede08952ab360291759",
+      "bytes": 2637
+    },
+    {
+      "role": "documentation",
+      "source_path": "data/reports/k_selection_report.md",
+      "bundle_path": "documentation/k_selection_report.md",
+      "required_for_load": false,
+      "sha256": "30971d366acdb4094825d548921dcf72952dfcda4741be9506dc80b6b941f389",
+      "bytes": 2750
+    },
+    {
+      "role": "documentation",
+      "source_path": "data/reports/kmeans_training_report.md",
+      "bundle_path": "documentation/kmeans_training_report.md",
+      "required_for_load": false,
+      "sha256": "5bbe0cec6d200eda69bbc7ea3d55e4b80f8285810141fc528c4e5a73738c200f",
+      "bytes": 1739
+    },
+    {
+      "role": "documentation",
+      "source_path": "data/reports/profile_interpretation_report.md",
+      "bundle_path": "documentation/profile_interpretation_report.md",
+      "required_for_load": false,
+      "sha256": "c9e6dbba71a00b3dbe70e687c82512df017fa1e3b9f3c05ca31a70036699ce97",
+      "bytes": 14644
+    }
+  ],
+  "load_contract": {
+    "entry_pointer": "artifacts/current_model.json",
+    "required_files": [
+      "preprocessing/scaler_params.csv",
+      "preprocessing/final_feature_list.csv",
+      "pca/pca_metadata.json",
+      "pca/pca_components.csv",
+      "kmeans/kmeans_metadata.json",
+      "kmeans/kmeans_centroids.csv",
+      "profiles/academic_profile_catalog.json",
+      "profiles/academic_profile_catalog.csv",
+      "profiles/cluster_feature_differences.csv",
+      "profiles/cluster_stability_metrics.csv",
+      "evaluation/k_selection_metrics.csv",
+      "evaluation/cluster_summary.csv",
+      "inference_snapshot/cluster_assignments.csv"
+    ],
+    "execution_metadata_schema": "execution_metadata_schema.json",
+    "note": "Los perfiles son apoyo tutorial y analitico; no son diagnostico automatico definitivo."
+  },
+  "warnings": [
+    "El dataset crudo activo no contiene asistencia, tutorias ni incidencias reales.",
+    "Las senales operativas estimadas deben reemplazarse por datos institucionales reales cuando existan.",
+    "No se incluyen artefactos remotos ni Supabase Storage como fuente actual."
+  ]
+}

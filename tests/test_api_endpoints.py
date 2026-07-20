@@ -55,7 +55,7 @@ class ApiEndpointTests(unittest.TestCase):
 
         summary = self.client.get("/cacei/segmentation/summary")
         self.assertEqual(summary.status_code, 200)
-        self.assertEqual(summary.json()["total_records"], 1277)
+        self.assertEqual(summary.json()["total_records"], 999)
         self.assertEqual(summary.json()["selected_k"], 2)
 
         students = self.client.get("/cacei/segmentation/students?limit=2")
@@ -162,9 +162,9 @@ class ApiEndpointTests(unittest.TestCase):
             "counts": {
                 "ml_model_versions": 1,
                 "ml_model_runs": 1,
-                "student_period_features": 1277,
-                "cluster_assignments": 1277,
-                "student_profile_history": 1277,
+                "student_period_features": 999,
+                "cluster_assignments": 999,
+                "student_profile_history": 999,
                 "rag_context_documents": 100,
             },
             "active_model_version": "casei-kmeans-pca90-k2-68c23826aa1e",
@@ -179,7 +179,7 @@ class ApiEndpointTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["status"], "completed")
-        self.assertEqual(response.json()["counts"]["cluster_assignments"], 1277)
+        self.assertEqual(response.json()["counts"]["cluster_assignments"], 999)
 
     def test_run_endpoint_contract_without_mutating_pipeline(self) -> None:
         fake_response = {
@@ -193,12 +193,12 @@ class ApiEndpointTests(unittest.TestCase):
             "model_version": "casei-kmeans-pca90-k2-68c23826aa1e",
             "inference_persistence": {
                 "execution_id": "mock-run",
-                "assignments_count": 1277,
+                "assignments_count": 999,
                 "students_count": 387,
             },
             "summary": {
                 "total_students": 387,
-                "total_records": 1277,
+                "total_records": 999,
                 "selected_k": 2,
                 "selected_representation": "pca_90",
             },
@@ -209,7 +209,7 @@ class ApiEndpointTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["status"], "completed")
-        self.assertEqual(response.json()["inference_persistence"]["assignments_count"], 1277)
+        self.assertEqual(response.json()["inference_persistence"]["assignments_count"], 999)
 
 
 if __name__ == "__main__":

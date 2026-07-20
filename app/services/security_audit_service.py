@@ -157,9 +157,14 @@ def audit_items_access(
     items: list[dict[str, Any]],
     model_version: str | None = None,
 ) -> None:
-    if context is None:
+    if context is None or not context.user_id:
         return
+    repository = SupabaseRepository()
+    if not repository.configured:
+        return
+
     seen: set[str] = set()
+    payloads: list[dict[str, Any]] = []
     for item in items:
         student_id = item.get("id_estudiante") or item.get("student_id")
         if not student_id:
@@ -168,4 +173,19 @@ def audit_items_access(
         if key in seen:
             continue
         seen.add(key)
-        audit_context_access(context, endpoint=endpoint, student_id=key, model_version=model_version)
+        payloads.append(
+            {
+                "requested_by": context.user_id,
+                "role": context.role,
+                "student_id": key,
+                "endpoint": endpoint,
+                "purpose": context.purpose or "academic_segmentation_access",
+                "model_version": model_version,
+            }
+        )
+
+    try:
+        repository.insert_rows("llm_context_audit", payloads)
+    except Exception:
+        # La auditoria no debe bloquear la respuesta de datos academicos.
+        return

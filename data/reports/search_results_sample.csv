@@ -1,41 +1,41 @@
 query_id,query,rank,document_id,is_relevant,score_bm25,programa,perfil_sugerido,promedio_general,porcentaje_asistencia,rezago_materias
-critical_lag,estudiantes criticos con rezago alto,1,IAG20210339::2024-2,True,8.806580886007195,Ingeniería Agroindustrial,Riesgo academico moderado,59.09,63.41,4
-critical_lag,estudiantes criticos con rezago alto,2,IAG20220113::2023-1,True,8.806580886007195,Ingeniería Agroindustrial,Riesgo academico moderado,59.48,65.56,4
-critical_lag,estudiantes criticos con rezago alto,3,IAG20210339::2023-2,True,8.806580886007195,Ingeniería Agroindustrial,Riesgo academico moderado,58.18,60.29,4
-critical_lag,estudiantes criticos con rezago alto,4,IDS20220005::2024-2,True,8.728032397892854,Ingeniería en Desarrollo de Software,Riesgo academico moderado,59.3,63.73,4
-critical_lag,estudiantes criticos con rezago alto,5,IEN20240366::2025-1,True,8.575198818508158,Ingeniería en Energía,Riesgo academico moderado,52.43,59.93,4
-atypical_attendance,buen promedio baja asistencia atipico,1,IDS20200065::2022-1,True,15.065151493445205,Ingeniería en Desarrollo de Software,Regular / seguimiento preventivo,94.0,50.89,2
-atypical_attendance,buen promedio baja asistencia atipico,2,IDS20200065::2022-2,True,15.065151493445205,Ingeniería en Desarrollo de Software,Regular / seguimiento preventivo,89.57,47.9,2
-atypical_attendance,buen promedio baja asistencia atipico,3,IBM20200017::2023-2,False,3.9140142131772824,Ingeniería Biomédica,Riesgo academico moderado,74.23,41.1,2
-atypical_attendance,buen promedio baja asistencia atipico,4,IBM20200017::2022-1,False,3.9140142131772824,Ingeniería Biomédica,Riesgo academico moderado,73.6,44.84,2
-atypical_attendance,buen promedio baja asistencia atipico,5,IAG20230236::2022-2,False,3.9140142131772824,Ingeniería Agroindustrial,Riesgo academico moderado,65.33,46.48,2
-moderate_risk,riesgo academico moderado,1,IEN20230123::2022-1,True,3.906561046448772,Ingeniería en Energía,Riesgo academico moderado,54.9,68.78,1
-moderate_risk,riesgo academico moderado,2,IEN20220344::2024-2,True,3.906561046448772,Ingeniería en Energía,Riesgo academico moderado,57.27,60.72,1
-moderate_risk,riesgo academico moderado,3,IEN20220060::2024-1,True,3.906561046448772,Ingeniería en Energía,Riesgo academico moderado,50.2,64.08,2
-moderate_risk,riesgo academico moderado,4,IEN20210159::2022-1,True,3.906561046448772,Ingeniería en Energía,Riesgo academico moderado,57.1,61.95,2
-moderate_risk,riesgo academico moderado,5,IAG20210176::2022-1,True,3.906561046448772,Ingeniería Agroindustrial,Riesgo academico moderado,58.2,61.74,2
-regular_preventive,alumnos regulares seguimiento preventivo,1,IEN20240352::2023-1,True,0.36398627725917304,Ingeniería en Energía,Regular / seguimiento preventivo,76.1,80.14,0
-regular_preventive,alumnos regulares seguimiento preventivo,2,IAG20200007::2023-1,True,0.36398627725917304,Ingeniería Agroindustrial,Regular / seguimiento preventivo,85.77,80.42,2
-regular_preventive,alumnos regulares seguimiento preventivo,3,IEN20220214::2022-2,True,0.36398627725917304,Ingeniería en Energía,Regular / seguimiento preventivo,89.67,90.76,0
-regular_preventive,alumnos regulares seguimiento preventivo,4,IEN20220220::2022-1,True,0.36398627725917304,Ingeniería en Energía,Regular / seguimiento preventivo,80.4,83.34,0
-regular_preventive,alumnos regulares seguimiento preventivo,5,IEN20220220::2023-2,True,0.36398627725917304,Ingeniería en Energía,Regular / seguimiento preventivo,79.2,81.42,1
-software_lag,desarrollo de software rezago alto,1,IDS20200101::2024-2,True,4.042444164272052,Ingeniería en Desarrollo de Software,Riesgo academico moderado,80.7,61.87,4
-software_lag,desarrollo de software rezago alto,2,IDS20210130::2023-1,True,4.042444164272052,Ingeniería en Desarrollo de Software,Riesgo academico moderado,80.15,66.33,3
-software_lag,desarrollo de software rezago alto,3,IDS20200353::2024-1,True,3.918209496875096,Ingeniería en Desarrollo de Software,Riesgo academico moderado,78.45,60.09,3
-software_lag,desarrollo de software rezago alto,4,IDS20200101::2024-1,True,3.87916783646783,Ingeniería en Desarrollo de Software,Regular / seguimiento preventivo,91.5,72.15,3
-software_lag,desarrollo de software rezago alto,5,IDS20200191::2024-2,True,3.87916783646783,Ingeniería en Desarrollo de Software,Regular / seguimiento preventivo,84.5,77.05,4
-biomedical_low_attendance,biomedica baja asistencia,1,IBM20200017::2023-2,True,5.503100620996477,Ingeniería Biomédica,Riesgo academico moderado,74.23,41.1,2
-biomedical_low_attendance,biomedica baja asistencia,2,IBM20200017::2022-1,True,5.503100620996477,Ingeniería Biomédica,Riesgo academico moderado,73.6,44.84,2
-biomedical_low_attendance,biomedica baja asistencia,3,IBM20200017::2024-1,True,5.456648026811709,Ingeniería Biomédica,Riesgo academico moderado,74.58,38.87,2
-biomedical_low_attendance,biomedica baja asistencia,4,IBM20200017::2022-2,True,5.456648026811709,Ingeniería Biomédica,Riesgo academico moderado,74.8,43.79,2
-biomedical_low_attendance,biomedica baja asistencia,5,IBM20220218::2023-1,True,5.456648026811709,Ingeniería Biomédica,Riesgo academico moderado,81.05,36.43,2
-energy_low_average,energia promedio bajo reprobadas,1,IEN20230123::2022-1,False,5.57792270170322,Ingeniería en Energía,Riesgo academico moderado,54.9,68.78,1
-energy_low_average,energia promedio bajo reprobadas,2,IEN20220344::2024-2,False,5.57792270170322,Ingeniería en Energía,Riesgo academico moderado,57.27,60.72,1
-energy_low_average,energia promedio bajo reprobadas,3,IEN20220060::2024-1,False,5.57792270170322,Ingeniería en Energía,Riesgo academico moderado,50.2,64.08,2
-energy_low_average,energia promedio bajo reprobadas,4,IEN20210159::2022-1,False,5.57792270170322,Ingeniería en Energía,Riesgo academico moderado,57.1,61.95,2
-energy_low_average,energia promedio bajo reprobadas,5,IEN20220344::2023-2,False,5.4253855594234786,Ingeniería en Energía,Riesgo academico moderado,57.4,57.28,1
-agro_high_performance,agroindustrial asistencia alta promedio alto,1,IAG20230030::2025-1,False,3.2231568823171823,Ingeniería Agroindustrial,Regular / seguimiento preventivo,77.47,83.69,3
-agro_high_performance,agroindustrial asistencia alta promedio alto,2,IAG20200007::2023-1,True,3.143322395715216,Ingeniería Agroindustrial,Regular / seguimiento preventivo,85.77,80.42,2
-agro_high_performance,agroindustrial asistencia alta promedio alto,3,IAG20210315::2022-2,True,3.143322395715216,Ingeniería Agroindustrial,Regular / seguimiento preventivo,82.2,82.64,1
-agro_high_performance,agroindustrial asistencia alta promedio alto,4,IAG20210133::2023-1,True,3.143322395715216,Ingeniería Agroindustrial,Regular / seguimiento preventivo,83.83,83.69,1
-agro_high_performance,agroindustrial asistencia alta promedio alto,5,IAG20210238::2022-2,True,3.143322395715216,Ingeniería Agroindustrial,Regular / seguimiento preventivo,85.23,82.87,1
+critical_lag,estudiantes criticos con rezago alto,1,IBM20200331::Enero-Abril 2023,True,10.117497636236758,Ingeniería Biomédica,Riesgo academico moderado,58.85,49.48,4
+critical_lag,estudiantes criticos con rezago alto,2,IAG20200249::Mayo-Agosto 2023,True,10.117497636236758,Ingeniería Agroindustrial,Riesgo academico moderado,57.5,55.35,4
+critical_lag,estudiantes criticos con rezago alto,3,IAG20210083::Septiembre-Diciembre 2023,True,10.117497636236758,Ingeniería Agroindustrial,Riesgo academico moderado,51.82,27.11,4
+critical_lag,estudiantes criticos con rezago alto,4,IEN20200224::Septiembre-Diciembre 2022,True,9.975017550255622,Ingeniería en Energía,Riesgo academico moderado,51.5,17.14,4
+critical_lag,estudiantes criticos con rezago alto,5,IBM20210147::Septiembre-Diciembre 2023,False,3.8616669692221355,Ingeniería Biomédica,Riesgo academico moderado,59.55,45.85,3
+atypical_attendance,buen promedio baja asistencia atipico,1,IDS20200065::Enero-Abril 2023,True,14.547455969688926,Ingeniería en Desarrollo de Software,Riesgo academico moderado,89.57,43.67,3
+atypical_attendance,buen promedio baja asistencia atipico,2,IDS20200065::Septiembre-Diciembre 2022,True,14.547455969688926,Ingeniería en Desarrollo de Software,Riesgo academico moderado,94.0,39.34,3
+atypical_attendance,buen promedio baja asistencia atipico,3,IEN20200224::Mayo-Agosto 2023,False,3.8657377861953197,Ingeniería en Energía,Riesgo academico moderado,65.76,36.2,2
+atypical_attendance,buen promedio baja asistencia atipico,4,IAG20230236::Septiembre-Diciembre 2022,False,3.8491743747626477,Ingeniería Agroindustrial,Riesgo academico moderado,61.7,34.37,0
+atypical_attendance,buen promedio baja asistencia atipico,5,IAG20230236::Enero-Abril 2023,False,3.8491743747626477,Ingeniería Agroindustrial,Riesgo academico moderado,65.33,48.58,0
+moderate_risk,riesgo academico moderado,1,IAG20210176::Septiembre-Diciembre 2022,True,4.703285230238592,Ingeniería Agroindustrial,Riesgo academico moderado,58.2,63.27,2
+moderate_risk,riesgo academico moderado,2,IBM20220362::Mayo-Agosto 2023,True,4.703285230238592,Ingeniería Biomédica,Riesgo academico moderado,55.4,62.71,2
+moderate_risk,riesgo academico moderado,3,IAG20220113::Enero-Abril 2023,True,4.703285230238592,Ingeniería Agroindustrial,Riesgo academico moderado,57.9,67.37,1
+moderate_risk,riesgo academico moderado,4,IAG20220371::Septiembre-Diciembre 2023,True,4.703285230238592,Ingeniería Agroindustrial,Riesgo academico moderado,48.36,63.41,1
+moderate_risk,riesgo academico moderado,5,IBM20210147::Septiembre-Diciembre 2022,True,4.703285230238592,Ingeniería Biomédica,Riesgo academico moderado,50.0,61.4,2
+regular_preventive,alumnos regulares seguimiento preventivo,1,IEN20240373::Septiembre-Diciembre 2022,True,0.3887855764895926,Ingeniería en Energía,Regular / seguimiento preventivo,70.0,77.45,0
+regular_preventive,alumnos regulares seguimiento preventivo,2,IEN20240251::Septiembre-Diciembre 2022,True,0.3887855764895926,Ingeniería en Energía,Regular / seguimiento preventivo,81.1,86.13,0
+regular_preventive,alumnos regulares seguimiento preventivo,3,IEN20240275::Mayo-Agosto 2023,True,0.3887855764895926,Ingeniería en Energía,Regular / seguimiento preventivo,80.55,88.5,0
+regular_preventive,alumnos regulares seguimiento preventivo,4,IEN20220214::Septiembre-Diciembre 2022,True,0.3887855764895926,Ingeniería en Energía,Regular / seguimiento preventivo,90.6,81.18,1
+regular_preventive,alumnos regulares seguimiento preventivo,5,IEN20220241::Septiembre-Diciembre 2022,True,0.3887855764895926,Ingeniería en Energía,Regular / seguimiento preventivo,70.0,78.85,1
+software_lag,desarrollo de software rezago alto,1,IDS20200101::Septiembre-Diciembre 2023,True,5.709654219251478,Ingeniería en Desarrollo de Software,Riesgo academico moderado,80.7,53.98,4
+software_lag,desarrollo de software rezago alto,2,IDS20200101::Enero-Abril 2023,True,5.680792548033545,Ingeniería en Desarrollo de Software,Regular / seguimiento preventivo,97.9,76.26,4
+software_lag,desarrollo de software rezago alto,3,IDS20210059::Septiembre-Diciembre 2023,True,5.680792548033545,Ingeniería en Desarrollo de Software,Regular / seguimiento preventivo,83.03,75.9,3
+software_lag,desarrollo de software rezago alto,4,IDS20200114::Septiembre-Diciembre 2022,True,5.680792548033545,Ingeniería en Desarrollo de Software,Regular / seguimiento preventivo,80.55,66.63,4
+software_lag,desarrollo de software rezago alto,5,IDS20210047::Mayo-Agosto 2023,True,5.680792548033545,Ingeniería en Desarrollo de Software,Regular / seguimiento preventivo,88.4,68.59,3
+biomedical_low_attendance,biomedica baja asistencia,1,IBM20220218::Mayo-Agosto 2023,True,6.482688112990126,Ingeniería Biomédica,Riesgo academico moderado,81.05,39.53,2
+biomedical_low_attendance,biomedica baja asistencia,2,IBM20220218::Septiembre-Diciembre 2023,True,6.363771731394699,Ingeniería Biomédica,Regular / seguimiento preventivo,82.19,43.33,1
+biomedical_low_attendance,biomedica baja asistencia,3,IBM20200017::Septiembre-Diciembre 2022,True,6.334727757379554,Ingeniería Biomédica,Riesgo academico moderado,73.6,37.5,4
+biomedical_low_attendance,biomedica baja asistencia,4,IBM20200017::Enero-Abril 2023,True,6.334727757379554,Ingeniería Biomédica,Riesgo academico moderado,74.8,33.68,4
+biomedical_low_attendance,biomedica baja asistencia,5,IBM20200017::Septiembre-Diciembre 2023,True,6.334727757379554,Ingeniería Biomédica,Riesgo academico moderado,74.58,37.1,3
+energy_low_average,energia promedio bajo reprobadas,1,IEN20230123::Septiembre-Diciembre 2022,False,6.613609813856917,Ingeniería en Energía,Riesgo academico moderado,54.9,67.96,0
+energy_low_average,energia promedio bajo reprobadas,2,IEN20210159::Enero-Abril 2023,False,6.613609813856917,Ingeniería en Energía,Riesgo academico moderado,57.45,63.32,2
+energy_low_average,energia promedio bajo reprobadas,3,IEN20240366::Septiembre-Diciembre 2023,True,6.491872692235709,Ingeniería en Energía,Riesgo academico moderado,52.43,34.32,0
+energy_low_average,energia promedio bajo reprobadas,4,IEN20210159::Septiembre-Diciembre 2022,False,6.491872692235709,Ingeniería en Energía,Riesgo academico moderado,57.1,55.73,2
+energy_low_average,energia promedio bajo reprobadas,5,IEN20220344::Septiembre-Diciembre 2023,False,6.491872692235709,Ingeniería en Energía,Riesgo academico moderado,57.27,56.66,1
+agro_high_performance,agroindustrial asistencia alta promedio alto,1,IAG20220242::Septiembre-Diciembre 2022,True,4.316855999127506,Ingeniería Agroindustrial,Regular / seguimiento preventivo,81.65,84.62,1
+agro_high_performance,agroindustrial asistencia alta promedio alto,2,IAG20240277::Mayo-Agosto 2023,True,4.316855999127506,Ingeniería Agroindustrial,Regular / seguimiento preventivo,82.7,89.09,0
+agro_high_performance,agroindustrial asistencia alta promedio alto,3,IAG20220262::Mayo-Agosto 2023,True,4.316855999127506,Ingeniería Agroindustrial,Regular / seguimiento preventivo,82.45,82.08,1
+agro_high_performance,agroindustrial asistencia alta promedio alto,4,IAG20220244::Septiembre-Diciembre 2023,True,4.316855999127506,Ingeniería Agroindustrial,Regular / seguimiento preventivo,81.87,82.3,1
+agro_high_performance,agroindustrial asistencia alta promedio alto,5,IAG20220258::Enero-Abril 2023,True,4.316855999127506,Ingeniería Agroindustrial,Regular / seguimiento preventivo,82.7,84.67,0

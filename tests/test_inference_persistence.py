@@ -34,11 +34,11 @@ class InferencePersistenceTests(unittest.TestCase):
                 run_detail = persistence.get_inference_run("test-execution", limit=3)
                 student_history = persistence.get_student_inference_history("IAG20200007")
 
-        self.assertEqual(result["assignments_count"], 1277)
+        self.assertEqual(result["assignments_count"], 999)
         self.assertEqual(summary["runs"], 1)
-        self.assertEqual(summary["student_inferences"], 1277)
+        self.assertEqual(summary["student_inferences"], 999)
         self.assertEqual(len(runs), 1)
-        self.assertEqual(run_detail["total_inferences"], 1277)
+        self.assertEqual(run_detail["total_inferences"], 999)
         self.assertEqual(len(run_detail["items"]), 3)
         self.assertEqual(student_history["total"], 3)
 

@@ -17,6 +17,13 @@ PLAN_CREDITS = {
     "IAG": 276,
 }
 
+PERIOD_LABEL_ORDER = {
+    "septiembre-diciembre 2022": 2022 * 3 + 3,
+    "enero-abril 2023": 2023 * 3 + 1,
+    "mayo-agosto 2023": 2023 * 3 + 2,
+    "septiembre-diciembre 2023": 2023 * 3 + 3,
+}
+
 
 def normalize_text(value: object) -> str:
     text = "" if pd.isna(value) else str(value)
@@ -47,10 +54,13 @@ def parse_cohort(matricula: object) -> int:
 
 def period_order(period: object) -> int:
     text = str(period)
-    match = re.search(r"(20\d{2})\s*-\s*([12])", text)
+    normalized = normalize_text(text).strip()
+    if normalized in PERIOD_LABEL_ORDER:
+        return PERIOD_LABEL_ORDER[normalized]
+    match = re.search(r"(20\d{2})\s*-\s*([123])", text)
     if not match:
         return 0
-    return int(match.group(1)) * 2 + int(match.group(2))
+    return int(match.group(1)) * 3 + int(match.group(2))
 
 
 def plan_total_credits(plan_key: object, carrera: object) -> int:
@@ -132,7 +142,9 @@ def build_student_period_features(raw: pd.DataFrame) -> pd.DataFrame:
             in_course_period = int(in_course_mask.sum())
             approved_credits_period = float(period_rows.loc[approved_mask, "Credito"].sum())
             enrolled_credits_period = float(period_rows["Credito"].sum())
-            retake_period = int(period_rows["cardex_norm"].str.contains("recursamiento", na=False).sum())
+            retake_period = int(
+                period_rows["cardex_norm"].str.contains("recursamiento|repeticion", na=False).sum()
+            )
 
             cumulative_scores.extend(period_scores)
             cumulative_approved += approved_period
@@ -145,7 +157,11 @@ def build_student_period_features(raw: pd.DataFrame) -> pd.DataFrame:
             total_plan_credits = plan_total_credits(plan_key, carrera)
             current_order = period_order(period)
             cohort = parse_cohort(matricula)
-            expected_periods = max(1, current_order - period_order(f"{cohort}-1") + 1) if current_order else observed_periods
+            expected_periods = (
+                max(observed_periods, current_order - period_order(f"{cohort}-1") + 1)
+                if current_order
+                else observed_periods
+            )
             periods_without_enrollment = int(max(0, min(8, expected_periods - observed_periods)))
 
             promedio_periodo = float(np.mean(period_scores)) if period_scores else np.nan

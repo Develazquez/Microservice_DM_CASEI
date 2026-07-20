@@ -467,7 +467,7 @@ Guardar los artefactos del pipeline de segmentacion academica en un formato loca
 """
 
 
-def persist_current_model_bundle() -> dict[str, Any]:
+def persist_current_model_bundle(activate: bool = True) -> dict[str, Any]:
     ensure_dirs()
     validate_required_sources()
     write_execution_schema()
@@ -485,7 +485,8 @@ def persist_current_model_bundle() -> dict[str, Any]:
     manifest_path = bundle_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
 
-    write_current_pointer(model_version, bundle_dir, manifest_path)
+    if activate:
+        write_current_pointer(model_version, bundle_dir, manifest_path)
     registry_index = upsert_registry_index(manifest, bundle_dir, manifest_path)
     loaded = load_persisted_model_bundle(model_version)
     load_checks = validate_loaded_contract(loaded)
@@ -502,6 +503,29 @@ def persist_current_model_bundle() -> dict[str, Any]:
         "registry_index": registry_index,
         "load_checks": load_checks,
         "report_path": PHASE_8_REPORT_PATH,
+        "activated": activate,
+    }
+
+
+def activate_persisted_model_bundle(model_version: str) -> dict[str, Any]:
+    loaded = load_persisted_model_bundle(model_version)
+    checks = validate_loaded_contract(loaded)
+    if not bool(checks["passed"].all()):
+        failed = checks.loc[~checks["passed"], ["check", "detail"]]
+        raise ValueError("El bundle candidato no cumple el contrato:\n" + failed.to_string(index=False))
+    bundle_dir = resolve_manifest_path(model_version).parent
+    for artifact in BUNDLE_FILES:
+        bundled = bundle_dir / artifact.bundle_path
+        if bundled.exists():
+            artifact.source_path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(bundled, artifact.source_path)
+    manifest_path = bundle_dir / "manifest.json"
+    write_current_pointer(model_version, bundle_dir, manifest_path)
+    return {
+        "model_version": model_version,
+        "activated_at_utc": utc_now(),
+        "manifest_path": str(manifest_path),
+        "checks_passed": True,
     }
 
 

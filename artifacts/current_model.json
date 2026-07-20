@@ -1,7 +1,7 @@
 {
-  "current_model_version": "casei-kmeans-pca90-k2-68c23826aa1e",
-  "updated_at_utc": "2026-07-13T01:57:40Z",
-  "bundle_dir": "artifacts/model_registry/casei-kmeans-pca90-k2-68c23826aa1e",
-  "manifest_path": "artifacts/model_registry/casei-kmeans-pca90-k2-68c23826aa1e/manifest.json",
+  "current_model_version": "casei-kmeans-pca90-k2-b0c92e1bd722",
+  "updated_at_utc": "2026-07-19T16:57:06Z",
+  "bundle_dir": "artifacts/model_registry/casei-kmeans-pca90-k2-b0c92e1bd722",
+  "manifest_path": "artifacts/model_registry/casei-kmeans-pca90-k2-b0c92e1bd722/manifest.json",
   "registry_index": "artifacts/model_registry/registry_index.csv"
 }

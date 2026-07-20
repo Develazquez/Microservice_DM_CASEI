@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import Counter, OrderedDict
+import json
 import math
 import re
 import unicodedata
@@ -8,9 +9,10 @@ import unicodedata
 import numpy as np
 import pandas as pd
 
-from app.models.config import PROCESSED_DIR, PROJECT_ROOT, RAW_DATASET, REPORTS_DIR, STUDENT_PERIOD_DATASET
+from app.models.config import ACTIVE_INFERENCE_METADATA, ACTIVE_INFERENCE_SNAPSHOT, PROCESSED_DIR, PROJECT_ROOT, RAW_DATASET, REPORTS_DIR, STUDENT_PERIOD_DATASET
 from app.models.search_config import BM25_B, BM25_K1, SEARCH_TOP_K, SPANISH_STOPWORDS
 from app.views.report_view import markdown_table, write_markdown
+from app.services.model_persistence_service import load_persisted_model_bundle
 
 
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
@@ -106,6 +108,10 @@ def get_cached_index(documents: pd.DataFrame) -> BM25Index:
     return index
 
 
+def clear_index_cache() -> None:
+    _INDEX_CACHE.clear()
+
+
 def numeric_bucket(value: float, thresholds: tuple[float, float], labels: tuple[str, str, str]) -> str:
     if value < thresholds[0]:
         return labels[0]
@@ -119,13 +125,16 @@ def load_search_documents() -> pd.DataFrame:
         raw = pd.read_csv(STUDENT_PERIOD_DATASET)
     else:
         raw = pd.read_csv(RAW_DATASET, encoding="utf-8-sig")
-    assignments_path = PROCESSED_DIR / "cluster_assignments.csv"
-    summary_path = REPORTS_DIR / "cluster_summary.csv"
-    if not assignments_path.exists() or not summary_path.exists():
-        raise FileNotFoundError("Ejecuta primero scripts/run_phase_5_6.py para generar clusters y perfiles.")
-
-    assignments = pd.read_csv(assignments_path)
-    summary = pd.read_csv(summary_path)[["cluster", "perfil_sugerido"]]
+    loaded = load_persisted_model_bundle()
+    assignments = loaded["cluster_assignments"].copy()
+    if ACTIVE_INFERENCE_SNAPSHOT.exists() and ACTIVE_INFERENCE_METADATA.exists():
+        metadata = json.loads(ACTIVE_INFERENCE_METADATA.read_text(encoding="utf-8"))
+        if metadata.get("model_version") == loaded["manifest"]["model_version"]:
+            assignments = pd.read_csv(ACTIVE_INFERENCE_SNAPSHOT)
+    summary = pd.DataFrame(loaded["profile_catalog"])
+    if "perfil_sugerido" not in summary.columns and "perfil_academico" in summary.columns:
+        summary = summary.rename(columns={"perfil_academico": "perfil_sugerido"})
+    summary = summary[["cluster", "perfil_sugerido"]]
 
     data = raw.merge(
         assignments[["id_estudiante", "id_periodo", "cluster", "membership_score"]],

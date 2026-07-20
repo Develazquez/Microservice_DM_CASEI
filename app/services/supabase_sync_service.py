@@ -3,19 +3,27 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from hashlib import sha256
 import json
+import os
+import shutil
 from typing import Any
 
 import pandas as pd
 
 from app.models.config import (
+    ACTIVE_DATASET_POINTER,
+    DATASET_VERSION_DIR,
+    FINAL_FEATURES,
     RAW_CARDEX_DATASET,
     STUDENT_PERIOD_DATASET,
+    SUPABASE_SNAPSHOT_REGISTRY_DIR,
     SUPABASE_SOURCE_SNAPSHOT,
     SUPABASE_STUDENT_PERIOD_PREVIEW,
     SUPABASE_SYNC_VALIDATION_REPORT,
 )
 from app.repositories.factory import repository_status
 from app.repositories.supabase_repository import SupabaseRepository
+from app.services.cardex_student_period_feature_service import build_student_period_features
+from app.services.model_persistence_service import load_persisted_model_bundle
 from app.services.segmentation_api_service import jsonable
 
 
@@ -66,6 +74,12 @@ def sync_from_supabase(limit: int = 1000, write_preview: bool = True) -> dict[st
         SUPABASE_STUDENT_PERIOD_PREVIEW.parent.mkdir(parents=True, exist_ok=True)
         preview.to_csv(SUPABASE_STUDENT_PERIOD_PREVIEW, index=False)
 
+    version_dir = SUPABASE_SNAPSHOT_REGISTRY_DIR / snapshot_hash
+    version_dir.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(SUPABASE_SOURCE_SNAPSHOT, version_dir / "source.json")
+    if write_preview:
+        shutil.copy2(SUPABASE_STUDENT_PERIOD_PREVIEW, version_dir / "student_period_features.csv")
+
     write_validation_report(validation, started_at=started_at)
 
     return {
@@ -79,6 +93,7 @@ def sync_from_supabase(limit: int = 1000, write_preview: bool = True) -> dict[st
         "preview_path": str(SUPABASE_STUDENT_PERIOD_PREVIEW) if write_preview else None,
         "validation_report_path": str(SUPABASE_SYNC_VALIDATION_REPORT),
         "validation": validation,
+        "versioned_snapshot_path": str(version_dir),
         "active_dataset_replaced": False,
         "note": (
             "La sincronizacion genera una vista preliminar desde Supabase; "
@@ -93,53 +108,132 @@ def source_hash(source: dict[str, list[dict[str, Any]]]) -> str:
 
 
 def build_student_period_preview(source: dict[str, list[dict[str, Any]]]) -> pd.DataFrame:
+    cardex = build_cardex_from_supabase(source)
+    if cardex.empty:
+        return empty_preview()
+    grouped = build_student_period_features(cardex)
+    identities = {
+        str(row.get("matricula")): row
+        for row in source.get("profiles", [])
+        if row.get("matricula")
+    }
+    grouped["student_profile_id"] = grouped["id_estudiante"].map(
+        lambda value: identities.get(str(value), {}).get("id")
+    )
+    grouped["program_id"] = grouped["id_estudiante"].map(
+        lambda value: identities.get(str(value), {}).get("program_id")
+    )
+    grouped["sexo"] = grouped["id_estudiante"].map(
+        lambda value: identities.get(str(value), {}).get("sexo")
+    )
+    return grouped
+
+
+def build_cardex_from_supabase(source: dict[str, list[dict[str, Any]]]) -> pd.DataFrame:
     profiles = {row["id"]: row for row in source.get("profiles", []) if row.get("id")}
     periodos = {row["id"]: row for row in source.get("periodos", []) if row.get("id")}
     materias = {row["id"]: row for row in source.get("materias", []) if row.get("id")}
+    programs = {row["id"]: row for row in source.get("academic_programs", []) if row.get("id")}
+    records: list[dict[str, Any]] = []
 
-    rows = detail_rows_from_historial(source, profiles, periodos, materias)
-    if not rows:
-        rows = detail_rows_from_carga(source, profiles, periodos, materias)
+    academic_rows = list(source.get("historial_academico", []))
+    if not academic_rows:
+        academic_rows = [
+            {
+                "student_id": row.get("alumno_id"),
+                "subject_id": row.get("materia_id"),
+                "period_id": row.get("periodo_id"),
+                "grade": row.get("calificacion_final"),
+                "calificacion_extra": row.get("calificacion_extraordinario"),
+                "status": row.get("estatus"),
+                "attempt_type": "carga_academica",
+            }
+            for row in source.get("carga_academica", [])
+        ]
 
-    if not rows:
-        return empty_preview()
-
-    detail = pd.DataFrame(rows)
-    detail["aprobada"] = detail["calificacion"].fillna(0) >= 70
-    detail["reprobada"] = detail["calificacion"].notna() & ~detail["aprobada"]
-    detail["creditos_aprobados"] = detail["creditos"].where(detail["aprobada"], 0)
-
-    grouped = (
-        detail.groupby(["id_estudiante", "id_periodo"], dropna=False)
-        .agg(
-            programa=("programa", "first"),
-            student_profile_id=("student_profile_id", "first"),
-            program_id=("program_id", "first"),
-            sexo=("sexo", "first"),
-            cohorte=("cohorte", "first"),
-            estatus_academico=("estatus_academico", "first"),
-            promedio_periodo=("calificacion", "mean"),
-            materias_aprobadas=("aprobada", "sum"),
-            materias_reprobadas_periodo=("reprobada", "sum"),
-            creditos_aprobados_periodo=("creditos_aprobados", "sum"),
-            creditos_inscritos_periodo=("creditos", "sum"),
+    for item in academic_rows:
+        student = profiles.get(item.get("student_id"))
+        if not student or not student.get("matricula"):
+            continue
+        materia = materias.get(item.get("subject_id")) or {}
+        periodo = periodos.get(item.get("period_id")) or {}
+        program = programs.get(student.get("program_id")) or {}
+        period_key = periodo.get("clave") or periodo.get("nombre") or item.get("period_id") or "SIN_PERIODO"
+        status = str(item.get("status") or "").lower()
+        if "reprob" in status:
+            subject_status = "Reprobada"
+        elif "curs" in status:
+            subject_status = "Cursando"
+        elif "baja" in status:
+            subject_status = "Baja"
+        else:
+            subject_status = "Aprobada"
+        records.append(
+            {
+                "Matricula": student.get("matricula"),
+                "Carrera": student.get("carrera") or program.get("nombre") or "SIN_PROGRAMA",
+                "EstatusAlumno": student.get("estatus_academico") or "Regular",
+                "CuatrimestreActual": student.get("cuatrimestre_actual") or 1,
+                "Materia": materia.get("nombre") or materia.get("clave") or item.get("subject_id"),
+                "Periodo": period_key,
+                "EstatusMateria": subject_status,
+                "Final": item.get("grade"),
+                "Extr": item.get("calificacion_extra"),
+                "EstatusCardex": item.get("attempt_type") or "ordinario",
+                "PeriodoCursado": period_key,
+                "PlanEstudiosClave": program.get("clave") or "PLAN-INSTITUCIONAL",
+                "Credito": materia.get("creditos") or 0,
+            }
         )
-        .reset_index()
-    )
+    return pd.DataFrame(records)
 
-    grouped = grouped.sort_values(["id_estudiante", "id_periodo"])
-    grouped["promedio_general"] = (
-        grouped.groupby("id_estudiante")["promedio_periodo"]
-        .expanding()
-        .mean()
-        .reset_index(level=0, drop=True)
-    )
-    grouped["materias_reprobadas_acumuladas"] = grouped.groupby("id_estudiante")[
-        "materias_reprobadas_periodo"
-    ].cumsum()
-    grouped["porcentaje_avance"] = 0.0
-    grouped["bandera_dato_incompleto"] = grouped["promedio_periodo"].isna().astype(int)
-    return grouped
+
+def promote_supabase_preview(expected_source_hash: str, reviewed_by: str | None = None) -> dict[str, Any]:
+    if not SUPABASE_SOURCE_SNAPSHOT.exists() or not SUPABASE_STUDENT_PERIOD_PREVIEW.exists():
+        raise FileNotFoundError("No existe un snapshot Supabase pendiente de promocion.")
+    snapshot = json.loads(SUPABASE_SOURCE_SNAPSHOT.read_text(encoding="utf-8"))
+    actual_hash = str(snapshot.get("source_hash") or "")
+    if not expected_source_hash or expected_source_hash != actual_hash:
+        raise ValueError("El source_hash solicitado no coincide con el ultimo snapshot validado.")
+    validation = snapshot.get("validation") or {}
+    decision = validation.get("decision") or {}
+    if not decision.get("ready_to_replace_active_dataset"):
+        warnings = validation.get("warnings") or []
+        raise ValueError("El snapshot tiene errores bloqueantes y no puede promoverse: " + "; ".join(warnings))
+
+    preview = pd.read_csv(SUPABASE_STUDENT_PERIOD_PREVIEW)
+    loaded = load_persisted_model_bundle()
+    required_features = list(loaded["manifest"]["preprocessing"]["input_features"])
+    missing_features = sorted(set(required_features) - set(preview.columns))
+    if missing_features:
+        raise ValueError("El snapshot no cumple el contrato del modelo activo. Faltan: " + ", ".join(missing_features))
+    if preview.empty:
+        raise ValueError("No se puede promover un snapshot vacio.")
+
+    DATASET_VERSION_DIR.mkdir(parents=True, exist_ok=True)
+    previous_backup = None
+    if STUDENT_PERIOD_DATASET.exists():
+        previous_hash = sha256(STUDENT_PERIOD_DATASET.read_bytes()).hexdigest()
+        previous_backup = DATASET_VERSION_DIR / f"{previous_hash}.csv"
+        if not previous_backup.exists():
+            shutil.copy2(STUDENT_PERIOD_DATASET, previous_backup)
+
+    temporary = STUDENT_PERIOD_DATASET.with_suffix(".promoting.csv")
+    preview.to_csv(temporary, index=False)
+    os.replace(temporary, STUDENT_PERIOD_DATASET)
+    pointer = {
+        "source": "supabase",
+        "source_hash": actual_hash,
+        "promoted_at_utc": utc_now(),
+        "reviewed_by": reviewed_by,
+        "dataset_path": str(STUDENT_PERIOD_DATASET),
+        "snapshot_path": str(SUPABASE_SNAPSHOT_REGISTRY_DIR / actual_hash),
+        "previous_dataset_backup": str(previous_backup) if previous_backup else None,
+        "records": int(len(preview)),
+    }
+    ACTIVE_DATASET_POINTER.parent.mkdir(parents=True, exist_ok=True)
+    ACTIVE_DATASET_POINTER.write_text(json.dumps(pointer, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return {"status": "promoted", **pointer}
 
 
 def detail_rows_from_historial(
@@ -263,6 +357,7 @@ def validate_against_local_sources(
         "creditos_inscritos_periodo",
         "creditos_aprobados_periodo",
         "bandera_dato_incompleto",
+        *FINAL_FEATURES,
     }
     warnings = sync_warnings(source=source, preview=preview)
 
@@ -420,4 +515,3 @@ def infer_cohort(matricula: Any) -> str | None:
         if candidate.isdigit() and candidate.startswith("20"):
             return candidate
     return None
-

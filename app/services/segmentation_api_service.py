@@ -10,7 +10,15 @@ import uuid
 import numpy as np
 import pandas as pd
 
-from app.models.config import API_HISTORY_PATH, ARTIFACTS_DIR, PROCESSED_DIR, REPORTS_DIR, STUDENT_PERIOD_DATASET
+from app.models.config import (
+    ACTIVE_INFERENCE_METADATA,
+    ACTIVE_INFERENCE_SNAPSHOT,
+    API_HISTORY_PATH,
+    ARTIFACTS_DIR,
+    PROCESSED_DIR,
+    REPORTS_DIR,
+    STUDENT_PERIOD_DATASET,
+)
 from app.services.academic_bm25_search_service import load_search_documents, run_search_engine
 from app.services.academic_search_orchestrator_service import search_academic_documents
 from app.services.clustering_training_evaluation_service import run_phase_5_6
@@ -138,15 +146,16 @@ def pca_coordinates_df() -> pd.DataFrame:
 def student_view() -> pd.DataFrame:
     loaded = current_loaded_bundle()
     assignments = loaded["cluster_assignments"].copy()
+    if ACTIVE_INFERENCE_SNAPSHOT.exists() and ACTIVE_INFERENCE_METADATA.exists():
+        active_metadata = json.loads(ACTIVE_INFERENCE_METADATA.read_text(encoding="utf-8"))
+        if active_metadata.get("model_version") == loaded["manifest"]["model_version"]:
+            assignments = pd.read_csv(ACTIVE_INFERENCE_SNAPSHOT)
     features = student_period_df()
-    feature_columns = [
-        column
-        for column in features.columns
-        if column not in {"programa", "cohorte", "estatus_academico"}
-    ]
+    keys = ["id_estudiante", "id_periodo"]
+    feature_columns = keys + [column for column in features.columns if column not in assignments.columns]
     view = assignments.merge(
         features[feature_columns],
-        on=["id_estudiante", "id_periodo"],
+        on=keys,
         how="left",
     )
 
@@ -163,20 +172,20 @@ def student_view() -> pd.DataFrame:
         ]
         if column in profiles.columns
     ]
-    if profile_columns:
+    if profile_columns and "perfil_academico" not in view.columns:
         view = view.merge(profiles[profile_columns], on="cluster", how="left")
 
     pca = pca_coordinates_df()
-    if not pca.empty:
+    if not pca.empty and "PC1" not in view.columns:
         view = view.merge(pca, on=["id_estudiante", "id_periodo"], how="left")
 
     return view
 
 
-def segmentation_summary() -> dict[str, Any]:
+def segmentation_summary(security_context: SecurityContext | None = None) -> dict[str, Any]:
     loaded = current_loaded_bundle()
     manifest = loaded["manifest"]
-    students = student_view()
+    students = apply_student_scope(student_view(), security_context)
     profiles = profile_catalog_df(loaded)
     metrics = manifest["model"].get("metrics", {})
     follow_up = students["prioridad_tutorial"].fillna("").str.lower().ne("baja-media")
