@@ -1,0 +1,77 @@
+{
+  "version": "casei-semantic-catalog-v1",
+  "concepts": [
+    {
+      "id": "low_performance",
+      "label": "bajo rendimiento academico",
+      "description": "Desempeno academico bajo o dificultades con calificaciones y materias.",
+      "phrases": ["va mal", "notas bajas", "bajo rendimiento", "se le complican las materias", "va flojo"],
+      "fields": ["promedio_general", "materias_reprobadas"],
+      "allowed_effect": "ranking",
+      "forbidden_effects": ["invent_numeric_threshold", "automatic_diagnosis"]
+    },
+    {
+      "id": "low_attendance",
+      "label": "baja asistencia",
+      "description": "Asistencia reducida, ausentismo o faltas frecuentes.",
+      "phrases": ["casi no viene", "falta mucho", "baja asistencia", "ausentismo", "no se presenta"],
+      "fields": ["porcentaje_asistencia", "faltas"],
+      "allowed_effect": "ranking",
+      "forbidden_effects": ["invent_numeric_threshold", "automatic_diagnosis"]
+    },
+    {
+      "id": "academic_lag",
+      "label": "rezago academico",
+      "description": "Atraso curricular, recursamientos o materias pendientes.",
+      "phrases": ["va atrasado", "esta atorado", "debe materias", "rezago alto", "se esta quedando"],
+      "fields": ["rezago_materias", "recursamientos"],
+      "allowed_effect": "ranking",
+      "forbidden_effects": ["invent_numeric_threshold", "automatic_diagnosis"]
+    },
+    {
+      "id": "high_performance",
+      "label": "buen desempeno academico",
+      "description": "Desempeno academico alto y resultados favorables.",
+      "phrases": ["va excelente", "buenas notas", "alto rendimiento", "destacado", "va muy bien"],
+      "fields": ["promedio_general", "porcentaje_avance"],
+      "allowed_effect": "ranking",
+      "forbidden_effects": ["invent_numeric_threshold", "automatic_diagnosis"]
+    },
+    {
+      "id": "tutorial_follow_up",
+      "label": "necesidad de seguimiento tutorial",
+      "description": "Casos que ameritan revision o acompanamiento por personal autorizado.",
+      "phrases": ["requiere atencion", "dar seguimiento", "hay que revisarlo", "necesita apoyo", "vigilar su avance"],
+      "fields": ["perfil_sugerido", "tutorias_abiertas", "compromisos_pendientes"],
+      "allowed_effect": "qwen_context",
+      "forbidden_effects": ["automatic_diagnosis", "automatic_sanction"]
+    },
+    {
+      "id": "atypical_attendance",
+      "label": "buen promedio con baja asistencia",
+      "description": "Combinacion atipica de buen desempeno y asistencia reducida.",
+      "phrases": ["saca buenas notas pero falta", "va bien aunque no viene", "buen promedio y poca asistencia"],
+      "fields": ["promedio_general", "porcentaje_asistencia"],
+      "allowed_effect": "qwen_context",
+      "forbidden_effects": ["invent_numeric_threshold", "automatic_diagnosis"]
+    },
+    {
+      "id": "stable_progress",
+      "label": "avance academico estable",
+      "description": "Trayectoria regular con desempeno y avance consistentes.",
+      "phrases": ["va estable", "sin problemas", "avance regular", "todo en orden", "seguimiento preventivo"],
+      "fields": ["perfil_sugerido", "promedio_general", "porcentaje_avance"],
+      "allowed_effect": "ranking",
+      "forbidden_effects": ["automatic_diagnosis"]
+    },
+    {
+      "id": "multiple_risk_signals",
+      "label": "multiples senales de riesgo academico",
+      "description": "Concurrencia de varias senales que requiere interpretacion contextual.",
+      "phrases": ["varios problemas", "muchas alertas", "riesgo por varias razones", "casos mas complicados"],
+      "fields": ["promedio_general", "porcentaje_asistencia", "rezago_materias", "materias_reprobadas"],
+      "allowed_effect": "qwen_context",
+      "forbidden_effects": ["invent_numeric_threshold", "automatic_diagnosis", "automatic_sanction"]
+    }
+  ]
+}

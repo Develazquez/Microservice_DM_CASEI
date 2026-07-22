@@ -17,4 +17,4 @@ ENV PYTHONPATH=/opt/casei \
     OLLAMA_MODELS=/workspace/ollama/models
 
 EXPOSE 8001
-CMD ["python3", "/opt/casei/deploy/runpod/start.py"]
+ENTRYPOINT ["python3", "/opt/casei/deploy/runpod/start.py"]

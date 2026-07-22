@@ -9,8 +9,8 @@ __pycache__
 .pytest_cache
 tests
 docs
-runpod_gateway
-deploy/runpod
+# runpod_gateway y deploy/runpod NO se excluyen:
+# son necesarios para la imagen GPU de RunPod.
 data/storage/*.sqlite
 data/storage/supabase_snapshots
 data/storage/dataset_versions

@@ -21,6 +21,8 @@ from app.models.config import (
 )
 from app.services.academic_bm25_search_service import load_search_documents, run_search_engine
 from app.services.academic_search_orchestrator_service import search_academic_documents
+from app.services.academic_semantic_embedding_service import build_and_persist_semantic_index
+from app.models.search_config import CASEI_SEMANTIC_SEARCH_ENABLED
 from app.services.clustering_training_evaluation_service import run_phase_5_6
 from app.services.exploratory_analysis_feature_engineering_pca_service import main as run_phase_2_4
 from app.services.inference_persistence_service import (
@@ -296,6 +298,8 @@ def search_students(
     programa: str | None = None,
     perfil: str | None = None,
     sexo: str | None = None,
+    retrieval: str | None = None,
+    explain: bool | None = None,
 ) -> dict[str, Any]:
     query = query.strip()
     if not query:
@@ -309,6 +313,8 @@ def search_students(
         programa=programa,
         perfil=perfil,
         sexo=sexo,
+        retrieval=retrieval,
+        explain=explain,
     )
     return {
         "query": query,
@@ -350,6 +356,9 @@ def run_segmentation(mode: str, persist_model: bool = True, refresh_search_index
         if refresh_search_index:
             run_search_engine()
             steps.append("refresh_search_index")
+            if CASEI_SEMANTIC_SEARCH_ENABLED:
+                build_and_persist_semantic_index(load_search_documents())
+                steps.append("refresh_semantic_search_index")
 
         manifest = current_manifest()
         summary = segmentation_summary()

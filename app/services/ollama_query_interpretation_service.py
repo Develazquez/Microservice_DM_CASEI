@@ -21,7 +21,7 @@ from app.models.search_config import (
     SLM_COOLDOWN_SECONDS,
     SLM_FAILURE_THRESHOLD,
 )
-from app.models.search_query_schemas import InterpretationRequest, QueryCatalogs, StructuredAcademicQuery
+from app.models.search_query_schemas import InterpretationRequest, QueryCatalogs, SemanticHint, StructuredAcademicQuery
 
 
 SYSTEM_PROMPT = """Eres un analizador de consultas academicas en espanol.
@@ -103,6 +103,9 @@ def build_prompt(request: InterpretationRequest) -> str:
     return (
         "Interpreta la consulta usando estos catalogos permitidos.\n"
         f"CATALOGOS={json.dumps(public_catalogs, ensure_ascii=True)}\n"
+        "Los INDICIOS_SEMANTICOS son evidencia de significado, no filtros autorizados. "
+        "No inventes umbrales a partir de su similitud.\n"
+        f"INDICIOS_SEMANTICOS={json.dumps([item.model_dump() for item in request.semantic_hints], ensure_ascii=True)}\n"
         f"CONSULTA={request.query.strip()}"
     )
 
@@ -149,14 +152,18 @@ def request_gateway(request: InterpretationRequest) -> StructuredAcademicQuery:
     return StructuredAcademicQuery.model_validate(payload.get("interpretation", payload))
 
 
-def interpret_query(query: str, catalogs: QueryCatalogs) -> tuple[StructuredAcademicQuery, bool]:
+def interpret_query(
+    query: str,
+    catalogs: QueryCatalogs,
+    semantic_hints: list[SemanticHint] | None = None,
+) -> tuple[StructuredAcademicQuery, bool]:
     global _COOLDOWN_UNTIL
     key = _cache_key(query, catalogs)
     cached = _cached(key)
     if cached is not None:
         return cached, True
     _ensure_circuit_available()
-    request = InterpretationRequest(query=query, catalogs=catalogs)
+    request = InterpretationRequest(query=query, catalogs=catalogs, semantic_hints=semantic_hints or [])
     try:
         interpretation = request_gateway(request) if OLLAMA_GATEWAY_URL else request_direct_ollama(request)
     except httpx.HTTPStatusError as exc:

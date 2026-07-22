@@ -1,4 +1,4 @@
-# Gateway SLM de CASEI en RunPod
+# Gateway de modelos de CASEI en RunPod
 
 Esta imagen ejecuta Ollama localmente y publica unicamente el gateway autenticado en el puerto 8001.
 No contiene datasets, expedientes ni artefactos academicos.
@@ -10,6 +10,9 @@ No contiene datasets, expedientes ni artefactos academicos.
 - Puerto HTTP expuesto: `8001`.
 - Variable `CASEI_SLM_GATEWAY_API_KEY`: secreto largo y aleatorio.
 - Variable `OLLAMA_MODEL`: `qwen3:4b-instruct-2507-q4_K_M`.
+- Variable `OLLAMA_EMBEDDING_MODEL`: `qwen3-embedding:0.6b`.
+- Variable `OLLAMA_MAX_LOADED_MODELS`: `2` para GPU de 8 GB o mas.
+- Variable `OLLAMA_NUM_PARALLEL`: `1`.
 
 Construccion local:
 
@@ -18,5 +21,9 @@ docker build -f deploy/runpod/Dockerfile -t casei-slm-gateway .
 ```
 
 La API CASEI debe usar la URL `https://POD_ID-8001.proxy.runpod.net`, nunca el puerto 11434.
-Antes de una demo se debe consultar `/health`, luego `/ready` y finalmente ejecutar `/warmup` con
+El gateway expone `/interpret` para Qwen Instruct y `/embed` para Qwen Embedding. Ambos requieren
 el header `X-CASEI-SLM-KEY`.
+
+Antes de una demo se debe consultar `/health`, luego `/ready` y finalmente ejecutar `/warmup`. En
+RunPod Serverless Flex este warmup debe realizarse con anticipacion porque un cold start puede incluir
+inicio del contenedor y carga de ambos modelos.

@@ -463,8 +463,8 @@ def student(
 @router.get(
     "/search",
     response_model=SearchResponse,
-    summary="Buscar alumnos segmentados por keywords",
-    description="Ejecuta BM25 sobre documentos academicos derivados de la vista alumno-periodo y perfiles de cluster.",
+    summary="Buscar alumnos segmentados con recuperacion lexica o semantica",
+    description="Interpreta filtros autorizados y ejecuta BM25, busqueda semantica o una fusion hibrida.",
     responses=ERROR_RESPONSES,
 )
 def search(
@@ -474,6 +474,14 @@ def search(
     mode: Literal["auto", "bm25", "slm"] = Query(
         default="auto",
         description="auto interpreta solo consultas complejas; bm25 omite el SLM; slm fuerza interpretacion con fallback.",
+    ),
+    retrieval: Literal["hybrid", "bm25", "semantic"] = Query(
+        default="hybrid",
+        description="Motor de recuperacion. Si la rama semantica no esta disponible, conserva fallback a BM25.",
+    ),
+    explain: bool = Query(
+        default=False,
+        description="Incluye la matriz de conclusion y evidencia de filtros en search_metadata.",
     ),
     programa: str | None = Query(default=None, description="Filtro explicito por programa o carrera."),
     perfil: str | None = Query(default=None, description="Filtro explicito por perfil academico."),
@@ -496,6 +504,8 @@ def search(
             programa=programa,
             perfil=perfil,
             sexo=sexo,
+            retrieval=retrieval,
+            explain=explain,
         )
         audit_items_access(context, endpoint="GET /cacei/segmentation/search", items=result["items"])
         return result

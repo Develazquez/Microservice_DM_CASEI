@@ -22,8 +22,12 @@ junit.xml
 test-results/
 /data/reports/*.md
 /data/reports/*.jsonl
+/data/reports/semantic_search_*.csv
+/data/reports/semantic_search_*.json
 /data/reports/figures/
 /artifacts/model_registry/*/documentation/
+/artifacts/search_registry/
+/artifacts/current_search_index.json
 
 # ── Pruebas y Tipado ───────────────────────────────
 .pytest_cache/
@@ -32,6 +36,7 @@ test-results/
 .hypothesis/
 .tox/
 .nox/
+tests/fixtures/
 
 # ── Notebooks ──────────────────────────────────────
 .ipynb_checkpoints/
@@ -70,9 +75,11 @@ Thumbs.db
 desktop.ini
 
 # ── Carpeta scripts (entrypoints CLI, no necesarios) ─
-/scripts/*
+/scripts
 !/scripts/run_ml_worker.py
 !/scripts/normalize_raw_cardex_contract.py
+!/scripts/run_semantic_search_index.py
+!/scripts/run_semantic_search_benchmark.py
 
 # ── Datos y artefactos ─────────────────────────────
 # Mantener resultados sintéticos versionables durante la fase académica.

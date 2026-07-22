@@ -11,6 +11,7 @@ from urllib.request import urlopen
 os.environ.setdefault("OLLAMA_HOST", "127.0.0.1:11434")
 os.environ.setdefault("OLLAMA_MODELS", "/workspace/ollama/models")
 model = os.getenv("OLLAMA_MODEL", "qwen3:4b-instruct-2507-q4_K_M")
+embedding_model = os.getenv("OLLAMA_EMBEDDING_MODEL", "qwen3-embedding:0.6b")
 Path(os.environ["OLLAMA_MODELS"]).mkdir(parents=True, exist_ok=True)
 
 ollama = subprocess.Popen(["ollama", "serve"])
@@ -25,8 +26,9 @@ else:
     raise RuntimeError("Ollama no inicio dentro del tiempo esperado.")
 
 listed = subprocess.run(["ollama", "list"], check=True, capture_output=True, text=True).stdout
-if model not in listed:
-    subprocess.run(["ollama", "pull", model], check=True)
+for required_model in [model, embedding_model]:
+    if required_model not in listed:
+        subprocess.run(["ollama", "pull", required_model], check=True)
 
 os.execvp(
     "uvicorn",
