@@ -26,8 +26,12 @@ test-results/
 /data/reports/semantic_search_*.json
 /data/reports/figures/
 /artifacts/model_registry/*/documentation/
-/artifacts/search_registry/
-/artifacts/current_search_index.json
+# El despliegue necesita el puntero y un unico indice semantico activo.
+# Al publicar una nueva version, sustituir esta excepcion por el nuevo bundle.
+/artifacts/search_registry/*
+!/artifacts/search_registry/casei-semantic-795d3e976be8/
+!/artifacts/search_registry/casei-semantic-795d3e976be8/**
+!/artifacts/current_search_index.json
 
 # ── Pruebas y Tipado ───────────────────────────────
 .pytest_cache/

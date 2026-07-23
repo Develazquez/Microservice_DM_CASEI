@@ -1,0 +1,20 @@
+{
+  "search_version": "casei-semantic-795d3e976be8",
+  "model": "qwen3-embedding:0.6b",
+  "dimension": 1024,
+  "documents": 999,
+  "prototypes": 8,
+  "source_fingerprint": "770c294bafae37dbf2ba038b521ebf9a4b751eab06699055cbad88313af2c01a",
+  "catalog_version": "casei-semantic-catalog-v1",
+  "descriptor_version": "2",
+  "build_mode": "full",
+  "reused_documents": 0,
+  "embedded_documents": 999,
+  "files": {
+    "semantic_embeddings.npy": "bfc829de76f7ec2e7a7c001c2a61a6fdf6d11af2b049bc3aea6177306bacf808",
+    "semantic_filter_prototypes.npy": "4d1504ef5b1a6f965afe5af25dafb38e72648ce77c9c31566a79bc80a0aca61e",
+    "semantic_document_ids.csv": "c6dbe6fbe52795c3907bd7b6cce7c21a5896ff53bf2d750c032424a4867048e7",
+    "semantic_catalog.json": "ad5ff42a9d95f4607d1b4320136bce76dd7c851a7eb59c6fea59f96f8723b5f9",
+    "semantic_index_metadata.json": "1edf095ca7ee36fb6b02923a71e981c022e1da96b685175389b74731c9927975"
+  }
+}
