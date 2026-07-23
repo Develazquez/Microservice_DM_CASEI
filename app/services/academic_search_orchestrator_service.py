@@ -53,6 +53,12 @@ DIRECT_LEXICAL_PHRASES = {
     "con incidencias", "alto rendimiento", "sin incidencias",
     "sin materias reprobadas",
 }
+SEMANTIC_ROUTE_MARKERS = {
+    "van flojos",
+    "casi no vienen",
+    "estan atorados",
+    "se estan quedando",
+}
 
 
 class UnsupportedSourceFilterError(ValueError):
@@ -126,6 +132,10 @@ def requires_semantic(query: str, documents: pd.DataFrame) -> bool:
     normalized = normalize_text(query)
     if PII_PATTERN.search(normalized):
         return False
+    if any(marker in normalized for marker in NEGATION_FILTER_MARKERS):
+        return True
+    if any(marker in normalized for marker in SEMANTIC_ROUTE_MARKERS):
+        return True
     query_tokens = set(tokenize(normalized))
     has_numeric_value = bool(re.search(r"\d", normalized)) or bool(query_tokens & NUMBER_WORDS)
     if has_numeric_value and any(criterion in normalized for criterion in ACADEMIC_CRITERIA):

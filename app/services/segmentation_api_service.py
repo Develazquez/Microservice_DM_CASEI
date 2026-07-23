@@ -21,7 +21,11 @@ from app.models.config import (
     STUDENT_PERIOD_DATASET,
 )
 from app.repositories.supabase_repository import SupabaseRepository
-from app.services.academic_bm25_search_service import load_search_documents, run_search_engine
+from app.services.academic_bm25_search_service import (
+    build_search_documents,
+    load_search_documents,
+    run_search_engine,
+)
 from app.services.academic_search_orchestrator_service import search_academic_documents
 from app.services.academic_semantic_embedding_service import build_and_persist_semantic_index
 from app.models.search_config import CASEI_SEMANTIC_SEARCH_ENABLED
@@ -188,6 +192,47 @@ def student_view() -> pd.DataFrame:
     if not pca.empty and "PC1" not in view.columns:
         view = view.merge(pca, on=["id_estudiante", "id_periodo"], how="left")
 
+    # Resolve student names from Supabase profiles when available.
+    # Local-mode CSVs only contain id_estudiante (matricula), not names.
+    if "nombre" not in view.columns:
+        try:
+            repo = SupabaseRepository()
+            if repo.configured:
+                profile_rows = repo.fetch_table(
+                    "profiles",
+                    select="matricula,nombre,apellidos",
+                    filters={"rol": "eq.alumno"},
+                    limit=10000,
+                )
+                if profile_rows:
+                    prof_df = pd.DataFrame(profile_rows)
+                    prof_df["nombre_completo"] = (
+                        prof_df[["nombre", "apellidos"]]
+                        .fillna("")
+                        .astype(str)
+                        .agg(" ".join, axis=1)
+                        .str.replace(r"\s+", " ", regex=True)
+                        .str.strip()
+                    )
+                    prof_df["matricula_upper"] = (
+                        prof_df["matricula"].fillna("").astype(str).str.upper()
+                    )
+                    prof_df = prof_df.drop_duplicates(subset=["matricula_upper"], keep="first")
+                    view["_id_upper"] = view["id_estudiante"].fillna("").astype(str).str.upper()
+                    view = view.merge(
+                        prof_df[["matricula_upper", "nombre_completo"]],
+                        left_on="_id_upper",
+                        right_on="matricula_upper",
+                        how="left",
+                    )
+                    view["nombre"] = view["nombre_completo"]
+                    view = view.drop(
+                        columns=["_id_upper", "matricula_upper", "nombre_completo"],
+                        errors="ignore",
+                    )
+        except Exception:
+            pass  # Name resolution is best-effort in local mode.
+
     return view
 
 
@@ -334,7 +379,12 @@ def search_students(
     query = query.strip()
     if not query:
         raise ValueError("La consulta no puede estar vacia.")
-    documents = apply_student_scope(load_search_documents(), security_context)
+    source_documents = (
+        build_search_documents(student_view())
+        if CASEI_DB_MODE in {"supabase", "postgres", "postgresql"}
+        else load_search_documents()
+    )
+    documents = apply_student_scope(source_documents, security_context)
     search_result = search_academic_documents(
         documents=documents,
         query=query,

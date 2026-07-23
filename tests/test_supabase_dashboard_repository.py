@@ -4,6 +4,7 @@ import pandas as pd
 
 from app.repositories.supabase_repository import SupabaseRepository
 from app.services import segmentation_api_service
+from app.services.academic_bm25_search_service import build_search_documents, get_cached_index
 
 
 class DashboardRepository(SupabaseRepository):
@@ -142,3 +143,56 @@ def test_summary_uses_supabase_active_model_and_current_rows(monkeypatch) -> Non
     assert result["model_version"] == "model-active"
     assert result["total_records"] == 1
     assert result["average_score"] == 63.5
+
+
+def test_live_supabase_rows_are_searchable_by_profile() -> None:
+    source = pd.DataFrame(
+        [
+            {
+                "id_estudiante": "IDS1",
+                "id_periodo": "2023-3",
+                "programa": "Ingeniería en Desarrollo de Software",
+                "cohorte": "2020",
+                "estatus_academico": "Activo",
+                "cluster": 0,
+                "perfil_academico": "Regular / seguimiento preventivo",
+                "promedio_general": 84.0,
+                "porcentaje_asistencia": 91.0,
+                "rezago_materias": 0,
+                "materias_reprobadas_acumuladas": 0,
+            }
+        ]
+    )
+
+    documents = build_search_documents(source)
+    results = get_cached_index(documents).search("alumnos regulares", top_k=10)
+
+    assert len(results) == 1
+    assert results.iloc[0]["id_estudiante"] == "IDS1"
+    assert results.iloc[0]["perfil_sugerido"] == "Regular / seguimiento preventivo"
+
+
+def test_colloquial_query_has_bm25_fallback_without_embeddings() -> None:
+    source = pd.DataFrame(
+        [
+            {
+                "id_estudiante": "IDS-RISK",
+                "id_periodo": "2023-3",
+                "programa": "Ingeniería en Desarrollo de Software",
+                "cohorte": "2020",
+                "estatus_academico": "Activo",
+                "cluster": 1,
+                "perfil_academico": "Crítico / rezago alto",
+                "promedio_general": 52.0,
+                "porcentaje_asistencia": 55.0,
+                "rezago_materias": 4,
+                "materias_reprobadas_acumuladas": 5,
+            }
+        ]
+    )
+
+    documents = build_search_documents(source)
+    results = get_cached_index(documents).search("los que van flojos", top_k=10)
+
+    assert len(results) == 1
+    assert results.iloc[0]["id_estudiante"] == "IDS-RISK"

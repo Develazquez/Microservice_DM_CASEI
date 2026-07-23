@@ -137,11 +137,12 @@ class SupabaseRepository:
                 .str.replace(r"\s+", " ", regex=True)
                 .str.strip()
             )
+
+            # Primary merge: student_profile_id → profiles.id
             view = view.merge(
                 profiles[
                     [
                         "student_profile_id_lookup",
-                        "matricula",
                         "nombre_completo",
                     ]
                 ],
@@ -151,9 +152,32 @@ class SupabaseRepository:
             )
             view["nombre"] = view["nombre_completo"]
             view = view.drop(
-                columns=["student_profile_id_lookup", "nombre_completo", "matricula"],
+                columns=["student_profile_id_lookup", "nombre_completo"],
                 errors="ignore",
             )
+
+            # Fallback merge: id_estudiante → profiles.matricula (case-insensitive)
+            # Resolves names when student_profile_id was not set during sync.
+            missing_mask = view["nombre"].fillna("").str.strip() == ""
+            if missing_mask.any():
+                profiles_by_mat = profiles.copy()
+                profiles_by_mat["matricula_upper"] = (
+                    profiles_by_mat["matricula"].fillna("").astype(str).str.upper()
+                )
+                profiles_by_mat = profiles_by_mat.drop_duplicates(
+                    subset=["matricula_upper"], keep="first"
+                )
+                view["_id_est_upper"] = (
+                    view["id_estudiante"].fillna("").astype(str).str.upper()
+                )
+                fallback = view.loc[missing_mask, ["_id_est_upper"]].merge(
+                    profiles_by_mat[["matricula_upper", "nombre_completo"]],
+                    left_on="_id_est_upper",
+                    right_on="matricula_upper",
+                    how="left",
+                )
+                view.loc[missing_mask, "nombre"] = fallback["nombre_completo"].values
+                view = view.drop(columns=["_id_est_upper"], errors="ignore")
 
         return view.reset_index(drop=True)
 

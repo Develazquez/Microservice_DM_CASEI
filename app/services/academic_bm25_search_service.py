@@ -142,7 +142,82 @@ def load_search_documents() -> pd.DataFrame:
         how="left",
     ).merge(summary, on="cluster", how="left")
 
-    data["document_id"] = data["id_estudiante"] + "::" + data["id_periodo"]
+    return build_search_documents(data)
+
+
+def build_search_documents(source: pd.DataFrame) -> pd.DataFrame:
+    """Normalize a student-period view into the BM25/hybrid search contract."""
+    data = source.copy()
+    has_failed_subjects = "materias_reprobadas" in data.columns
+    has_tutorial_count = "num_tutorias" in data.columns
+    if "perfil_sugerido" not in data.columns:
+        if "perfil_academico" in data.columns:
+            data["perfil_sugerido"] = data["perfil_academico"]
+        else:
+            data["perfil_sugerido"] = "Sin perfil"
+
+    defaults: dict[str, object] = {
+        "id_estudiante": "",
+        "id_periodo": "",
+        "programa": "",
+        "cohorte": "",
+        "estatus_academico": "",
+        "sexo": None,
+        "cluster": 0,
+        "membership_score": 0.0,
+        "promedio_general": 0.0,
+        "porcentaje_asistencia": 0.0,
+        "rezago_materias": 0.0,
+        "materias_reprobadas": 0.0,
+        "num_tutorias": 0.0,
+        "num_incidencias": 0.0,
+    }
+    for column, default in defaults.items():
+        if column not in data.columns:
+            data[column] = default
+
+    if "materias_reprobadas_acumuladas" in data.columns:
+        accumulated = pd.to_numeric(
+            data["materias_reprobadas_acumuladas"],
+            errors="coerce",
+        )
+        if has_failed_subjects:
+            current = pd.to_numeric(data["materias_reprobadas"], errors="coerce")
+            data["materias_reprobadas"] = current.where(current.notna(), accumulated)
+        else:
+            data["materias_reprobadas"] = accumulated
+    if {"tutorias_abiertas", "tutorias_cerradas"}.issubset(data.columns):
+        inferred_tutorials = (
+            pd.to_numeric(data["tutorias_abiertas"], errors="coerce").fillna(0)
+            + pd.to_numeric(data["tutorias_cerradas"], errors="coerce").fillna(0)
+        )
+        if has_tutorial_count:
+            current_tutorials = pd.to_numeric(data["num_tutorias"], errors="coerce")
+            data["num_tutorias"] = current_tutorials.where(
+                current_tutorials.notna(),
+                inferred_tutorials,
+            )
+        else:
+            data["num_tutorias"] = inferred_tutorials
+
+    numeric_columns = [
+        "cluster",
+        "membership_score",
+        "promedio_general",
+        "porcentaje_asistencia",
+        "rezago_materias",
+        "materias_reprobadas",
+        "num_tutorias",
+        "num_incidencias",
+    ]
+    for column in numeric_columns:
+        data[column] = pd.to_numeric(data[column], errors="coerce").fillna(0)
+
+    data["document_id"] = (
+        data["id_estudiante"].fillna("").astype(str)
+        + "::"
+        + data["id_periodo"].fillna("").astype(str)
+    )
     data["promedio_bucket"] = data["promedio_general"].apply(
         lambda value: numeric_bucket(float(value), (60, 80), ("promedio bajo", "promedio medio", "promedio alto"))
     )
@@ -169,17 +244,26 @@ def build_document_text(row: pd.Series) -> str:
     profile = str(row.get("perfil_sugerido", "sin perfil"))
     signals = []
     if float(row["promedio_general"]) < 60:
-        signals.append("critico criticos riesgo bajo promedio reprobacion")
+        signals.append(
+            "critico criticos riesgo bajo promedio reprobacion "
+            "va flojo van flojos notas bajas necesita apoyo"
+        )
     if float(row["porcentaje_asistencia"]) < 60:
-        signals.append("baja asistencia ausentismo asistencias")
+        signals.append(
+            "baja asistencia ausentismo asistencias "
+            "casi no viene casi no vienen falta mucho faltan un monton"
+        )
     if float(row["rezago_materias"]) >= 3:
-        signals.append("rezago rezagos alto atraso academico")
+        signals.append(
+            "rezago rezagos alto atraso academico "
+            "atorado atorados se esta quedando se estan quedando"
+        )
     if float(row["promedio_general"]) < 60 and float(row["rezago_materias"]) >= 4:
         signals.append("estudiantes criticos con rezago alto")
     if float(row["promedio_general"]) >= 85 and float(row["porcentaje_asistencia"]) < 60:
         signals.append("atipico atipicos buen promedio baja asistencia")
     if "regular" in normalize_text(profile):
-        signals.append("regular seguimiento preventivo estable")
+        signals.append("regular regulares alumno alumnos seguimiento preventivo estable")
 
     return " ".join(
         [
