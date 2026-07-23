@@ -298,6 +298,21 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def file_checksum_matches(path: Path, expected_sha256: str) -> bool:
+    if _sha256(path) == expected_sha256:
+        return True
+    if path.suffix.lower() not in {".csv", ".json", ".md", ".txt"}:
+        return False
+
+    raw = path.read_bytes()
+    normalized_lf = raw.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    variants = {
+        hashlib.sha256(normalized_lf).hexdigest(),
+        hashlib.sha256(normalized_lf.replace(b"\n", b"\r\n")).hexdigest(),
+    }
+    return expected_sha256 in variants
+
+
 def _descriptor_hash(descriptor: str) -> str:
     value = f"{SEMANTIC_DESCRIPTOR_VERSION}:{descriptor}"
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
@@ -321,7 +336,7 @@ def _reusable_document_embeddings(
             return {}
         for name, expected in manifest.get("files", {}).items():
             path = target / name
-            if not path.exists() or _sha256(path) != expected:
+            if not path.exists() or not file_checksum_matches(path, expected):
                 return {}
         identifiers = pd.read_csv(target / "semantic_document_ids.csv", dtype=str)
         vectors = _normalize_rows(np.load(target / "semantic_embeddings.npy", allow_pickle=False))
@@ -464,7 +479,7 @@ def load_current_semantic_index() -> SemanticIndexBundle:
         raise EmbeddingUnavailableError("El indice semantico activo usa otro modelo de embeddings.")
     for name, expected in manifest.get("files", {}).items():
         path = target / name
-        if not path.exists() or _sha256(path) != expected:
+        if not path.exists() or not file_checksum_matches(path, expected):
             raise EmbeddingUnavailableError(f"Checksum invalido en el indice semantico: {name}")
 
     identifiers = pd.read_csv(target / "semantic_document_ids.csv")["document_id"].astype(str).tolist()

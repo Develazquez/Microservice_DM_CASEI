@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -22,6 +23,7 @@ from app.services.academic_semantic_embedding_service import (
     EmbeddingUnavailableError,
     build_and_persist_semantic_index,
     embed_texts,
+    file_checksum_matches,
     reset_semantic_runtime_state,
     semantic_descriptor,
     semantic_query_text,
@@ -108,6 +110,23 @@ class SemanticServiceTests(unittest.TestCase):
         self.assertEqual(request.call_count, 1)
         self.assertEqual(first.dtype, np.float32)
         np.testing.assert_allclose(first, second)
+
+    def test_text_checksum_accepts_only_line_ending_normalization(self) -> None:
+        expected = b"document_id,descriptor_hash\r\nA::2024-1,abc\r\n"
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "semantic_document_ids.csv"
+            path.write_bytes(expected.replace(b"\r\n", b"\n"))
+            self.assertTrue(file_checksum_matches(path, hashlib.sha256(expected).hexdigest()))
+
+            path.write_bytes(b"document_id,descriptor_hash\nA::2024-1,changed\n")
+            self.assertFalse(file_checksum_matches(path, hashlib.sha256(expected).hexdigest()))
+
+    def test_binary_checksum_remains_strict(self) -> None:
+        expected = b"\x93NUMPY\r\nbinary"
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "semantic_embeddings.npy"
+            path.write_bytes(expected.replace(b"\r\n", b"\n"))
+            self.assertFalse(file_checksum_matches(path, hashlib.sha256(expected).hexdigest()))
 
     def test_query_expansion_uses_controlled_catalog_paraphrases(self) -> None:
         catalog = {
