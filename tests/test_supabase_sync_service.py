@@ -4,10 +4,15 @@ import unittest
 
 import pandas as pd
 
-from app.models.config import FINAL_FEATURES, SUPABASE_SNAPSHOT_REGISTRY_DIR
+from app.models.config import CARDEX_COLUMNS, FINAL_FEATURES, SUPABASE_SNAPSHOT_REGISTRY_DIR
 from app.repositories.factory import repository_status
 from app.services import supabase_sync_service
-from app.services.supabase_sync_service import build_student_period_preview, validate_against_local_sources
+from app.services.supabase_sync_service import (
+    build_cardex_from_supabase,
+    build_student_period_preview,
+    infer_cohort,
+    validate_against_local_sources,
+)
 
 
 class SupabaseSyncServiceTests(unittest.TestCase):
@@ -74,6 +79,65 @@ class SupabaseSyncServiceTests(unittest.TestCase):
         self.assertEqual(row["materias_reprobadas_periodo"], 0)
         self.assertEqual(row["creditos_inscritos_periodo"], 9)
         self.assertTrue(set(FINAL_FEATURES).issubset(preview.columns))
+
+    def test_real_pdf_identifiers_preserve_cardex_contract(self) -> None:
+        source = {
+            "profiles": [
+                {
+                    "id": "student-legacy",
+                    "matricula": "193243",
+                    "nombre": "Moisés De Jesús",
+                    "apellidos": "Anzueto González",
+                    "carrera": "Ingeniería en Desarrollo de Software",
+                    "program_id": "program-ids",
+                    "estatus_academico": "Activo",
+                    "cuatrimestre_actual": 2,
+                }
+            ],
+            "historial_academico": [
+                {
+                    "student_id": "student-legacy",
+                    "subject_id": "subject-1",
+                    "period_id": "period-2020-1",
+                    "grade": 77,
+                    "calificacion_extra": None,
+                    "status": "Aprobado",
+                    "attempt_type": "Ordinario",
+                }
+            ],
+            "materias": [
+                {
+                    "id": "subject-1",
+                    "nombre": "Ingeniería de Software Asistida por Computadora",
+                    "creditos": 6,
+                }
+            ],
+            "periodos": [
+                {
+                    "id": "period-2020-1",
+                    "clave": "2020-1",
+                    "nombre": "ENERO-ABRIL 2020",
+                }
+            ],
+            "academic_programs": [
+                {
+                    "id": "program-ids",
+                    "clave": "NME",
+                    "nombre": "Ingeniería en Desarrollo de Software",
+                }
+            ],
+            "carga_academica": [],
+        }
+
+        cardex = build_cardex_from_supabase(source)
+
+        self.assertEqual(list(cardex.columns), CARDEX_COLUMNS)
+        self.assertEqual(cardex.iloc[0]["Nombre"], "Moisés De Jesús Anzueto González")
+        self.assertEqual(cardex.iloc[0]["Periodo"], 1)
+        self.assertEqual(cardex.iloc[0]["PeriodoCursado"], "2020-1")
+        self.assertEqual(cardex.iloc[0]["EstatusCardex"], "ordinario")
+        self.assertEqual(infer_cohort("193243"), "2019")
+        self.assertEqual(infer_cohort("243678"), "2024")
 
     def test_validation_marks_preview_as_non_replacement(self) -> None:
         preview = pd.DataFrame(

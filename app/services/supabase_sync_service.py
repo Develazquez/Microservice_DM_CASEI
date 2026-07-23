@@ -4,13 +4,16 @@ from datetime import datetime, timezone
 from hashlib import sha256
 import json
 import os
+import re
 import shutil
 from typing import Any
+import unicodedata
 
 import pandas as pd
 
 from app.models.config import (
     ACTIVE_DATASET_POINTER,
+    CARDEX_COLUMNS,
     DATASET_VERSION_DIR,
     FINAL_FEATURES,
     RAW_CARDEX_DATASET,
@@ -171,21 +174,72 @@ def build_cardex_from_supabase(source: dict[str, list[dict[str, Any]]]) -> pd.Da
         records.append(
             {
                 "Matricula": student.get("matricula"),
+                "Nombre": " ".join(
+                    part
+                    for part in [student.get("nombre"), student.get("apellidos")]
+                    if part
+                ).strip(),
                 "Carrera": student.get("carrera") or program.get("nombre") or "SIN_PROGRAMA",
                 "EstatusAlumno": student.get("estatus_academico") or "Regular",
                 "CuatrimestreActual": student.get("cuatrimestre_actual") or 1,
                 "Materia": materia.get("nombre") or materia.get("clave") or item.get("subject_id"),
-                "Periodo": period_key,
+                "Periodo": institutional_period_number(period_key),
                 "EstatusMateria": subject_status,
                 "Final": item.get("grade"),
                 "Extr": item.get("calificacion_extra"),
-                "EstatusCardex": item.get("attempt_type") or "ordinario",
-                "PeriodoCursado": period_key,
+                "EstatusCardex": normalize_attempt_type(item.get("attempt_type")),
+                "PeriodoCursado": normalize_period_label(period_key),
                 "PlanEstudiosClave": program.get("clave") or "PLAN-INSTITUCIONAL",
                 "Credito": materia.get("creditos") or 0,
             }
         )
-    return pd.DataFrame(records)
+    return pd.DataFrame(records, columns=CARDEX_COLUMNS)
+
+
+def institutional_period_number(value: Any) -> int | None:
+    normalized = normalize_source_text(value)
+    compact = re.search(r"(20\d{2})\s*-\s*([123])", normalized)
+    if compact:
+        return int(compact.group(2))
+    if "enero-abril" in normalized:
+        return 1
+    if "mayo-agosto" in normalized:
+        return 2
+    if "septiembre-diciembre" in normalized:
+        return 3
+    return None
+
+
+def normalize_period_label(value: Any) -> str:
+    text = str(value or "").strip()
+    normalized = normalize_source_text(text)
+    compact = re.search(r"(20\d{2})\s*-\s*([123])", normalized)
+    if compact:
+        return f"{compact.group(1)}-{compact.group(2)}"
+    named = re.search(
+        r"(enero-abril|mayo-agosto|septiembre-diciembre)\s+(20\d{2})",
+        normalized,
+    )
+    if named:
+        labels = {
+            "enero-abril": "Enero-Abril",
+            "mayo-agosto": "Mayo-Agosto",
+            "septiembre-diciembre": "Septiembre-Diciembre",
+        }
+        return f"{labels[named.group(1)]} {named.group(2)}"
+    return text or "SIN_PERIODO"
+
+
+def normalize_attempt_type(value: Any) -> str:
+    normalized = normalize_source_text(value)
+    if any(token in normalized for token in ("repet", "recurs", "extra")):
+        return "repeticion"
+    return "ordinario"
+
+
+def normalize_source_text(value: Any) -> str:
+    text = unicodedata.normalize("NFKD", str(value or "").strip().lower())
+    return "".join(character for character in text if not unicodedata.combining(character))
 
 
 def promote_supabase_preview(expected_source_hash: str, reviewed_by: str | None = None) -> dict[str, Any]:
@@ -514,4 +568,7 @@ def infer_cohort(matricula: Any) -> str | None:
         candidate = text[index : index + 4]
         if candidate.isdigit() and candidate.startswith("20"):
             return candidate
+    legacy = re.fullmatch(r"(\d{2})\d{4}", text.strip())
+    if legacy:
+        return str(2000 + int(legacy.group(1)))
     return None

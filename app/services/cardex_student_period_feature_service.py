@@ -17,11 +17,10 @@ PLAN_CREDITS = {
     "IAG": 276,
 }
 
-PERIOD_LABEL_ORDER = {
-    "septiembre-diciembre 2022": 2022 * 3 + 3,
-    "enero-abril 2023": 2023 * 3 + 1,
-    "mayo-agosto 2023": 2023 * 3 + 2,
-    "septiembre-diciembre 2023": 2023 * 3 + 3,
+PERIOD_NAME_NUMBER = {
+    "enero-abril": 1,
+    "mayo-agosto": 2,
+    "septiembre-diciembre": 3,
 }
 
 
@@ -48,15 +47,25 @@ def stable_int(low: int, high: int, *parts: object) -> int:
 
 
 def parse_cohort(matricula: object) -> int:
-    match = re.search(r"(20\d{2})", str(matricula))
-    return int(match.group(1)) if match else 2022
+    text = str(matricula).strip()
+    match = re.search(r"(20\d{2})", text)
+    if match:
+        return int(match.group(1))
+    legacy = re.fullmatch(r"(\d{2})\d{4}", text)
+    if legacy:
+        return 2000 + int(legacy.group(1))
+    return 2022
 
 
 def period_order(period: object) -> int:
     text = str(period)
     normalized = normalize_text(text).strip()
-    if normalized in PERIOD_LABEL_ORDER:
-        return PERIOD_LABEL_ORDER[normalized]
+    named = re.search(
+        r"(enero-abril|mayo-agosto|septiembre-diciembre)\s+(20\d{2})",
+        normalized,
+    )
+    if named:
+        return int(named.group(2)) * 3 + PERIOD_NAME_NUMBER[named.group(1)]
     match = re.search(r"(20\d{2})\s*-\s*([123])", text)
     if not match:
         return 0

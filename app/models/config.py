@@ -112,6 +112,7 @@ STUDENT_PERIOD_DATASET = PROCESSED_DIR / "student_period_features.csv"
 
 CARDEX_COLUMNS = [
     "Matricula",
+    "Nombre",
     "Carrera",
     "EstatusAlumno",
     "CuatrimestreActual",

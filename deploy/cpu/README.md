@@ -1,11 +1,16 @@
 # Despliegue CPU de API y worker CASEI
 
+Esta es una alternativa para separar el worker del Pod GPU. No debe levantarse
+al mismo tiempo que el worker de RunPod salvo que se busque concurrencia
+controlada con identificadores de worker distintos.
+
 Esta configuracion ejecuta dos procesos separados desde la misma imagen:
 
 - `api`: FastAPI, consultas, autenticacion y encolado de trabajos.
 - `worker`: sincronizacion, inferencia, reentrenamiento y publicacion.
 
-Qwen/Ollama no se ejecuta en esta imagen. El gateway SLM permanece en RunPod.
+Qwen/Ollama no se ejecuta en esta imagen. El gateway SLM puede permanecer en
+RunPod aunque el worker se aloje aqui.
 
 ## Preparacion
 

@@ -5,10 +5,19 @@ import unittest
 import pandas as pd
 
 from app.models.config import REPORTS_DIR
+from app.services.cardex_student_period_feature_service import parse_cohort, period_order
 from app.services.segmentation_api_service import segmentation_summary
 
 
 class PipelineRegressionTests(unittest.TestCase):
+    def test_real_institutional_periods_and_legacy_matriculas(self) -> None:
+        self.assertEqual(parse_cohort("193243"), 2019)
+        self.assertEqual(parse_cohort("243678"), 2024)
+        self.assertEqual(parse_cohort("IDS20200001"), 2020)
+        self.assertEqual(period_order("ENERO-ABRIL 2020"), 2020 * 3 + 1)
+        self.assertEqual(period_order("Mayo-Agosto 2026"), 2026 * 3 + 2)
+        self.assertEqual(period_order("2026-3"), 2026 * 3 + 3)
+
     def test_k_selection_metrics_keep_current_operational_choice(self) -> None:
         metrics = pd.read_csv(REPORTS_DIR / "k_selection_metrics.csv")
         selected = metrics[(metrics["representation"] == "pca_90") & (metrics["k"] == 2)].iloc[0]

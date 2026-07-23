@@ -14,6 +14,11 @@ class DataQualityTests(unittest.TestCase):
         self.assertEqual(len(raw), 2000)
         self.assertEqual(list(raw.columns), CARDEX_COLUMNS)
         self.assertGreater(raw["Matricula"].nunique(), 300)
+        self.assertEqual(raw["Nombre"].isna().sum(), 0)
+        self.assertEqual(
+            raw.groupby("Matricula")["Nombre"].nunique().max(),
+            1,
+        )
         self.assertGreater(raw["Carrera"].nunique(), 1)
         expected_values = {
             "Periodo": {"1", "2", "3"},

@@ -50,6 +50,143 @@ class SupabaseRepository:
             raise FileNotFoundError(f"Student-period dataset not found: {STUDENT_PERIOD_DATASET}")
         return pd.read_csv(STUDENT_PERIOD_DATASET)
 
+    def active_model_metadata(self) -> dict[str, Any]:
+        rows = self.fetch_table(
+            "ml_model_versions",
+            select="model_version,algorithm,selected_representation,selected_k,metrics,artifact_manifest,is_active,created_at",
+            filters={"is_active": "eq.true"},
+            limit=1,
+        )
+        if not rows:
+            raise FileNotFoundError("Supabase no contiene una version activa del modelo.")
+        return rows[0]
+
+    def current_student_segmentation(self, limit: int = 10000) -> pd.DataFrame:
+        """Build the current student-period view from persisted inference results.
+
+        Partial inference runs append rows instead of replacing the historical
+        tables. The newest assignment for every student-period is therefore the
+        active snapshot exposed to the API.
+        """
+        active_model = self.active_model_metadata()
+        model_version = str(active_model["model_version"])
+        assignments = self.fetch_table(
+            "cluster_assignments",
+            select="*",
+            filters={"model_version": f"eq.{model_version}"},
+            limit=limit,
+            order="created_at.desc",
+        )
+        if not assignments:
+            raise FileNotFoundError(
+                f"Supabase no contiene asignaciones para el modelo activo {model_version}."
+            )
+
+        assignment_df = pd.DataFrame(assignments)
+        keys = ["id_estudiante", "id_periodo"]
+        assignment_df = assignment_df.drop_duplicates(subset=keys, keep="first")
+        execution_ids = set(assignment_df["execution_id"].dropna().astype(str))
+
+        feature_rows = self.fetch_table(
+            "student_period_features",
+            select="*",
+            limit=limit,
+            order="created_at.desc",
+        )
+        feature_df = pd.DataFrame(feature_rows)
+        if not feature_df.empty:
+            feature_df = feature_df[
+                feature_df["execution_id"].fillna("").astype(str).isin(execution_ids)
+            ].copy()
+            feature_df = feature_df.drop_duplicates(
+                subset=["execution_id", *keys],
+                keep="first",
+            )
+            feature_df = self._expand_feature_payload(feature_df)
+
+        view = assignment_df
+        if not feature_df.empty:
+            feature_columns = [
+                column
+                for column in feature_df.columns
+                if column not in {"id", "created_at", "features"}
+            ]
+            view = assignment_df.merge(
+                feature_df[feature_columns],
+                on=["execution_id", *keys],
+                how="left",
+                suffixes=("", "_feature"),
+            )
+            view = self._coalesce_feature_columns(view)
+
+        profile_rows = self.fetch_table(
+            "profiles",
+            select="id,matricula,nombre,apellidos",
+            filters={"rol": "eq.alumno"},
+            limit=limit,
+        )
+        if profile_rows:
+            profiles = pd.DataFrame(profile_rows).rename(
+                columns={"id": "student_profile_id_lookup"}
+            )
+            profiles["nombre_completo"] = (
+                profiles[["nombre", "apellidos"]]
+                .fillna("")
+                .astype(str)
+                .agg(" ".join, axis=1)
+                .str.replace(r"\s+", " ", regex=True)
+                .str.strip()
+            )
+            view = view.merge(
+                profiles[
+                    [
+                        "student_profile_id_lookup",
+                        "matricula",
+                        "nombre_completo",
+                    ]
+                ],
+                left_on="student_profile_id",
+                right_on="student_profile_id_lookup",
+                how="left",
+            )
+            view["nombre"] = view["nombre_completo"]
+            view = view.drop(
+                columns=["student_profile_id_lookup", "nombre_completo", "matricula"],
+                errors="ignore",
+            )
+
+        return view.reset_index(drop=True)
+
+    @staticmethod
+    def _expand_feature_payload(features: pd.DataFrame) -> pd.DataFrame:
+        if "features" not in features.columns:
+            return features
+        payload = pd.json_normalize(
+            features["features"].apply(lambda value: value if isinstance(value, dict) else {})
+        )
+        payload.index = features.index
+        expanded = features.copy()
+        for column in payload.columns:
+            if column not in expanded.columns:
+                expanded[column] = payload[column]
+            else:
+                expanded[column] = expanded[column].combine_first(payload[column])
+        return expanded
+
+    @staticmethod
+    def _coalesce_feature_columns(view: pd.DataFrame) -> pd.DataFrame:
+        feature_suffix = "_feature"
+        for column in list(view.columns):
+            if not column.endswith(feature_suffix):
+                continue
+            target = column[: -len(feature_suffix)]
+            if target in view.columns:
+                view[target] = view[target].combine_first(view[column])
+            else:
+                view[target] = view[column]
+            view = view.drop(columns=[column])
+        return view
+
     def current_model_bundle(self) -> dict[str, Any]:
         return load_persisted_model_bundle()
 

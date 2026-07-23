@@ -301,8 +301,20 @@ No usar Supabase Storage como fuente actual de artefactos. La API sigue cargando
 ## Qwen en RunPod
 
 La configuracion para un Pod bajo demanda se encuentra en `deploy/runpod`. La imagen mantiene Ollama
-en `127.0.0.1:11434` y solo publica un gateway FastAPI autenticado en el puerto `8001`. El modelo se
-guarda bajo `/workspace/ollama/models` para sobrevivir cuando el Pod se detiene.
+en `127.0.0.1:11434`, publica un gateway FastAPI autenticado en el puerto `8001` y puede ejecutar el
+worker ML persistente que consume la cola de Supabase. El modelo se guarda bajo
+`/workspace/ollama/models` para sobrevivir cuando el Pod se detiene.
+
+Variables del Pod para habilitar el worker:
+
+```text
+CASEI_ML_WORKER_ENABLED=true
+CASEI_AUTO_INFERENCE_ENABLED=true
+CASEI_ML_WORKER_ID=worker-runpod-1
+CASEI_SUPABASE_URL=<url-del-proyecto>
+CASEI_SUPABASE_SERVICE_ROLE_KEY=<service-role-key-como-secreto>
+CASEI_STRICT_BUNDLE_CHECKSUMS=true
+```
 
 Variables de la API cuando el Pod esta encendido:
 
@@ -329,5 +341,6 @@ ACADEMIC_SEGMENTATION_API_URL=https://<tu-api>.vercel.app
 Notas operativas:
 
 - Los endpoints de consulta (`/health`, `/summary`, `/students`, `/clusters`, `/search`) son los mas adecuados para Vercel.
-- Los endpoints que reentrenan o regeneran artefactos pueden exceder limites serverless; para produccion conviene ejecutarlos en un job externo y sincronizar resultados a Supabase PostgreSQL.
+- Vercel encola y consulta trabajos; el worker de RunPod los reclama y publica sus resultados en Supabase.
+- Los endpoints que reentrenan o regeneran artefactos no deben ejecutarse dentro de una funcion serverless.
 - Mantener `CASEI_CORS_ORIGINS` restringido a los dominios reales de la web, no usar comodin si se envian credenciales.

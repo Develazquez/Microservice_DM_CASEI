@@ -24,7 +24,7 @@
     "inertia": 17361.098914344308,
     "silhouette": 0.3255789062232767,
     "calinski_harabasz": 310.1769170943589,
-    "davies_bouldin": 1.4632741329176733,
+    "davies_bouldin": 1.4632741329176728,
     "min_cluster_size": 187,
     "max_cluster_size": 812
   },

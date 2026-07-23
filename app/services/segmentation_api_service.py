@@ -15,10 +15,12 @@ from app.models.config import (
     ACTIVE_INFERENCE_SNAPSHOT,
     API_HISTORY_PATH,
     ARTIFACTS_DIR,
+    CASEI_DB_MODE,
     PROCESSED_DIR,
     REPORTS_DIR,
     STUDENT_PERIOD_DATASET,
 )
+from app.repositories.supabase_repository import SupabaseRepository
 from app.services.academic_bm25_search_service import load_search_documents, run_search_engine
 from app.services.academic_search_orchestrator_service import search_academic_documents
 from app.services.academic_semantic_embedding_service import build_and_persist_semantic_index
@@ -146,6 +148,11 @@ def pca_coordinates_df() -> pd.DataFrame:
 
 
 def student_view() -> pd.DataFrame:
+    if CASEI_DB_MODE in {"supabase", "postgres", "postgresql"}:
+        repository = SupabaseRepository()
+        repository.require_configured()
+        return repository.current_student_segmentation()
+
     loaded = current_loaded_bundle()
     assignments = loaded["cluster_assignments"].copy()
     if ACTIVE_INFERENCE_SNAPSHOT.exists() and ACTIVE_INFERENCE_METADATA.exists():
@@ -185,11 +192,34 @@ def student_view() -> pd.DataFrame:
 
 
 def segmentation_summary(security_context: SecurityContext | None = None) -> dict[str, Any]:
-    loaded = current_loaded_bundle()
-    manifest = loaded["manifest"]
     students = apply_student_scope(student_view(), security_context)
-    profiles = profile_catalog_df(loaded)
-    metrics = manifest["model"].get("metrics", {})
+    if CASEI_DB_MODE in {"supabase", "postgres", "postgresql"}:
+        active_model = SupabaseRepository().active_model_metadata()
+        model_version = str(active_model["model_version"])
+        selected_representation = active_model.get("selected_representation")
+        selected_k = active_model.get("selected_k")
+        metrics = active_model.get("metrics") or {}
+        profiles = (
+            students[
+                [
+                    "cluster",
+                    "perfil_academico",
+                    "prioridad_tutorial",
+                ]
+            ]
+            .drop_duplicates(subset=["cluster"])
+            .sort_values("cluster")
+        )
+        warnings: list[str] = []
+    else:
+        loaded = current_loaded_bundle()
+        manifest = loaded["manifest"]
+        model_version = manifest["model_version"]
+        selected_representation = manifest["model"]["selected_representation"]
+        selected_k = manifest["model"]["selected_k"]
+        metrics = manifest["model"].get("metrics", {})
+        profiles = profile_catalog_df(loaded)
+        warnings = manifest.get("warnings", [])
     follow_up = students["prioridad_tutorial"].fillna("").str.lower().ne("baja-media")
 
     profile_distribution = (
@@ -207,9 +237,9 @@ def segmentation_summary(security_context: SecurityContext | None = None) -> dic
 
     return jsonable(
         {
-            "model_version": manifest["model_version"],
-            "selected_representation": manifest["model"]["selected_representation"],
-            "selected_k": manifest["model"]["selected_k"],
+            "model_version": model_version,
+            "selected_representation": selected_representation,
+            "selected_k": selected_k,
             "metrics": metrics,
             "total_students": int(students["id_estudiante"].nunique()),
             "total_records": int(len(students)),
@@ -220,7 +250,7 @@ def segmentation_summary(security_context: SecurityContext | None = None) -> dic
             "profile_distribution": dataframe_records(profile_distribution),
             "program_distribution": dataframe_records(program_distribution),
             "profiles": dataframe_records(profiles),
-            "warnings": manifest.get("warnings", []),
+            "warnings": warnings,
         }
     )
 
