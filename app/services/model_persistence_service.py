@@ -82,6 +82,17 @@ def file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def matches_text_eol_variant(path: Path, expected_sha256: str) -> bool:
+    """Accept the same text content when Git only changed line endings."""
+    raw = path.read_bytes()
+    normalized_lf = raw.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    variants = {
+        hashlib.sha256(normalized_lf).hexdigest(),
+        hashlib.sha256(normalized_lf.replace(b"\n", b"\r\n")).hexdigest(),
+    }
+    return expected_sha256 in variants
+
+
 def read_json(path: Path) -> dict[str, Any]:
     if not path.exists():
         raise FileNotFoundError(f"Required JSON artifact not found: {path}")
@@ -311,11 +322,18 @@ def validate_manifest_files(manifest: dict[str, Any], bundle_dir: Path) -> pd.Da
         eol_tolerated = bool(
             exists
             and not raw_checksum_ok
+            and is_text_bundle_file(path)
+            and matches_text_eol_variant(path, artifact["sha256"])
+        )
+        checksum_bypassed = bool(
+            exists
+            and not raw_checksum_ok
+            and not eol_tolerated
             and not strict_checksums
             and is_text_bundle_file(path)
             and path.stat().st_size > 0
         )
-        checksum_ok = raw_checksum_ok or eol_tolerated
+        checksum_ok = raw_checksum_ok or eol_tolerated or checksum_bypassed
         records.append(
             {
                 "bundle_path": artifact["bundle_path"],
@@ -325,6 +343,7 @@ def validate_manifest_files(manifest: dict[str, Any], bundle_dir: Path) -> pd.Da
                 "checksum_ok": checksum_ok,
                 "raw_checksum_ok": raw_checksum_ok,
                 "eol_tolerated": eol_tolerated,
+                "checksum_bypassed": checksum_bypassed,
             }
         )
     return pd.DataFrame(records)
