@@ -29,8 +29,8 @@ test-results/
 # El despliegue necesita el puntero y un unico indice semantico activo.
 # Al publicar una nueva version, sustituir esta excepcion por el nuevo bundle.
 /artifacts/search_registry/*
-!/artifacts/search_registry/casei-semantic-795d3e976be8/
-!/artifacts/search_registry/casei-semantic-795d3e976be8/**
+!/artifacts/search_registry/casei-semantic-89f40e053f73/
+!/artifacts/search_registry/casei-semantic-89f40e053f73/**
 !/artifacts/current_search_index.json
 
 # ── Pruebas y Tipado ───────────────────────────────
@@ -79,11 +79,10 @@ Thumbs.db
 desktop.ini
 
 # ── Carpeta scripts (entrypoints CLI, no necesarios) ─
-/scripts
+/scripts/*
 !/scripts/run_ml_worker.py
 !/scripts/normalize_raw_cardex_contract.py
 !/scripts/run_semantic_search_index.py
-!/scripts/run_semantic_search_benchmark.py
 
 # ── Datos y artefactos ─────────────────────────────
 # Mantener resultados sintéticos versionables durante la fase académica.

@@ -25,6 +25,7 @@ from app.services.academic_semantic_embedding_service import (
     embed_texts,
     file_checksum_matches,
     reset_semantic_runtime_state,
+    select_semantic_hints,
     semantic_descriptor,
     semantic_query_text,
 )
@@ -99,10 +100,13 @@ class SemanticServiceTests(unittest.TestCase):
 
     def test_embedding_cache_reuses_float32_vector(self) -> None:
         expected = np.asarray([[1.0, 0.0, 0.0]], dtype=np.float32)
-        with patch(
-            "app.services.academic_semantic_embedding_service.request_direct_embeddings",
-            return_value=expected,
-        ) as request:
+        with (
+            patch("app.services.academic_semantic_embedding_service.OLLAMA_GATEWAY_URL", ""),
+            patch(
+                "app.services.academic_semantic_embedding_service.request_direct_embeddings",
+                return_value=expected,
+            ) as request,
+        ):
             first, first_hit = embed_texts(["Los que van flojos"])
             second, second_hit = embed_texts(["  los que van flojos  "])
         self.assertFalse(first_hit)
@@ -149,6 +153,58 @@ class SemanticServiceTests(unittest.TestCase):
         self.assertEqual(concepts, ["low_performance", "academic_lag"])
         self.assertIn("bajo rendimiento", expanded)
         self.assertIn("rezago academico", expanded)
+
+    def test_colloquial_catalog_phrases_expand_to_expected_concepts(self) -> None:
+        catalog_path = Path(__file__).parents[1] / "app" / "models" / "semantic_catalog.json"
+        catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+        cases = {
+            "quienes necesitan que los revisemos": "tutorial_follow_up",
+            "los que van de maravilla": "high_performance",
+            "los que sacan buenas notas": "high_performance",
+            "quienes faltan un monton": "low_attendance",
+        }
+        for query, expected in cases.items():
+            with self.subTest(query=query):
+                _, concepts = semantic_query_text(query, catalog)
+                self.assertIn(expected, concepts)
+        _, good_grades_concepts = semantic_query_text("los que sacan buenas notas", catalog)
+        self.assertEqual(good_grades_concepts, ["high_performance"])
+
+    def test_explicit_high_performance_blocks_conflicting_prototypes(self) -> None:
+        catalog = {
+            "concepts": [
+                {
+                    "id": "high_performance",
+                    "label": "buen desempeno",
+                    "allowed_effect": "ranking",
+                    "conflicts_with": ["low_performance", "multiple_risk_signals"],
+                },
+                {
+                    "id": "low_performance",
+                    "label": "bajo rendimiento",
+                    "allowed_effect": "ranking",
+                },
+                {
+                    "id": "atypical_attendance",
+                    "label": "buen promedio con baja asistencia",
+                    "allowed_effect": "qwen_context",
+                    "requires_catalog_match": True,
+                },
+                {
+                    "id": "multiple_risk_signals",
+                    "label": "multiples senales",
+                    "allowed_effect": "qwen_context",
+                    "requires_catalog_match": True,
+                },
+            ]
+        }
+        hints = select_semantic_hints(
+            catalog,
+            ["high_performance", "low_performance", "atypical_attendance", "multiple_risk_signals"],
+            np.asarray([0.87, 0.82, 0.88, 0.84], dtype=np.float32),
+            ["high_performance"],
+        )
+        self.assertEqual([hint.concept_id for hint in hints], ["high_performance"])
 
     def test_full_index_persists_aligned_ids_and_checksums(self) -> None:
         documents = sample_documents()
@@ -228,6 +284,38 @@ class SemanticServiceTests(unittest.TestCase):
         self.assertEqual(second["reused_documents"], 2)
         self.assertEqual(second["embedded_documents"], 0)
         self.assertEqual(embed.call_count, 3)
+
+    def test_prototypes_only_aborts_before_embedding_changed_documents(self) -> None:
+        documents = sample_documents()
+        catalog = {
+            "version": "test-v2",
+            "concepts": [
+                {
+                    "id": "low_performance",
+                    "label": "bajo rendimiento",
+                    "description": "dificultad academica",
+                    "phrases": ["va flojo"],
+                    "allowed_effect": "ranking",
+                }
+            ],
+        }
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            catalog_path = root / "semantic_catalog.json"
+            catalog_path.write_text(json.dumps(catalog), encoding="utf-8")
+            with (
+                patch("app.services.academic_semantic_embedding_service.PROJECT_ROOT", root),
+                patch("app.services.academic_semantic_embedding_service.SEARCH_REGISTRY_DIR", root / "registry"),
+                patch("app.services.academic_semantic_embedding_service.CURRENT_SEARCH_INDEX_POINTER", root / "current.json"),
+                patch("app.services.academic_semantic_embedding_service.SEMANTIC_CATALOG_PATH", catalog_path),
+                patch("app.services.academic_semantic_embedding_service.embed_texts") as embed,
+            ):
+                with self.assertRaisesRegex(EmbeddingUnavailableError, "prototypes-only"):
+                    build_and_persist_semantic_index(
+                        documents,
+                        require_full_document_reuse=True,
+                    )
+        embed.assert_not_called()
 
 
 class HybridRoutingTests(unittest.TestCase):

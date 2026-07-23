@@ -1,0 +1,14 @@
+{
+  "search_version": "casei-semantic-89f40e053f73",
+  "model": "qwen3-embedding:0.6b",
+  "dimension": 1024,
+  "documents": 999,
+  "prototypes": 8,
+  "source_fingerprint": "770c294bafae37dbf2ba038b521ebf9a4b751eab06699055cbad88313af2c01a",
+  "catalog_version": "casei-semantic-catalog-v2",
+  "catalog_fingerprint": "bcc00fd98197b14acf2d9183424995d5ba1feaf8c9d0b3ce7e4b1d4aeaa2117b",
+  "descriptor_version": "2",
+  "build_mode": "incremental",
+  "reused_documents": 999,
+  "embedded_documents": 0
+}

@@ -1,0 +1,21 @@
+{
+  "search_version": "casei-semantic-89f40e053f73",
+  "model": "qwen3-embedding:0.6b",
+  "dimension": 1024,
+  "documents": 999,
+  "prototypes": 8,
+  "source_fingerprint": "770c294bafae37dbf2ba038b521ebf9a4b751eab06699055cbad88313af2c01a",
+  "catalog_version": "casei-semantic-catalog-v2",
+  "catalog_fingerprint": "bcc00fd98197b14acf2d9183424995d5ba1feaf8c9d0b3ce7e4b1d4aeaa2117b",
+  "descriptor_version": "2",
+  "build_mode": "incremental",
+  "reused_documents": 999,
+  "embedded_documents": 0,
+  "files": {
+    "semantic_embeddings.npy": "213b12c051b64a3ab7a3672ed599f9bc1bb66d1572a5d1ff5b7ac36929ea22a0",
+    "semantic_filter_prototypes.npy": "f0c4f8b09c9373a4fa11cc68c1b39bb0ee81c59d31bc79dd0713853c911600f5",
+    "semantic_document_ids.csv": "c6dbe6fbe52795c3907bd7b6cce7c21a5896ff53bf2d750c032424a4867048e7",
+    "semantic_catalog.json": "e6cb4368f1430dc4fd488dfb48a5d58ee4895743e50db897493b05f2c91d3c8c",
+    "semantic_index_metadata.json": "d12eaf13c2a46257fe1404faebddb73a5209b2fddbe0a455cd7a371484dd69d7"
+  }
+}

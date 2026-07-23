@@ -121,6 +121,12 @@ def _matching_catalog_concepts(query: str, catalog: dict[str, Any]) -> list[dict
     query_stems = _semantic_stems(query)
     matches: list[dict[str, Any]] = []
     for concept in catalog.get("concepts", []):
+        required_terms = concept.get("required_query_terms", [])
+        if required_terms and not any(
+            _semantic_stems(str(term)) <= query_stems
+            for term in required_terms
+        ):
+            continue
         for phrase in concept.get("phrases", []):
             phrase_stems = _semantic_stems(str(phrase))
             if phrase_stems and len(query_stems & phrase_stems) / len(phrase_stems) >= 0.6:
@@ -133,6 +139,57 @@ def semantic_query_text(query: str, catalog: dict[str, Any]) -> tuple[str, list[
     matches = _matching_catalog_concepts(query, catalog)
     expanded = " ".join([query, *[prototype_text(concept) for concept in matches]])
     return expanded.strip(), [str(concept["id"]) for concept in matches]
+
+
+def select_semantic_hints(
+    catalog: dict[str, Any],
+    prototype_ids: list[str],
+    prototype_scores: np.ndarray,
+    expanded_concepts: list[str],
+) -> list[SemanticHint]:
+    concept_by_id = {str(item["id"]): item for item in catalog.get("concepts", [])}
+    score_by_id = {
+        str(concept_id): float(prototype_scores[position])
+        for position, concept_id in enumerate(prototype_ids)
+    }
+    explicit_ids = [concept_id for concept_id in expanded_concepts if concept_id in concept_by_id]
+    ordered_ids = [
+        *explicit_ids,
+        *[
+            prototype_ids[int(position)]
+            for position in np.argsort(-prototype_scores)
+            if prototype_ids[int(position)] not in explicit_ids
+        ],
+    ]
+    blocked_ids = {
+        str(conflict)
+        for concept_id in explicit_ids
+        for conflict in concept_by_id[concept_id].get("conflicts_with", [])
+        if str(conflict) not in explicit_ids
+    }
+    hints: list[SemanticHint] = []
+    for concept_id in ordered_ids:
+        concept_id = str(concept_id)
+        concept = concept_by_id[concept_id]
+        score = score_by_id[concept_id]
+        is_explicit = concept_id in explicit_ids
+        if concept_id in blocked_ids:
+            continue
+        if concept.get("requires_catalog_match") and not is_explicit:
+            continue
+        if not is_explicit and score < SEMANTIC_PROTOTYPE_MIN_SIMILARITY:
+            continue
+        hints.append(
+            SemanticHint(
+                concept_id=concept_id,
+                label=str(concept.get("label", concept_id)),
+                similarity=score,
+                allowed_effect=str(concept.get("allowed_effect", "ranking")),
+            )
+        )
+        if len(hints) >= 8:
+            break
+    return hints
 
 
 def _normalize_rows(values: np.ndarray) -> np.ndarray:
@@ -318,9 +375,7 @@ def _descriptor_hash(descriptor: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
-def _reusable_document_embeddings(
-    catalog_version: str,
-) -> dict[str, tuple[str, np.ndarray]]:
+def _reusable_document_embeddings() -> dict[str, tuple[str, np.ndarray]]:
     if not CURRENT_SEARCH_INDEX_POINTER.exists():
         return {}
     try:
@@ -330,7 +385,6 @@ def _reusable_document_embeddings(
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         if (
             manifest.get("model") != OLLAMA_EMBEDDING_MODEL
-            or str(manifest.get("catalog_version")) != str(catalog_version)
             or str(manifest.get("descriptor_version")) != SEMANTIC_DESCRIPTOR_VERSION
         ):
             return {}
@@ -350,7 +404,11 @@ def _reusable_document_embeddings(
         return {}
 
 
-def build_and_persist_semantic_index(documents: pd.DataFrame) -> dict[str, Any]:
+def build_and_persist_semantic_index(
+    documents: pd.DataFrame,
+    *,
+    require_full_document_reuse: bool = False,
+) -> dict[str, Any]:
     if documents.empty:
         raise ValueError("No hay documentos para construir el indice semantico.")
     if "document_id" not in documents.columns:
@@ -360,8 +418,11 @@ def build_and_persist_semantic_index(documents: pd.DataFrame) -> dict[str, Any]:
     descriptors = [semantic_descriptor(row) for _, row in unique.iterrows()]
     catalog = load_semantic_catalog()
     catalog_version = str(catalog.get("version", "unknown"))
+    catalog_fingerprint = hashlib.sha256(
+        json.dumps(catalog, ensure_ascii=True, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
     descriptor_hashes = [_descriptor_hash(value) for value in descriptors]
-    reusable = _reusable_document_embeddings(catalog_version)
+    reusable = _reusable_document_embeddings()
     document_vectors: list[np.ndarray | None] = [None] * len(unique)
     changed_indexes: list[int] = []
     reused_documents = 0
@@ -372,6 +433,11 @@ def build_and_persist_semantic_index(documents: pd.DataFrame) -> dict[str, Any]:
             reused_documents += 1
         else:
             changed_indexes.append(index)
+    if require_full_document_reuse and changed_indexes:
+        raise EmbeddingUnavailableError(
+            "El modo prototypes-only requiere reutilizar todos los embeddings documentales; "
+            f"{len(changed_indexes)} documentos necesitarian recalcularse."
+        )
     if changed_indexes:
         changed_embeddings, _ = embed_texts(
             [descriptors[index] for index in changed_indexes],
@@ -400,7 +466,7 @@ def build_and_persist_semantic_index(documents: pd.DataFrame) -> dict[str, Any]:
     ).hexdigest()
     version_seed = (
         f"{source_fingerprint}:{OLLAMA_EMBEDDING_MODEL}:{catalog_version}:"
-        f"{SEMANTIC_DESCRIPTOR_VERSION}"
+        f"{catalog_fingerprint}:{SEMANTIC_DESCRIPTOR_VERSION}"
     )
     search_version = f"casei-semantic-{hashlib.sha256(version_seed.encode('utf-8')).hexdigest()[:12]}"
     target = SEARCH_REGISTRY_DIR / search_version
@@ -423,6 +489,7 @@ def build_and_persist_semantic_index(documents: pd.DataFrame) -> dict[str, Any]:
         "prototypes": int(len(concepts)),
         "source_fingerprint": source_fingerprint,
         "catalog_version": catalog_version,
+        "catalog_fingerprint": catalog_fingerprint,
         "descriptor_version": SEMANTIC_DESCRIPTOR_VERSION,
         "build_mode": "incremental" if reusable else "full",
         "reused_documents": reused_documents,
@@ -521,22 +588,12 @@ def semantic_search_documents(documents: pd.DataFrame, query: str) -> dict[str, 
     available.insert(0, "rank_semantic", range(1, len(available) + 1))
 
     prototype_scores = bundle.prototype_embeddings @ query_vector
-    concept_by_id = {str(item["id"]): item for item in bundle.catalog.get("concepts", [])}
-    hints: list[SemanticHint] = []
-    for position in np.argsort(-prototype_scores):
-        score = float(prototype_scores[position])
-        if score < SEMANTIC_PROTOTYPE_MIN_SIMILARITY or len(hints) >= 8:
-            break
-        concept_id = bundle.prototype_ids[int(position)]
-        concept = concept_by_id[concept_id]
-        hints.append(
-            SemanticHint(
-                concept_id=concept_id,
-                label=str(concept.get("label", concept_id)),
-                similarity=score,
-                allowed_effect=str(concept.get("allowed_effect", "ranking")),
-            )
-        )
+    hints = select_semantic_hints(
+        bundle.catalog,
+        bundle.prototype_ids,
+        prototype_scores,
+        expanded_concepts,
+    )
     return {
         "results": available,
         "hints": hints,
