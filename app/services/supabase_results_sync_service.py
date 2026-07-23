@@ -83,6 +83,10 @@ def sync_results_to_supabase(
         )
         counts["ml_model_runs"] = 1
 
+        # Clean previous results so stale records (e.g. with missing names) don't persist.
+        _clean_previous_results(repository, model_version, execution_id)
+        counts["cleaned_previous"] = 1
+
         identities = repository.fetch_student_identity_lookup()
         programs = repository.fetch_program_lookup()
         features = student_period_df()
@@ -255,6 +259,10 @@ def publish_inference_result(
     repository = SupabaseRepository()
     repository.require_configured()
     ensure_model_version_registered(repository, result.model_version)
+
+    # Clean previous results so stale records don't persist across runs.
+    _clean_previous_results(repository, result.model_version, execution_id)
+
     identities = repository.fetch_student_identity_lookup()
     programs = repository.fetch_program_lookup()
     feature_rows = build_feature_rows(
@@ -499,6 +507,29 @@ def clean_value(value: Any) -> Any:
     except TypeError:
         pass
     return value
+
+
+def _clean_previous_results(
+    repository: SupabaseRepository,
+    model_version: str,
+    current_execution_id: str,
+) -> None:
+    """Delete stale segmentation results from previous runs of the same model version."""
+    old_runs = repository.fetch_table(
+        "ml_model_runs",
+        select="execution_id",
+        filters={
+            "model_version": f"eq.{model_version}",
+            "execution_id": f"neq.{current_execution_id}",
+        },
+        limit=1000,
+    )
+    repository.delete_rows("cluster_assignments", {"model_version": f"eq.{model_version}"})
+    repository.delete_rows("student_profile_history", {"model_version": f"eq.{model_version}"})
+    for old_run in (old_runs or []):
+        old_eid = old_run.get("execution_id")
+        if old_eid:
+            repository.delete_rows("student_period_features", {"execution_id": f"eq.{old_eid}"})
 
 
 def normalize_sex(value: Any) -> str | None:

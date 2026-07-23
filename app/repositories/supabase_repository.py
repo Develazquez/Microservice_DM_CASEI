@@ -338,6 +338,12 @@ class SupabaseRepository:
             "tutor_student_scope": self.fetch_tutor_scope(limit=limit * 5),
         }
 
+    def delete_rows(self, table: str, filters: dict[str, str]) -> None:
+        """Delete rows matching the given PostgREST filters."""
+        if not filters:
+            raise ValueError("delete_rows requires at least one filter to prevent accidental full-table deletes.")
+        self._request("DELETE", table, params=filters, prefer="return=minimal")
+
     def _request(
         self,
         method: str,
