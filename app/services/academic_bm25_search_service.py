@@ -265,9 +265,11 @@ def build_document_text(row: pd.Series) -> str:
     if "regular" in normalize_text(profile):
         signals.append("regular regulares alumno alumnos seguimiento preventivo estable")
 
+    nombre = str(row.get("nombre", "")).strip()
     return " ".join(
         [
             f"estudiante {row['id_estudiante']}",
+            f"nombre {nombre} {nombre}" if nombre else "",
             f"periodo {row['id_periodo']}",
             f"programa {row['programa']} {row['programa']} {row['programa']}",
             f"cohorte {row['cohorte']}",
