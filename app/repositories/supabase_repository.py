@@ -50,30 +50,36 @@ class SupabaseRepository:
             raise FileNotFoundError(f"Student-period dataset not found: {STUDENT_PERIOD_DATASET}")
         return pd.read_csv(STUDENT_PERIOD_DATASET)
 
-    def active_model_metadata(self) -> dict[str, Any]:
+    def active_model_metadata(self, tenant_id: str | None = None) -> dict[str, Any]:
+        filters: dict[str, str] = {"is_active": "eq.true"}
+        if tenant_id:
+            filters["tenant_id"] = f"eq.{tenant_id}"
         rows = self.fetch_table(
             "ml_model_versions",
             select="model_version,algorithm,selected_representation,selected_k,metrics,artifact_manifest,is_active,created_at",
-            filters={"is_active": "eq.true"},
+            filters=filters,
             limit=1,
         )
         if not rows:
             raise FileNotFoundError("Supabase no contiene una version activa del modelo.")
         return rows[0]
 
-    def current_student_segmentation(self, limit: int = 10000) -> pd.DataFrame:
+    def current_student_segmentation(self, limit: int = 10000, tenant_id: str | None = None) -> pd.DataFrame:
         """Build the current student-period view from persisted inference results.
 
         Partial inference runs append rows instead of replacing the historical
         tables. The newest assignment for every student-period is therefore the
         active snapshot exposed to the API.
         """
-        active_model = self.active_model_metadata()
+        active_model = self.active_model_metadata(tenant_id=tenant_id)
         model_version = str(active_model["model_version"])
+        ca_filters: dict[str, str] = {"model_version": f"eq.{model_version}"}
+        if tenant_id:
+            ca_filters["tenant_id"] = f"eq.{tenant_id}"
         assignments = self.fetch_table(
             "cluster_assignments",
             select="*",
-            filters={"model_version": f"eq.{model_version}"},
+            filters=ca_filters,
             limit=limit,
             order="created_at.desc",
         )
@@ -87,9 +93,13 @@ class SupabaseRepository:
         assignment_df = assignment_df.drop_duplicates(subset=keys, keep="first")
         execution_ids = set(assignment_df["execution_id"].dropna().astype(str))
 
+        spf_filters: dict[str, str] = {}
+        if tenant_id:
+            spf_filters["tenant_id"] = f"eq.{tenant_id}"
         feature_rows = self.fetch_table(
             "student_period_features",
             select="*",
+            filters=spf_filters or None,
             limit=limit,
             order="created_at.desc",
         )
@@ -119,10 +129,13 @@ class SupabaseRepository:
             )
             view = self._coalesce_feature_columns(view)
 
+        profile_filters: dict[str, str] = {"rol": "eq.alumno"}
+        if tenant_id:
+            profile_filters["tenant_id"] = f"eq.{tenant_id}"
         profile_rows = self.fetch_table(
             "profiles",
             select="id,matricula,nombre,apellidos",
-            filters={"rol": "eq.alumno"},
+            filters=profile_filters,
             limit=limit,
         )
         if profile_rows:
@@ -258,24 +271,43 @@ class SupabaseRepository:
     def rpc(self, function_name: str, parameters: dict[str, Any] | None = None) -> Any:
         return self._request("POST", f"rpc/{function_name}", payload=parameters or {})
 
-    def fetch_student_identity_lookup(self, limit: int = 10000) -> dict[str, dict[str, Any]]:
+    @staticmethod
+    def _tenant_filter(tenant_id: str | None, extra: dict[str, str] | None = None) -> dict[str, str] | None:
+        """Build a PostgREST filter dict that includes tenant_id when provided."""
+        filters: dict[str, str] = {}
+        if tenant_id:
+            filters["tenant_id"] = f"eq.{tenant_id}"
+        if extra:
+            filters.update(extra)
+        return filters or None
+
+    def fetch_student_identity_lookup(self, limit: int = 10000, tenant_id: str | None = None) -> dict[str, dict[str, Any]]:
+        filters: dict[str, str] = {"rol": "eq.alumno"}
+        if tenant_id:
+            filters["tenant_id"] = f"eq.{tenant_id}"
         rows = self.fetch_table(
             "profiles",
             select="id,matricula,carrera,program_id,sexo,rol",
-            filters={"rol": "eq.alumno"},
+            filters=filters,
             limit=limit,
         )
         return {str(row.get("matricula")): row for row in rows if row.get("matricula")}
 
-    def fetch_program_lookup(self, limit: int = 1000) -> dict[str, dict[str, Any]]:
-        rows = self.fetch_academic_programs(limit=limit)
+    def fetch_program_lookup(self, limit: int = 1000, tenant_id: str | None = None) -> dict[str, dict[str, Any]]:
+        rows = self.fetch_academic_programs(limit=limit, tenant_id=tenant_id)
         return {str(row.get("nombre")): row for row in rows if row.get("nombre")}
 
-    def fetch_academic_programs(self, limit: int = 1000) -> list[dict[str, Any]]:
-        return self.fetch_table("academic_programs", select="id,clave,nombre,activo", limit=limit, order="nombre.asc")
+    def fetch_academic_programs(self, limit: int = 1000, tenant_id: str | None = None) -> list[dict[str, Any]]:
+        return self.fetch_table(
+            "academic_programs",
+            select="id,clave,nombre,activo",
+            filters=self._tenant_filter(tenant_id),
+            limit=limit,
+            order="nombre.asc",
+        )
 
-    def fetch_profile_role_counts(self, limit: int = 10000) -> list[dict[str, Any]]:
-        rows = self.fetch_table("profiles", select="rol,matricula", limit=limit)
+    def fetch_profile_role_counts(self, limit: int = 10000, tenant_id: str | None = None) -> list[dict[str, Any]]:
+        rows = self.fetch_table("profiles", select="rol,matricula", filters=self._tenant_filter(tenant_id), limit=limit)
         counts: dict[str, dict[str, int | str]] = {}
         for row in rows:
             role = str(row.get("rol") or "sin_rol")
@@ -285,57 +317,73 @@ class SupabaseRepository:
                 current["with_matricula"] = int(current["with_matricula"]) + 1
         return list(counts.values())
 
-    def fetch_tutor_scope(self, tutor_id: str | None = None, limit: int = 10000) -> list[dict[str, Any]]:
-        filters = {"tutor_id": f"eq.{tutor_id}"} if tutor_id else None
+    def fetch_tutor_scope(
+        self,
+        tutor_id: str | None = None,
+        tenant_id: str | None = None,
+        limit: int = 10000,
+    ) -> list[dict[str, Any]]:
+        filters: dict[str, str] = {}
+        if tutor_id:
+            filters["tutor_id"] = f"eq.{tutor_id}"
+        if tenant_id:
+            filters["tenant_id"] = f"eq.{tenant_id}"
         return self.fetch_table(
             "tutor_student_scope",
-            select="tutor_id,student_id,program_id,program_name,group_id,period_id,scope_source,active",
-            filters=filters,
+            select="tutor_id,student_id,program_id,program_name,group_id,period_id,scope_source,active,tenant_id",
+            filters=filters or None,
             limit=limit,
         )
 
-    def fetch_academic_source_data(self, limit: int = 1000) -> dict[str, list[dict[str, Any]]]:
+    def fetch_academic_source_data(self, limit: int = 1000, tenant_id: str | None = None) -> dict[str, list[dict[str, Any]]]:
         limit = max(1, min(int(limit), 10000))
+        tf = self._tenant_filter
         return {
-            "profile_role_counts": self.fetch_profile_role_counts(limit=10000),
-            "academic_programs": self.fetch_academic_programs(limit=1000),
+            "profile_role_counts": self.fetch_profile_role_counts(limit=10000, tenant_id=tenant_id),
+            "academic_programs": self.fetch_academic_programs(limit=1000, tenant_id=tenant_id),
             "profiles": self.fetch_table(
                 "profiles",
                 select="id,matricula,nombre,apellidos,carrera,program_id,sexo,rol,estatus_academico,cuatrimestre_actual",
-                filters={"rol": "eq.alumno"},
+                filters=tf(tenant_id, {"rol": "eq.alumno"}),
                 limit=limit,
             ),
             "historial_academico": self.fetch_table(
                 "historial_academico",
                 select="id,student_id,subject_id,period_id,grade,calificacion_extra,status,attempt_type",
+                filters=tf(tenant_id),
                 limit=limit * 5,
             ),
             "carga_academica": self.fetch_table(
                 "carga_academica",
                 select="id,alumno_id,materia_id,grupo_id,periodo_id,docente_id,calificacion_final,calificacion_extraordinario,estatus",
+                filters=tf(tenant_id),
                 limit=limit * 5,
             ),
             "materias": self.fetch_table(
                 "materias",
                 select="id,nombre,clave,creditos,cuatrimestre_plan",
+                filters=tf(tenant_id),
                 limit=limit * 2,
             ),
             "periodos": self.fetch_table(
                 "periodos",
                 select="id,nombre,clave,fecha_inicio,fecha_fin,activo",
+                filters=tf(tenant_id),
                 limit=500,
             ),
             "grupos": self.fetch_table(
                 "grupos",
                 select="id,nombre,clave,periodo_id,tutor_id,program_id,activo",
+                filters=tf(tenant_id),
                 limit=limit,
             ),
             "tutor_program_assignments": self.fetch_table(
                 "tutor_program_assignments",
                 select="id,tutor_id,program_id,is_primary,active",
+                filters=tf(tenant_id),
                 limit=limit,
             ),
-            "tutor_student_scope": self.fetch_tutor_scope(limit=limit * 5),
+            "tutor_student_scope": self.fetch_tutor_scope(tenant_id=tenant_id, limit=limit * 5),
         }
 
     def delete_rows(self, table: str, filters: dict[str, str]) -> None:

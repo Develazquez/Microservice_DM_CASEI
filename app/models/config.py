@@ -68,6 +68,29 @@ ARTIFACTS_DIR = PROJECT_ROOT / "artifacts"
 MODEL_REGISTRY_DIR = ARTIFACTS_DIR / "model_registry"
 MODEL_REGISTRY_INDEX = MODEL_REGISTRY_DIR / "registry_index.csv"
 CURRENT_MODEL_POINTER = ARTIFACTS_DIR / "current_model.json"
+
+
+def tenant_artifacts_dir(tenant_slug: str | None = None) -> Path:
+    """Return the artifacts directory for a specific tenant.
+
+    When *tenant_slug* is ``None`` the global ``ARTIFACTS_DIR`` is returned so
+    that existing single-tenant code keeps working without changes.
+    """
+    if not tenant_slug:
+        return ARTIFACTS_DIR
+    tenant_dir = ARTIFACTS_DIR / tenant_slug
+    tenant_dir.mkdir(parents=True, exist_ok=True)
+    return tenant_dir
+
+
+def tenant_model_pointer(tenant_slug: str | None = None) -> Path:
+    return tenant_artifacts_dir(tenant_slug) / "current_model.json"
+
+
+def tenant_model_registry_dir(tenant_slug: str | None = None) -> Path:
+    registry = tenant_artifacts_dir(tenant_slug) / "model_registry"
+    registry.mkdir(parents=True, exist_ok=True)
+    return registry
 API_HISTORY_PATH = REPORTS_DIR / "api_execution_history.jsonl"
 INFERENCE_HISTORY_DB = STORAGE_DIR / "segmentation_inference_history.sqlite"
 INFERENCE_SCHEMA_PATH = STORAGE_DIR / "segmentation_inference_schema.sql"

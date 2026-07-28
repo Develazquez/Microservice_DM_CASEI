@@ -151,11 +151,11 @@ def pca_coordinates_df() -> pd.DataFrame:
     return pca[columns]
 
 
-def student_view() -> pd.DataFrame:
+def student_view(tenant_id: str | None = None) -> pd.DataFrame:
     if CASEI_DB_MODE in {"supabase", "postgres", "postgresql"}:
         repository = SupabaseRepository()
         repository.require_configured()
-        return repository.current_student_segmentation()
+        return repository.current_student_segmentation(tenant_id=tenant_id)
 
     loaded = current_loaded_bundle()
     assignments = loaded["cluster_assignments"].copy()
@@ -198,10 +198,13 @@ def student_view() -> pd.DataFrame:
         try:
             repo = SupabaseRepository()
             if repo.configured:
+                _filters: dict[str, str] = {"rol": "eq.alumno"}
+                if tenant_id:
+                    _filters["tenant_id"] = f"eq.{tenant_id}"
                 profile_rows = repo.fetch_table(
                     "profiles",
                     select="matricula,nombre,apellidos",
-                    filters={"rol": "eq.alumno"},
+                    filters=_filters,
                     limit=10000,
                 )
                 if profile_rows:
@@ -237,9 +240,10 @@ def student_view() -> pd.DataFrame:
 
 
 def segmentation_summary(security_context: SecurityContext | None = None) -> dict[str, Any]:
-    students = apply_student_scope(student_view(), security_context)
+    _tid = security_context.tenant_id if security_context else None
+    students = apply_student_scope(student_view(tenant_id=_tid), security_context)
     if CASEI_DB_MODE in {"supabase", "postgres", "postgresql"}:
-        active_model = SupabaseRepository().active_model_metadata()
+        active_model = SupabaseRepository().active_model_metadata(tenant_id=_tid)
         model_version = str(active_model["model_version"])
         selected_representation = active_model.get("selected_representation")
         selected_k = active_model.get("selected_k")
@@ -309,7 +313,8 @@ def filtered_students(
     offset: int = 0,
     security_context: SecurityContext | None = None,
 ) -> dict[str, Any]:
-    students = apply_student_scope(student_view(), security_context)
+    _tid = security_context.tenant_id if security_context else None
+    students = apply_student_scope(student_view(tenant_id=_tid), security_context)
     if perfil:
         students = students[students["perfil_academico"].fillna("").str.contains(perfil, case=False, na=False)]
     if programa:
@@ -379,8 +384,9 @@ def search_students(
     query = query.strip()
     if not query:
         raise ValueError("La consulta no puede estar vacia.")
+    _tid = security_context.tenant_id if security_context else None
     source_documents = (
-        build_search_documents(student_view())
+        build_search_documents(student_view(tenant_id=_tid))
         if CASEI_DB_MODE in {"supabase", "postgres", "postgresql"}
         else load_search_documents()
     )

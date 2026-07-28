@@ -15,7 +15,7 @@ from app.services.segmentation_api_service import jsonable
 from app.services.supabase_results_sync_service import ensure_model_version_registered
 
 
-def train_candidate_model() -> dict[str, Any]:
+def train_candidate_model(tenant_id: str | None = None) -> dict[str, Any]:
     active = load_persisted_model_bundle()["manifest"]
     active_version = str(active["model_version"])
     active_metrics = dict(active["model"].get("metrics") or {})
@@ -31,7 +31,12 @@ def train_candidate_model() -> dict[str, Any]:
 
     repository = SupabaseRepository()
     if repository.configured:
-        ensure_model_version_registered(repository, candidate_version, activate_if_missing=False)
+        ensure_model_version_registered(
+            repository,
+            candidate_version,
+            activate_if_missing=False,
+            tenant_id=tenant_id,
+        )
 
     return {
         "status": "review_required" if comparison["passes_quality_gate"] else "rejected",

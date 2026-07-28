@@ -83,9 +83,10 @@ def consume_data_events(repository: SupabaseRepository) -> dict[str, int]:
 def process_claimed_job(repository: SupabaseRepository, job: dict[str, Any]) -> dict[str, Any]:
     execution_id = str(job["execution_id"])
     operation = str(job.get("run_type") or "auto")
+    _tid = str(job["tenant_id"]) if job.get("tenant_id") else None
     try:
         heartbeat(repository, execution_id, "validating", 10)
-        sync = sync_from_supabase(limit=10000, write_preview=True)
+        sync = sync_from_supabase(limit=10000, write_preview=True, tenant_id=_tid)
         source_hash = str(sync["source_hash"])
         promote_supabase_preview(source_hash, reviewed_by=str(job.get("requested_by") or "") or None)
         repository.patch_rows(
@@ -96,7 +97,7 @@ def process_claimed_job(repository: SupabaseRepository, job: dict[str, Any]) -> 
 
         if operation == "retrain":
             heartbeat(repository, execution_id, "processing", 35)
-            candidate = train_candidate_model()
+            candidate = train_candidate_model(tenant_id=_tid)
             final_status = str(candidate["status"])
             repository.patch_rows(
                 "ml_model_runs",
@@ -119,13 +120,13 @@ def process_claimed_job(repository: SupabaseRepository, job: dict[str, Any]) -> 
             return {"execution_id": execution_id, **candidate}
 
         heartbeat(repository, execution_id, "processing", 45)
-        student_ids = matriculas_for_job(repository, execution_id)
+        student_ids = matriculas_for_job(repository, execution_id, tenant_id=_tid)
         inference = infer_with_active_bundle(
             student_ids=student_ids or None,
-            model_version=active_model_version(repository),
+            model_version=active_model_version(repository, tenant_id=_tid),
         )
         heartbeat(repository, execution_id, "publishing", 80)
-        counts = publish_inference_result(inference, execution_id, source_hash)
+        counts = publish_inference_result(inference, execution_id, source_hash, tenant_id=_tid)
         snapshot = persist_active_inference_snapshot(inference)
         search_index = refresh_search_index(student_ids=student_ids or None)
         repository.patch_rows(
@@ -164,7 +165,7 @@ def process_claimed_job(repository: SupabaseRepository, job: dict[str, Any]) -> 
             raise
 
 
-def matriculas_for_job(repository: SupabaseRepository, execution_id: str) -> list[str]:
+def matriculas_for_job(repository: SupabaseRepository, execution_id: str, tenant_id: str | None = None) -> list[str]:
     run_students = repository.fetch_table(
         "ml_run_students",
         select="student_profile_id",
@@ -174,10 +175,13 @@ def matriculas_for_job(repository: SupabaseRepository, execution_id: str) -> lis
     profile_ids = {str(row.get("student_profile_id")) for row in run_students if row.get("student_profile_id")}
     if not profile_ids:
         return []
+    filters: dict[str, str] = {"rol": "eq.alumno"}
+    if tenant_id:
+        filters["tenant_id"] = f"eq.{tenant_id}"
     profiles = repository.fetch_table(
         "profiles",
         select="id,matricula",
-        filters={"rol": "eq.alumno"},
+        filters=filters,
         limit=10000,
     )
     return [str(row["matricula"]) for row in profiles if str(row.get("id")) in profile_ids and row.get("matricula")]
@@ -195,11 +199,14 @@ def heartbeat(repository: SupabaseRepository, execution_id: str, status: str, pr
     )
 
 
-def active_model_version(repository: SupabaseRepository) -> str | None:
+def active_model_version(repository: SupabaseRepository, tenant_id: str | None = None) -> str | None:
+    filters: dict[str, str] = {"is_active": "eq.true"}
+    if tenant_id:
+        filters["tenant_id"] = f"eq.{tenant_id}"
     rows = repository.fetch_table(
         "ml_model_versions",
         select="model_version",
-        filters={"is_active": "eq.true"},
+        filters=filters,
         limit=1,
     )
     return str(rows[0]["model_version"]) if rows else None

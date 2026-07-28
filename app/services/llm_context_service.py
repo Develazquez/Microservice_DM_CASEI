@@ -415,8 +415,8 @@ def student_llm_context(
     )
 
 
-def latest_student_rows() -> pd.DataFrame:
-    students = student_view()
+def latest_student_rows(tenant_id: str | None = None) -> pd.DataFrame:
+    students = student_view(tenant_id=tenant_id)
     if students.empty:
         return students
     return (
@@ -445,7 +445,8 @@ def rag_documents(
 
     limit = max(1, min(int(limit), 100))
     offset = max(0, int(offset))
-    rows = apply_student_scope(latest_student_rows(), security_context)
+    _tid = security_context.tenant_id if security_context else None
+    rows = apply_student_scope(latest_student_rows(tenant_id=_tid), security_context)
 
     if perfil:
         rows = rows[rows["perfil_academico"].fillna("").str.contains(perfil, case=False, na=False)]

@@ -49,6 +49,7 @@ def security_context_from_request(
         return SecurityContext(
             role=context.role,
             user_id=context.user_id,
+            tenant_id=context.tenant_id,
             program_id=context.program_id,
             program_name=context.program_name,
             purpose=context.purpose,
@@ -82,6 +83,10 @@ def validate_supabase_access_token(token: str, purpose: str | None = None) -> Se
     if not user_id:
         raise AuthenticationError("Supabase no devolvio un identificador de usuario valido.")
 
+    # Extraer tenant_id del JWT app_metadata
+    app_metadata = user.get("app_metadata", {})
+    tenant_id = _optional_text(app_metadata.get("tenant_id"))
+
     profile = _profile_for_user(user_id)
     raw_role = str(profile.get("rol") or "").strip().lower()
     role = PROFILE_ROLE_MAP.get(raw_role)
@@ -96,6 +101,7 @@ def validate_supabase_access_token(token: str, purpose: str | None = None) -> Se
     return SecurityContext(
         role=role,
         user_id=user_id,
+        tenant_id=tenant_id,
         program_id=program_id,
         program_name=program_name,
         purpose=purpose,

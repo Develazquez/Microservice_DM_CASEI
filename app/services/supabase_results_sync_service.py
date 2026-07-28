@@ -25,9 +25,11 @@ def sync_results_to_supabase(
     max_rag_documents: int = 500,
     batch_size: int = 500,
     notes: str | None = None,
+    tenant_id: str | None = None,
 ) -> dict[str, Any]:
     repository = SupabaseRepository()
     repository.require_configured()
+    tenant_id = require_tenant_id(tenant_id)
     started_at = utc_now()
     execution_id = str(uuid.uuid4())
     batch_size = max(1, min(int(batch_size), 1000))
@@ -42,11 +44,16 @@ def sync_results_to_supabase(
     counts: dict[str, int] = {}
 
     try:
-        repository.patch_rows("ml_model_versions", {"is_active": False}, {"is_active": "eq.true"})
+        repository.patch_rows(
+            "ml_model_versions",
+            {"is_active": False},
+            {"is_active": "eq.true", "tenant_id": f"eq.{tenant_id}"},
+        )
         counts["ml_model_versions"] = repository.insert_rows(
             "ml_model_versions",
             [
                 {
+                    "tenant_id": tenant_id,
                     "model_version": model_version,
                     "algorithm": str(model.get("algorithm") or "kmeans"),
                     "selected_representation": model.get("selected_representation"),
@@ -64,6 +71,7 @@ def sync_results_to_supabase(
             "ml_model_runs",
             [
                 {
+                    "tenant_id": tenant_id,
                     "execution_id": execution_id,
                     "model_version": model_version,
                     "run_type": "sync_to_supabase",
@@ -84,13 +92,13 @@ def sync_results_to_supabase(
         counts["ml_model_runs"] = 1
 
         # Clean previous results so stale records (e.g. with missing names) don't persist.
-        _clean_previous_results(repository, model_version, execution_id)
+        _clean_previous_results(repository, model_version, execution_id, tenant_id=tenant_id)
         counts["cleaned_previous"] = 1
 
-        identities = repository.fetch_student_identity_lookup()
-        programs = repository.fetch_program_lookup()
+        identities = repository.fetch_student_identity_lookup(tenant_id=tenant_id)
+        programs = repository.fetch_program_lookup(tenant_id=tenant_id)
         features = student_period_df()
-        view = student_view()
+        view = student_view(tenant_id=tenant_id)
 
         feature_rows = build_feature_rows(
             features=features,
@@ -98,6 +106,7 @@ def sync_results_to_supabase(
             source_hash=source_hash,
             identities=identities,
             programs=programs,
+            tenant_id=tenant_id,
         )
         counts["student_period_features"] = insert_in_batches(
             repository,
@@ -114,6 +123,7 @@ def sync_results_to_supabase(
             model_version=model_version,
             identities=identities,
             programs=programs,
+            tenant_id=tenant_id,
         )
         counts["cluster_assignments"] = insert_in_batches(
             repository,
@@ -130,6 +140,7 @@ def sync_results_to_supabase(
             model_version=model_version,
             identities=identities,
             programs=programs,
+            tenant_id=tenant_id,
         )
         counts["student_profile_history"] = insert_in_batches(
             repository,
@@ -144,6 +155,7 @@ def sync_results_to_supabase(
                 model_version=model_version,
                 identities=identities,
                 limit=max_rag_documents,
+                tenant_id=tenant_id,
             )
             counts["rag_context_documents"] = insert_in_batches(
                 repository,
@@ -206,28 +218,35 @@ def ensure_model_version_registered(
     repository: SupabaseRepository,
     model_version: str,
     activate_if_missing: bool = True,
+    tenant_id: str | None = None,
 ) -> dict[str, Any]:
+    tenant_id = require_tenant_id(tenant_id)
     loaded = load_persisted_model_bundle(model_version)
     manifest = loaded["manifest"]
     model = manifest["model"]
     active_rows = repository.fetch_table(
         "ml_model_versions",
         select="model_version",
-        filters={"is_active": "eq.true"},
+        filters={"is_active": "eq.true", "tenant_id": f"eq.{tenant_id}"},
         limit=1,
     )
     existing_rows = repository.fetch_table(
         "ml_model_versions",
-        select="model_version,is_active",
+        select="model_version,is_active,tenant_id",
         filters={"model_version": f"eq.{model_version}"},
         limit=1,
     )
+    if existing_rows and str(existing_rows[0].get("tenant_id") or "") != tenant_id:
+        raise ValueError(
+            f"La version {model_version} ya pertenece a otro tenant y no puede reasignarse."
+        )
     already_active = bool(existing_rows and existing_rows[0].get("is_active"))
     should_activate = activate_if_missing and not active_rows
     repository.insert_rows(
         "ml_model_versions",
         [
             {
+                "tenant_id": tenant_id,
                 "model_version": model_version,
                 "algorithm": str(model.get("algorithm") or "kmeans"),
                 "selected_representation": model.get("selected_representation"),
@@ -255,22 +274,34 @@ def publish_inference_result(
     result: InferenceResult,
     execution_id: str,
     source_hash: str,
+    tenant_id: str | None = None,
 ) -> dict[str, int]:
     repository = SupabaseRepository()
     repository.require_configured()
-    ensure_model_version_registered(repository, result.model_version)
+    tenant_id = require_tenant_id(tenant_id)
+    ensure_model_version_registered(
+        repository,
+        result.model_version,
+        tenant_id=tenant_id,
+    )
 
     # Clean previous results so stale records don't persist across runs.
-    _clean_previous_results(repository, result.model_version, execution_id)
+    _clean_previous_results(
+        repository,
+        result.model_version,
+        execution_id,
+        tenant_id=tenant_id,
+    )
 
-    identities = repository.fetch_student_identity_lookup()
-    programs = repository.fetch_program_lookup()
+    identities = repository.fetch_student_identity_lookup(tenant_id=tenant_id)
+    programs = repository.fetch_program_lookup(tenant_id=tenant_id)
     feature_rows = build_feature_rows(
         features=result.features,
         execution_id=execution_id,
         source_hash=source_hash,
         identities=identities,
         programs=programs,
+        tenant_id=tenant_id,
     )
     assignment_rows = build_assignment_rows(
         view=result.assignments,
@@ -278,6 +309,7 @@ def publish_inference_result(
         model_version=result.model_version,
         identities=identities,
         programs=programs,
+        tenant_id=tenant_id,
     )
     history_rows = build_profile_history_rows(
         view=result.assignments,
@@ -285,6 +317,7 @@ def publish_inference_result(
         model_version=result.model_version,
         identities=identities,
         programs=programs,
+        tenant_id=tenant_id,
     )
     counts = repository.rpc(
         "publish_ml_inference_results",
@@ -305,6 +338,7 @@ def build_feature_rows(
     source_hash: str,
     identities: dict[str, dict[str, Any]],
     programs: dict[str, dict[str, Any]],
+    tenant_id: str,
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     scalar_columns = {
@@ -327,6 +361,7 @@ def build_feature_rows(
         rows.append(
             clean_row(
                 {
+                    "tenant_id": tenant_id,
                     "execution_id": execution_id,
                     "student_profile_id": identity.get("id"),
                     "id_estudiante": student_id,
@@ -355,6 +390,7 @@ def build_assignment_rows(
     model_version: str,
     identities: dict[str, dict[str, Any]],
     programs: dict[str, dict[str, Any]],
+    tenant_id: str,
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for row in dataframe_rows(view):
@@ -365,6 +401,7 @@ def build_assignment_rows(
         rows.append(
             clean_row(
                 {
+                    "tenant_id": tenant_id,
                     "execution_id": execution_id,
                     "model_version": model_version,
                     "student_profile_id": identity.get("id"),
@@ -392,6 +429,7 @@ def build_profile_history_rows(
     model_version: str,
     identities: dict[str, dict[str, Any]],
     programs: dict[str, dict[str, Any]],
+    tenant_id: str,
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for row in dataframe_rows(view):
@@ -416,6 +454,7 @@ def build_profile_history_rows(
         rows.append(
             clean_row(
                 {
+                    "tenant_id": tenant_id,
                     "execution_id": execution_id,
                     "model_version": model_version,
                     "student_profile_id": identity.get("id"),
@@ -438,6 +477,7 @@ def build_rag_document_rows(
     model_version: str,
     identities: dict[str, dict[str, Any]],
     limit: int,
+    tenant_id: str,
 ) -> list[dict[str, Any]]:
     response = rag_documents(role="director", limit=limit, offset=0)
     rows: list[dict[str, Any]] = []
@@ -448,6 +488,7 @@ def build_rag_document_rows(
         rows.append(
             clean_row(
                 {
+                    "tenant_id": tenant_id,
                     "document_id": item.get("document_id"),
                     "student_reference": item.get("metadata", {}).get("student_reference") or str(student_id),
                     "student_profile_id": identity.get("id"),
@@ -513,6 +554,7 @@ def _clean_previous_results(
     repository: SupabaseRepository,
     model_version: str,
     current_execution_id: str,
+    tenant_id: str,
 ) -> None:
     """Delete stale segmentation results from previous runs of the same model version."""
     old_runs = repository.fetch_table(
@@ -521,15 +563,35 @@ def _clean_previous_results(
         filters={
             "model_version": f"eq.{model_version}",
             "execution_id": f"neq.{current_execution_id}",
+            "tenant_id": f"eq.{tenant_id}",
         },
         limit=1000,
     )
-    repository.delete_rows("cluster_assignments", {"model_version": f"eq.{model_version}"})
-    repository.delete_rows("student_profile_history", {"model_version": f"eq.{model_version}"})
+    tenant_filters = {
+        "model_version": f"eq.{model_version}",
+        "tenant_id": f"eq.{tenant_id}",
+    }
+    repository.delete_rows("cluster_assignments", tenant_filters)
+    repository.delete_rows("student_profile_history", tenant_filters)
     for old_run in (old_runs or []):
         old_eid = old_run.get("execution_id")
         if old_eid:
-            repository.delete_rows("student_period_features", {"execution_id": f"eq.{old_eid}"})
+            repository.delete_rows(
+                "student_period_features",
+                {
+                    "execution_id": f"eq.{old_eid}",
+                    "tenant_id": f"eq.{tenant_id}",
+                },
+            )
+
+
+def require_tenant_id(tenant_id: str | None) -> str:
+    normalized = str(tenant_id or "").strip()
+    if not normalized:
+        raise ValueError(
+            "No se pudo determinar tenant_id para publicar resultados ML."
+        )
+    return normalized
 
 
 def normalize_sex(value: Any) -> str | None:

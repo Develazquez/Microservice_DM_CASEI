@@ -20,6 +20,7 @@ class AuthorizationError(PermissionError):
 class SecurityContext:
     role: str = "director"
     user_id: str | None = None
+    tenant_id: str | None = None
     program_id: str | None = None
     program_name: str | None = None
     purpose: str | None = None
@@ -48,6 +49,7 @@ def security_context_from_headers(headers: Mapping[str, str], role: str | None =
     return SecurityContext(
         role=selected_role,
         user_id=headers.get("x-casei-user-id") or headers.get("X-CASEI-USER-ID"),
+        tenant_id=headers.get("x-casei-tenant-id") or headers.get("X-CASEI-TENANT-ID"),
         program_id=headers.get("x-casei-program-id") or headers.get("X-CASEI-PROGRAM-ID"),
         program_name=headers.get("x-casei-program") or headers.get("X-CASEI-PROGRAM"),
         purpose=headers.get("x-casei-purpose") or headers.get("X-CASEI-PURPOSE"),
@@ -89,7 +91,7 @@ def apply_program_scope(df: pd.DataFrame, context: SecurityContext) -> pd.DataFr
 def apply_tutor_scope(df: pd.DataFrame, context: SecurityContext) -> pd.DataFrame:
     if not context.user_id:
         raise AuthorizationError("El rol tutor requiere X-CASEI-USER-ID para validar alcance.")
-    allowed = tutor_allowed_student_ids(context.user_id)
+    allowed = tutor_allowed_student_ids(context.user_id, tenant_id=context.tenant_id)
     if not allowed:
         return df.iloc[0:0]
     if "student_profile_id" in df.columns:
@@ -103,17 +105,20 @@ def apply_tutor_scope(df: pd.DataFrame, context: SecurityContext) -> pd.DataFram
     return df[by_profile | by_matricula]
 
 
-def tutor_allowed_student_ids(tutor_id: str) -> dict[str, set[str]]:
+def tutor_allowed_student_ids(tutor_id: str, tenant_id: str | None = None) -> dict[str, set[str]]:
     repository = SupabaseRepository()
     repository.require_configured()
-    scope_rows = repository.fetch_tutor_scope(tutor_id=tutor_id, limit=10000)
+    scope_rows = repository.fetch_tutor_scope(tutor_id=tutor_id, tenant_id=tenant_id, limit=10000)
     profile_ids = {str(row.get("student_id")) for row in scope_rows if row.get("student_id")}
     if not profile_ids:
         return {"profile_ids": set(), "matriculas": set()}
+    filters: dict[str, str] = {"rol": "eq.alumno"}
+    if tenant_id:
+        filters["tenant_id"] = f"eq.{tenant_id}"
     profile_rows = repository.fetch_table(
         "profiles",
         select="id,matricula",
-        filters={"rol": "eq.alumno"},
+        filters=filters,
         limit=10000,
     )
     matriculas = {
@@ -136,7 +141,7 @@ def audit_context_access(
     repository = SupabaseRepository()
     if not repository.configured:
         return
-    payload = {
+    payload: dict[str, Any] = {
         "requested_by": context.user_id,
         "role": context.role,
         "student_id": student_id,
@@ -144,6 +149,8 @@ def audit_context_access(
         "purpose": purpose or context.purpose or "academic_segmentation_access",
         "model_version": model_version,
     }
+    if context.tenant_id:
+        payload["tenant_id"] = context.tenant_id
     try:
         repository.insert_rows("llm_context_audit", [payload])
     except Exception:
@@ -173,16 +180,17 @@ def audit_items_access(
         if key in seen:
             continue
         seen.add(key)
-        payloads.append(
-            {
-                "requested_by": context.user_id,
-                "role": context.role,
-                "student_id": key,
-                "endpoint": endpoint,
-                "purpose": context.purpose or "academic_segmentation_access",
-                "model_version": model_version,
-            }
-        )
+        item_payload: dict[str, Any] = {
+            "requested_by": context.user_id,
+            "role": context.role,
+            "student_id": key,
+            "endpoint": endpoint,
+            "purpose": context.purpose or "academic_segmentation_access",
+            "model_version": model_version,
+        }
+        if context.tenant_id:
+            item_payload["tenant_id"] = context.tenant_id
+        payloads.append(item_payload)
 
     try:
         repository.insert_rows("llm_context_audit", payloads)

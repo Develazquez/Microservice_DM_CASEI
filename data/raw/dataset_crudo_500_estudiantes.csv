@@ -1,0 +1,501 @@
+Matricula,Nombre,Carrera,EstatusAlumno,CuatrimestreActual,Materia,Periodo,EstatusMateria,Final,Extr,EstatusCardex,PeriodoCursado,PlanEstudiosClave,Credito
+IDS20230001,Ricardo Gallegos Castillo,Ingeniería en Desarrollo de Software,Activo,9,Sistemas Operativos,2,Reprobada,41.4,75.5,repeticion,Septiembre-Diciembre 2023,004,5
+IAG20210001,Andrés Rivera Herrera,Ingeniería Agroindustrial,Activo,6,Microbiología,1,Reprobada,59.4,,ordinario,Mayo-Agosto 2023,004,6
+IBM20200001,Aurora Nava Rivera,Ingeniería Biomédica,Inscrito,4,Anatomía y Fisiología,2,Aprobada,76.0,,ordinario,Enero-Abril 2024,004,5
+IEN20230001,Marlene Jiménez Estrada,Ingeniería en Energía,Baja Temporal,9,Estadía Profesional I,3,Aprobada,85.9,,ordinario,Septiembre-Diciembre 2023,NME,8
+IDS20200002,Catalina Medina Maldonado,Ingeniería en Desarrollo de Software,Inactivo,3,Gestión de Proyectos,3,Aprobada,89.7,,ordinario,Enero-Abril 2024,004,6
+IAG20200002,Soledad Medina Ruiz,Ingeniería Agroindustrial,Inactivo,4,Control de Calidad,2,Reprobada,40.9,,ordinario,Septiembre-Diciembre 2023,004,7
+IBM20230002,Rafael Ochoa Fuentes,Ingeniería Biomédica,Activo,9,Procesamiento de Señales,2,Aprobada,89.9,,ordinario,Enero-Abril 2024,004,8
+IEN20220002,Abel Trejo Rivera,Ingeniería en Energía,Proceso de Titulacion,7,Gestión de la Energía,3,Aprobada,90.1,,ordinario,Septiembre-Diciembre 2023,004,8
+IDS20210003,Mauricio Rodríguez Contreras,Ingeniería en Desarrollo de Software,Activo,5,Programación,2,Aprobada,99.9,,ordinario,Mayo-Agosto 2023,004,5
+IAG20220003,Dafne Álvarez Navarro,Ingeniería Agroindustrial,Activo,8,Procesos Agroindustriales,3,Aprobada,92.4,,ordinario,Enero-Abril 2023,004,7
+IBM20200003,Lorena Flores Valencia,Ingeniería Biomédica,Activo,4,Anatomía y Fisiología,3,Aprobada,75.3,,ordinario,Mayo-Agosto 2023,NME,5
+IEN20220003,Brenda Huerta Valencia,Ingeniería en Energía,Activo,7,Eficiencia Energética,1,Reprobada,57.7,,repeticion,Mayo-Agosto 2023,NME,7
+IDS20230004,Olivia Reyes Medina,Ingeniería en Desarrollo de Software,Activo,9,Bases de Datos,2,Aprobada,80.2,,ordinario,Enero-Abril 2023,004,6
+IAG20200004,Margarita Mendoza Rojas,Ingeniería Agroindustrial,Activo,4,Inocuidad Alimentaria,1,Cursando,45.7,,ordinario,Septiembre-Diciembre 2023,004,8
+IBM20200004,Karla Montes Castillo,Ingeniería Biomédica,Baja Temporal,4,Imágenes Médicas,1,Aprobada,71.2,,ordinario,Septiembre-Diciembre 2023,004,7
+IEN20210004,Emiliano Aguilar Chávez,Ingeniería en Energía,Desconocido,7,Gestión de la Energía,3,Aprobada,74.1,,ordinario,Enero-Abril 2023,004,8
+IDS20220005,Clara Flores Bautista,Ingeniería en Desarrollo de Software,Activo,7,Bases de Datos,1,Reprobada,45.4,68.3,ordinario,Septiembre-Diciembre 2023,004,6
+IAG20220005,Gabriela Cervantes Solís,Ingeniería Agroindustrial,Activo,7,Gestión Ambiental,3,Reprobada,54.1,,repeticion,Septiembre-Diciembre 2023,004,6
+IBM20210005,Yahir Gutiérrez Cisneros,Ingeniería Biomédica,Inscrito,6,Equipos Médicos,2,Aprobada,99.4,,ordinario,Enero-Abril 2024,NME,8
+IEN20220005,Braulio Sánchez Medina,Ingeniería en Energía,Baja Temporal,7,Sistemas Eléctricos,3,Reprobada,42.9,,repeticion,Enero-Abril 2024,NME,6
+IDS20210006,Esteban Pacheco Reyes,Ingeniería en Desarrollo de Software,Inscrito,5,Ingeniería de Software,2,Aprobada,97.4,,ordinario,Enero-Abril 2024,NME,8
+IAG20220006,Dante Chávez Sánchez,Ingeniería Agroindustrial,Activo,7,Diseño de Plantas,2,Aprobada,67.0,,ordinario,Mayo-Agosto 2023,NME,7
+IBM20200006,Abel Gallegos Ruiz,Ingeniería Biomédica,Activo,3,Ingeniería Clínica,2,Aprobada,71.5,,ordinario,Enero-Abril 2024,NME,6
+IEN20230006,Bianca Morales Gómez,Ingeniería en Energía,Activo,9,Circuitos Eléctricos,2,Reprobada,41.4,55.1,repeticion,Mayo-Agosto 2023,NME,7
+IDS20220007,Axel Castillo Mejía,Ingeniería en Desarrollo de Software,Egresado,7,Seguridad Informática,2,Reprobada,48.0,59.5,repeticion,Septiembre-Diciembre 2023,NME,7
+IAG20220007,Francisco Calderón Salazar,Ingeniería Agroindustrial,Egresado,8,Inocuidad Alimentaria,1,Reprobada,46.8,73.9,repeticion,Mayo-Agosto 2023,004,8
+IBM20200007,Antonia Castro Herrera,Ingeniería Biomédica,Inscrito,3,Biomecánica,2,Cursando,52.0,,ordinario,Enero-Abril 2024,NME,7
+IEN20200007,Fabián Vargas Torres,Ingeniería en Energía,Activo,3,Circuitos Eléctricos,1,Aprobada,68.0,,ordinario,Enero-Abril 2024,004,7
+IDS20220008,Valentina Villarreal Pérez,Ingeniería en Desarrollo de Software,Activo,7,Seguridad Informática,1,Aprobada,67.5,,ordinario,Mayo-Agosto 2023,004,7
+IAG20220008,Israel Pacheco Fuentes,Ingeniería Agroindustrial,Inscrito,7,Microbiología,3,Reprobada,47.7,71.7,repeticion,Mayo-Agosto 2023,004,6
+IBM20220008,Ariadna Sandoval Estrada,Ingeniería Biomédica,Egresado,7,Instrumentación Biomédica,3,Aprobada,85.6,,ordinario,Enero-Abril 2024,004,7
+IEN20200008,Lorena Rivera Vargas,Ingeniería en Energía,Proceso de Titulacion,5,Circuitos Eléctricos,3,Aprobada,73.2,,ordinario,Septiembre-Diciembre 2023,NME,7
+IDS20210009,Sandra Pacheco Rojas,Ingeniería en Desarrollo de Software,Inscrito,6,DevOps,1,Aprobada,89.8,,ordinario,Enero-Abril 2023,004,7
+IAG20200009,Donovan Domínguez Cervantes,Ingeniería Agroindustrial,Activo,3,Microbiología,1,Reprobada,43.8,,repeticion,Enero-Abril 2023,004,6
+IBM20230009,Dante Salazar Medina,Ingeniería Biomédica,Inscrito,9,Instrumentación Biomédica,1,Reprobada,43.1,,ordinario,Enero-Abril 2023,NME,7
+IEN20200009,Margarita Vázquez Sandoval,Ingeniería en Energía,Activo,5,Transferencia de Calor,3,Aprobada,71.9,,ordinario,Enero-Abril 2024,004,6
+IDS20220010,Ezequiel Flores Rojas,Ingeniería en Desarrollo de Software,Activo,8,Sistemas Operativos,1,Reprobada,44.5,63.1,ordinario,Septiembre-Diciembre 2023,004,5
+IAG20220010,Julio Ramírez Montes,Ingeniería Agroindustrial,Inscrito,7,Control de Calidad,1,Aprobada,81.3,,ordinario,Enero-Abril 2023,NME,7
+IBM20210010,Emilio Acosta Ibarra,Ingeniería Biomédica,Activo,5,Biomecánica,2,Aprobada,79.9,,ordinario,Enero-Abril 2023,NME,7
+IEN20200010,Marisol Luna Espinoza,Ingeniería en Energía,Egresado,5,Máquinas Eléctricas,1,Aprobada,70.7,,ordinario,Enero-Abril 2023,004,8
+IDS20220011,Misael Padilla Mendoza,Ingeniería en Desarrollo de Software,Proceso de Titulacion,8,Minería de Datos,3,Aprobada,82.8,,ordinario,Mayo-Agosto 2023,004,8
+IAG20200011,Ian Huerta Solís,Ingeniería Agroindustrial,Baja Temporal,5,Biotecnología,2,Aprobada,89.7,,ordinario,Mayo-Agosto 2023,004,8
+IBM20200011,Fátima Romero Orozco,Ingeniería Biomédica,Activo,3,Circuitos Eléctricos,1,Aprobada,91.6,,ordinario,Enero-Abril 2023,NME,5
+IEN20200011,Ricardo Lara García,Ingeniería en Energía,Activo,4,Energía Solar,3,Aprobada,76.7,,ordinario,Enero-Abril 2023,004,7
+IDS20230012,Graciela Espinoza Romero,Ingeniería en Desarrollo de Software,Activo,9,Gestión de Proyectos,3,Reprobada,44.1,,ordinario,Mayo-Agosto 2023,NME,6
+IAG20210012,Consuelo Aguilar Ramos,Ingeniería Agroindustrial,Desconocido,7,Microbiología,2,Aprobada,81.0,,ordinario,Enero-Abril 2023,004,6
+IBM20220012,Trinidad Castro Mejía,Ingeniería Biomédica,Inscrito,8,Imágenes Médicas,2,Aprobada,78.1,,ordinario,Mayo-Agosto 2023,NME,7
+IEN20210012,Miriam Pacheco García,Ingeniería en Energía,Activo,5,Cálculo Integral,1,Reprobada,56.4,,ordinario,Mayo-Agosto 2023,004,5
+IDS20200013,Benjamín Jiménez García,Ingeniería en Desarrollo de Software,Activo,4,Minería de Datos,1,Reprobada,52.0,59.2,ordinario,Enero-Abril 2024,NME,8
+IAG20200013,Virginia Aguilar Ávila,Ingeniería Agroindustrial,Inactivo,4,Procesos Agroindustriales,1,Reprobada,47.9,61.5,ordinario,Enero-Abril 2024,004,7
+IBM20230013,Fátima Álvarez Ramos,Ingeniería Biomédica,Inactivo,9,Normatividad Sanitaria,2,Aprobada,99.6,,ordinario,Mayo-Agosto 2023,004,8
+IEN20230013,Amelia Estrada Valencia,Ingeniería en Energía,Activo,9,Circuitos Eléctricos,3,Aprobada,99.0,,ordinario,Enero-Abril 2023,004,7
+IDS20200014,Martha Solís Huerta,Ingeniería en Desarrollo de Software,Inscrito,3,DevOps,3,Cursando,46.0,,ordinario,Septiembre-Diciembre 2023,004,7
+IAG20220014,Brenda López Díaz,Ingeniería Agroindustrial,Inscrito,8,Administración Agroindustrial,3,Reprobada,58.9,,ordinario,Enero-Abril 2024,NME,8
+IBM20220014,Daniela Villarreal González,Ingeniería Biomédica,Proceso de Titulacion,7,Estadía Profesional I,3,Cursando,43.8,,ordinario,Septiembre-Diciembre 2023,004,8
+IEN20230014,Clara Guerrero Maldonado,Ingeniería en Energía,Activo,9,Circuitos Eléctricos,3,Aprobada,96.5,,ordinario,Enero-Abril 2024,NME,7
+IDS20230015,Martha Coronado Zamora,Ingeniería en Desarrollo de Software,Activo,9,Bases de Datos,2,Cursando,49.1,,ordinario,Septiembre-Diciembre 2023,004,6
+IAG20220015,Ezequiel Gómez Peña,Ingeniería Agroindustrial,Inscrito,8,Diseño de Plantas,1,Aprobada,81.0,,ordinario,Mayo-Agosto 2023,NME,7
+IBM20220015,Rafael Ramos Cortés,Ingeniería Biomédica,Inscrito,8,Estadía Profesional I,2,Aprobada,67.4,,ordinario,Mayo-Agosto 2023,004,8
+IEN20200015,José Manuel Campos Sandoval,Ingeniería en Energía,Activo,3,Gestión de la Energía,3,Reprobada,58.0,,ordinario,Enero-Abril 2024,004,8
+IDS20210016,Abel Castillo Navarro,Ingeniería en Desarrollo de Software,Activo,5,Seguridad Informática,3,Aprobada,77.9,,ordinario,Septiembre-Diciembre 2023,NME,7
+IAG20220016,Raúl Valencia Zamora,Ingeniería Agroindustrial,Inactivo,8,Química de Alimentos,2,Aprobada,89.5,,ordinario,Enero-Abril 2024,NME,5
+IBM20230016,Pilar Orozco Vargas,Ingeniería Biomédica,Baja Temporal,9,Instrumentación Biomédica,3,Reprobada,42.5,,repeticion,Septiembre-Diciembre 2023,NME,7
+IEN20220016,Leticia Zamora Chávez,Ingeniería en Energía,Activo,8,Cálculo Integral,1,Cursando,53.3,,ordinario,Mayo-Agosto 2023,004,5
+IDS20230017,Daniela Nava Suárez,Ingeniería en Desarrollo de Software,Activo,9,Sistemas Operativos,3,Aprobada,68.7,,ordinario,Enero-Abril 2024,NME,5
+IAG20210017,Cecilia Hernández Cruz,Ingeniería Agroindustrial,Activo,5,Administración Agroindustrial,3,Aprobada,79.9,,ordinario,Septiembre-Diciembre 2023,004,8
+IBM20230017,Xavier Torres Velázquez,Ingeniería Biomédica,Desconocido,9,Estadía Profesional I,3,Aprobada,92.3,,ordinario,Enero-Abril 2024,004,8
+IEN20230017,Sofía Ochoa Nava,Ingeniería en Energía,Activo,9,Eficiencia Energética,1,Aprobada,77.7,,ordinario,Enero-Abril 2023,004,7
+IDS20230018,Mateo Villarreal Salazar,Ingeniería en Desarrollo de Software,Proceso de Titulacion,9,Estadía Profesional I,1,Aprobada,86.8,,ordinario,Septiembre-Diciembre 2023,004,8
+IAG20200018,Héctor Gutiérrez Coronado,Ingeniería Agroindustrial,Activo,3,Gestión Ambiental,2,Aprobada,72.9,,ordinario,Mayo-Agosto 2023,NME,6
+IBM20200018,Wendy González Pérez,Ingeniería Biomédica,Activo,3,Equipos Médicos,2,Reprobada,43.1,,repeticion,Enero-Abril 2024,004,8
+IEN20210018,Óscar Calderón Espinoza,Ingeniería en Energía,Inscrito,7,Transferencia de Calor,1,Cursando,49.4,,ordinario,Enero-Abril 2023,NME,6
+IDS20200019,Tomás Sánchez Estrada,Ingeniería en Desarrollo de Software,Inscrito,4,Bases de Datos,3,Aprobada,72.4,,ordinario,Mayo-Agosto 2023,004,6
+IAG20220019,Jorge Cruz Camacho,Ingeniería Agroindustrial,Activo,7,Inocuidad Alimentaria,1,Aprobada,78.7,,ordinario,Enero-Abril 2024,NME,8
+IBM20220019,Raúl Navarro Torres,Ingeniería Biomédica,Inscrito,7,Instrumentación Biomédica,1,Aprobada,95.5,,ordinario,Enero-Abril 2024,004,7
+IEN20200019,Brenda Calderón Castillo,Ingeniería en Energía,Activo,4,Eficiencia Energética,1,Aprobada,89.4,,ordinario,Enero-Abril 2024,004,7
+IDS20200020,Alma Nava Flores,Ingeniería en Desarrollo de Software,Desconocido,5,Redes de Computadoras,1,Aprobada,91.8,,ordinario,Septiembre-Diciembre 2023,NME,6
+IAG20200020,Paulina Reyes Gutiérrez,Ingeniería Agroindustrial,Egresado,4,Conservación de Alimentos,3,Aprobada,65.5,,ordinario,Enero-Abril 2024,004,5
+IBM20200020,David González Ávila,Ingeniería Biomédica,Egresado,5,Biomecánica,3,Aprobada,83.0,,ordinario,Septiembre-Diciembre 2023,NME,7
+IEN20230020,Paola Ríos Castro,Ingeniería en Energía,Inactivo,9,Máquinas Eléctricas,3,Reprobada,42.7,,ordinario,Enero-Abril 2023,NME,8
+IDS20220021,Isabel Padilla Mendoza,Ingeniería en Desarrollo de Software,Activo,8,Programación,2,Aprobada,64.8,,ordinario,Septiembre-Diciembre 2023,NME,5
+IAG20230021,Leonardo Fuentes Luna,Ingeniería Agroindustrial,Activo,9,Microbiología,1,Reprobada,42.0,,repeticion,Enero-Abril 2023,NME,6
+IBM20220021,Rafael Cruz Ortiz,Ingeniería Biomédica,Activo,7,Anatomía y Fisiología,3,Aprobada,66.4,,ordinario,Septiembre-Diciembre 2023,004,5
+IEN20230021,Ernesto Hernández Castro,Ingeniería en Energía,Baja Temporal,9,Máquinas Eléctricas,2,Aprobada,71.9,,ordinario,Mayo-Agosto 2023,NME,8
+IDS20230022,Emilio Gómez Suárez,Ingeniería en Desarrollo de Software,Inactivo,9,Gestión de Proyectos,2,Aprobada,98.5,,ordinario,Enero-Abril 2024,004,6
+IAG20200022,Luisa Huerta Flores,Ingeniería Agroindustrial,Proceso de Titulacion,4,Estadía Profesional I,1,Aprobada,64.6,,ordinario,Mayo-Agosto 2023,NME,8
+IBM20200022,Diana Aguilar Rojas,Ingeniería Biomédica,Inscrito,3,Procesamiento de Señales,3,Aprobada,69.3,,ordinario,Septiembre-Diciembre 2023,NME,8
+IEN20230022,Uriel Coronado Rodríguez,Ingeniería en Energía,Activo,9,Sistemas Eléctricos,1,Aprobada,74.1,,ordinario,Septiembre-Diciembre 2023,NME,6
+IDS20210023,Camila Guerrero Mendoza,Ingeniería en Desarrollo de Software,Activo,5,Sistemas Operativos,1,Aprobada,84.4,,ordinario,Septiembre-Diciembre 2023,NME,5
+IAG20200023,Mateo Figueroa Calderón,Ingeniería Agroindustrial,Activo,3,Control de Calidad,3,Aprobada,65.4,,ordinario,Enero-Abril 2023,004,7
+IBM20200023,Rodrigo Ponce Bautista,Ingeniería Biomédica,Activo,3,Imágenes Médicas,1,Cursando,47.5,,ordinario,Mayo-Agosto 2023,NME,7
+IEN20230023,Ximena Ríos Mendoza,Ingeniería en Energía,Activo,9,Transferencia de Calor,2,Aprobada,75.2,,ordinario,Septiembre-Diciembre 2023,NME,6
+IDS20200024,Gloria Velázquez Acosta,Ingeniería en Desarrollo de Software,Activo,4,Inteligencia Artificial,3,Aprobada,60.8,,ordinario,Enero-Abril 2024,NME,8
+IAG20220024,Renata Orozco Contreras,Ingeniería Agroindustrial,Inscrito,8,Inocuidad Alimentaria,1,Aprobada,66.7,,ordinario,Enero-Abril 2023,NME,8
+IBM20210024,Silvia Ruiz López,Ingeniería Biomédica,Egresado,5,Circuitos Eléctricos,3,Aprobada,80.2,,ordinario,Mayo-Agosto 2023,004,5
+IEN20220024,Citlali Pacheco Estrada,Ingeniería en Energía,Egresado,8,Sistemas Eléctricos,1,Aprobada,83.2,,ordinario,Enero-Abril 2024,NME,6
+IDS20230025,Dolores Castro Castillo,Ingeniería en Desarrollo de Software,Egresado,9,Programación,3,Aprobada,87.3,,ordinario,Septiembre-Diciembre 2023,NME,5
+IAG20230025,María José Medina Suárez,Ingeniería Agroindustrial,Activo,9,Biotecnología,2,Aprobada,97.6,,ordinario,Mayo-Agosto 2023,004,8
+IBM20210025,Diana Ochoa Gómez,Ingeniería Biomédica,Activo,5,Circuitos Eléctricos,3,Aprobada,99.8,,ordinario,Enero-Abril 2024,NME,5
+IEN20220025,Maximiliano Martínez Jiménez,Ingeniería en Energía,Activo,7,Sistemas Eléctricos,1,Reprobada,45.4,61.4,ordinario,Mayo-Agosto 2023,004,6
+IDS20220026,Iván Guerrero Sánchez,Ingeniería en Desarrollo de Software,Desconocido,8,Redes de Computadoras,1,Reprobada,55.4,69.8,repeticion,Mayo-Agosto 2023,004,6
+IAG20220026,Marisol Vargas Villarreal,Ingeniería Agroindustrial,Activo,8,Estadía Profesional I,1,Aprobada,75.1,,ordinario,Septiembre-Diciembre 2023,NME,8
+IBM20220026,Elena García González,Ingeniería Biomédica,Activo,8,Biomecánica,1,Aprobada,92.7,,ordinario,Enero-Abril 2024,004,7
+IEN20230026,Gisela Torres Aguilar,Ingeniería en Energía,Activo,9,Sistemas Eléctricos,1,Aprobada,91.6,,ordinario,Mayo-Agosto 2023,004,6
+IDS20200027,Laura Luna Reyes,Ingeniería en Desarrollo de Software,Desconocido,5,Ingeniería de Software,1,Aprobada,94.3,,ordinario,Septiembre-Diciembre 2023,004,8
+IAG20210027,Fidel Rivera Maldonado,Ingeniería Agroindustrial,Activo,7,Inocuidad Alimentaria,3,Reprobada,46.7,,ordinario,Enero-Abril 2023,004,8
+IBM20230027,Itzel Zamora Camacho,Ingeniería Biomédica,Desconocido,9,Ingeniería Clínica,2,Aprobada,65.2,,ordinario,Enero-Abril 2023,NME,6
+IEN20200027,Carlos Luna Padilla,Ingeniería en Energía,Egresado,5,Termodinámica,2,Aprobada,94.5,,ordinario,Enero-Abril 2023,NME,5
+IDS20230028,Camilo Castillo Gutiérrez,Ingeniería en Desarrollo de Software,Activo,9,Sistemas Operativos,3,Reprobada,53.7,,repeticion,Enero-Abril 2024,004,5
+IAG20220028,Sergio Castillo Herrera,Ingeniería Agroindustrial,Activo,7,Conservación de Alimentos,2,Aprobada,60.6,,ordinario,Mayo-Agosto 2023,NME,5
+IBM20210028,Ernesto Montes Meza,Ingeniería Biomédica,Activo,7,Estadía Profesional I,3,Aprobada,88.6,,ordinario,Septiembre-Diciembre 2023,NME,8
+IEN20200028,Enrique Trejo Castro,Ingeniería en Energía,Activo,5,Transferencia de Calor,3,Aprobada,72.2,,ordinario,Mayo-Agosto 2023,004,6
+IDS20210029,Clara Peña Trejo,Ingeniería en Desarrollo de Software,Desconocido,6,Ingeniería de Software,2,Reprobada,50.2,58.0,ordinario,Septiembre-Diciembre 2023,NME,8
+IAG20210029,Jocelyn Herrera Acosta,Ingeniería Agroindustrial,Proceso de Titulacion,7,Diseño de Plantas,2,Aprobada,94.4,,ordinario,Mayo-Agosto 2023,004,7
+IBM20230029,Jimena Ponce Romero,Ingeniería Biomédica,Activo,9,Ingeniería Clínica,2,Aprobada,93.6,,ordinario,Enero-Abril 2023,004,6
+IEN20210029,Leonel Martínez González,Ingeniería en Energía,Inscrito,6,Gestión de la Energía,3,Aprobada,72.9,,ordinario,Mayo-Agosto 2023,NME,8
+IDS20230030,Uriel Romero Pérez,Ingeniería en Desarrollo de Software,Baja Temporal,9,Desarrollo Web,1,Aprobada,67.9,,ordinario,Enero-Abril 2023,NME,7
+IAG20230030,Montserrat Contreras Herrera,Ingeniería Agroindustrial,Desconocido,9,Diseño de Plantas,2,Aprobada,83.6,,ordinario,Enero-Abril 2024,004,7
+IBM20210030,Alberto Espinoza Jiménez,Ingeniería Biomédica,Activo,7,Anatomía y Fisiología,3,Aprobada,77.7,,ordinario,Mayo-Agosto 2023,004,5
+IEN20230030,Paulina Mendoza Lara,Ingeniería en Energía,Inactivo,9,Eficiencia Energética,3,Aprobada,91.8,,ordinario,Enero-Abril 2024,004,7
+IDS20200031,Matías Cervantes Trejo,Ingeniería en Desarrollo de Software,Inactivo,3,Ingeniería de Software,3,Aprobada,96.9,,ordinario,Mayo-Agosto 2023,004,8
+IAG20220031,Vicente Sánchez Martínez,Ingeniería Agroindustrial,Activo,8,Procesos Agroindustriales,2,Aprobada,63.5,,ordinario,Septiembre-Diciembre 2023,NME,7
+IBM20200031,Pablo Huerta Flores,Ingeniería Biomédica,Inscrito,3,Ingeniería Clínica,3,Aprobada,95.4,,ordinario,Enero-Abril 2023,004,6
+IEN20230031,Teresa López Ríos,Ingeniería en Energía,Activo,9,Mecánica de Fluidos,1,Reprobada,43.5,78.5,repeticion,Enero-Abril 2023,NME,6
+IDS20220032,Teresa Vázquez Nava,Ingeniería en Desarrollo de Software,Activo,7,Seguridad Informática,2,Reprobada,40.7,56.5,repeticion,Enero-Abril 2023,NME,7
+IAG20220032,Iker López Martínez,Ingeniería Agroindustrial,Inscrito,8,Operaciones Unitarias,2,Aprobada,95.1,,ordinario,Enero-Abril 2023,NME,6
+IBM20220032,Manuel Fuentes Solís,Ingeniería Biomédica,Inscrito,8,Circuitos Eléctricos,2,Aprobada,64.1,,ordinario,Septiembre-Diciembre 2023,NME,5
+IEN20200032,Iker García Luna,Ingeniería en Energía,Activo,5,Mecánica de Fluidos,3,Aprobada,79.5,,ordinario,Enero-Abril 2024,004,6
+IDS20220033,Roberto Flores Maldonado,Ingeniería en Desarrollo de Software,Baja Temporal,8,Inteligencia Artificial,3,Aprobada,80.3,,ordinario,Mayo-Agosto 2023,004,8
+IAG20220033,Samuel Orozco Calderón,Ingeniería Agroindustrial,Egresado,7,Administración Agroindustrial,2,Aprobada,86.0,,ordinario,Enero-Abril 2024,004,8
+IBM20210033,Nayeli Acosta Lara,Ingeniería Biomédica,Activo,5,Electrónica Analógica,1,Aprobada,63.1,,ordinario,Septiembre-Diciembre 2023,004,6
+IEN20220033,Perla Trejo Vázquez,Ingeniería en Energía,Inscrito,8,Energía Solar,2,Cursando,49.3,,ordinario,Mayo-Agosto 2023,004,7
+IDS20230034,Sebastián Domínguez Contreras,Ingeniería en Desarrollo de Software,Inscrito,9,Seguridad Informática,1,Aprobada,66.3,,ordinario,Septiembre-Diciembre 2023,004,7
+IAG20210034,Fernando Contreras Cervantes,Ingeniería Agroindustrial,Activo,5,Microbiología,1,Aprobada,93.8,,ordinario,Mayo-Agosto 2023,NME,6
+IBM20200034,Lizbeth Medina Rojas,Ingeniería Biomédica,Activo,3,Procesamiento de Señales,3,Aprobada,91.6,,ordinario,Mayo-Agosto 2023,004,8
+IEN20230034,Cecilia López Huerta,Ingeniería en Energía,Egresado,9,Transferencia de Calor,2,Cursando,50.6,,ordinario,Septiembre-Diciembre 2023,004,6
+IDS20210035,Daniela Sandoval Morales,Ingeniería en Desarrollo de Software,Activo,7,Inteligencia Artificial,1,Aprobada,60.1,,ordinario,Enero-Abril 2024,NME,8
+IAG20230035,Citlali Ponce Rojas,Ingeniería Agroindustrial,Egresado,9,Estadía Profesional I,1,Aprobada,94.4,,ordinario,Enero-Abril 2024,004,8
+IBM20210035,Ezequiel Acosta Ávila,Ingeniería Biomédica,Proceso de Titulacion,5,Instrumentación Biomédica,2,Aprobada,69.5,,ordinario,Enero-Abril 2023,004,7
+IEN20210035,Julieta Nava Díaz,Ingeniería en Energía,Inscrito,7,Eficiencia Energética,1,Reprobada,51.0,66.8,ordinario,Septiembre-Diciembre 2023,004,7
+IDS20230036,Wendy Álvarez Ramírez,Ingeniería en Desarrollo de Software,Egresado,9,Desarrollo Web,2,Reprobada,55.3,,ordinario,Mayo-Agosto 2023,NME,7
+IAG20220036,Alondra Cortés Camacho,Ingeniería Agroindustrial,Activo,7,Inocuidad Alimentaria,1,Reprobada,52.5,,repeticion,Enero-Abril 2024,NME,8
+IBM20220036,Alfredo Flores López,Ingeniería Biomédica,Proceso de Titulacion,7,Normatividad Sanitaria,2,Reprobada,52.8,62.2,ordinario,Enero-Abril 2023,004,8
+IEN20210036,Adrián Reyes Mejía,Ingeniería en Energía,Desconocido,6,Mecánica de Fluidos,2,Aprobada,79.8,,ordinario,Enero-Abril 2023,NME,6
+IDS20220037,Misael Coronado Villarreal,Ingeniería en Desarrollo de Software,Activo,8,Redes de Computadoras,1,Aprobada,94.2,,ordinario,Enero-Abril 2024,NME,6
+IAG20220037,Rodrigo Acosta Medina,Ingeniería Agroindustrial,Activo,8,Biotecnología,3,Aprobada,79.4,,ordinario,Septiembre-Diciembre 2023,NME,8
+IBM20210037,Salvador Díaz Hernández,Ingeniería Biomédica,Desconocido,5,Instrumentación Biomédica,1,Aprobada,87.3,,ordinario,Mayo-Agosto 2023,NME,7
+IEN20220037,Citlali Vargas Gutiérrez,Ingeniería en Energía,Activo,7,Gestión de la Energía,2,Reprobada,52.2,,ordinario,Enero-Abril 2023,004,8
+IDS20210038,Graciela Figueroa Castillo,Ingeniería en Desarrollo de Software,Desconocido,5,Bases de Datos,1,Aprobada,97.6,,ordinario,Enero-Abril 2024,NME,6
+IAG20200038,Natalia Cervantes Vargas,Ingeniería Agroindustrial,Inscrito,4,Operaciones Unitarias,2,Cursando,41.6,,ordinario,Septiembre-Diciembre 2023,004,6
+IBM20210038,Vanessa Gómez Torres,Ingeniería Biomédica,Inscrito,6,Estadía Profesional I,2,Aprobada,69.7,,ordinario,Mayo-Agosto 2023,NME,8
+IEN20230038,Alberto Guerrero Herrera,Ingeniería en Energía,Activo,9,Máquinas Eléctricas,1,Aprobada,86.4,,ordinario,Enero-Abril 2024,NME,8
+IDS20230039,Luisa Mendoza Delgado,Ingeniería en Desarrollo de Software,Desconocido,9,Desarrollo Web,1,Aprobada,69.9,,ordinario,Septiembre-Diciembre 2023,NME,7
+IAG20210039,Renata Huerta Ramírez,Ingeniería Agroindustrial,Proceso de Titulacion,6,Biotecnología,3,Reprobada,57.7,72.5,ordinario,Mayo-Agosto 2023,NME,8
+IBM20220039,Kevin Reyes Espinoza,Ingeniería Biomédica,Activo,8,Instrumentación Biomédica,3,Aprobada,60.6,,ordinario,Mayo-Agosto 2023,NME,7
+IEN20230039,Patricia Montes Cervantes,Ingeniería en Energía,Activo,9,Energía Solar,2,Aprobada,97.2,,ordinario,Mayo-Agosto 2023,004,7
+IDS20220040,Marisol Montes Herrera,Ingeniería en Desarrollo de Software,Activo,7,Ingeniería de Software,1,Aprobada,81.8,,ordinario,Enero-Abril 2023,004,8
+IAG20220040,Helena Figueroa Ruiz,Ingeniería Agroindustrial,Desconocido,8,Diseño de Plantas,3,Aprobada,100.0,,ordinario,Mayo-Agosto 2023,NME,7
+IBM20230040,Patricio Reyes Montes,Ingeniería Biomédica,Activo,9,Electrónica Analógica,3,Reprobada,52.6,78.2,ordinario,Enero-Abril 2023,004,6
+IEN20230040,Elías Huerta Cisneros,Ingeniería en Energía,Desconocido,9,Gestión de la Energía,3,Aprobada,83.3,,ordinario,Enero-Abril 2024,NME,8
+IDS20220041,Samuel Luna Ortiz,Ingeniería en Desarrollo de Software,Desconocido,8,Bases de Datos,2,Reprobada,40.2,,ordinario,Enero-Abril 2024,004,6
+IAG20220041,Laura Pacheco Villarreal,Ingeniería Agroindustrial,Activo,7,Control de Calidad,2,Aprobada,72.3,,ordinario,Mayo-Agosto 2023,004,7
+IBM20220041,Valentina Bautista Rivera,Ingeniería Biomédica,Activo,8,Bioquímica,1,Cursando,52.1,,ordinario,Enero-Abril 2024,004,6
+IEN20220041,Fernando Flores García,Ingeniería en Energía,Activo,8,Termodinámica,3,Cursando,55.6,,ordinario,Enero-Abril 2024,004,5
+IDS20210042,David Suárez Guerrero,Ingeniería en Desarrollo de Software,Activo,6,Redes de Computadoras,3,Aprobada,90.0,,ordinario,Septiembre-Diciembre 2023,NME,6
+IAG20220042,Pablo Ramos Cervantes,Ingeniería Agroindustrial,Desconocido,7,Diseño de Plantas,3,Aprobada,67.0,,ordinario,Mayo-Agosto 2023,NME,7
+IBM20220042,Samuel Romero Rivera,Ingeniería Biomédica,Proceso de Titulacion,8,Biomecánica,3,Aprobada,63.6,,ordinario,Septiembre-Diciembre 2023,004,7
+IEN20230042,Ivonne Martínez Medina,Ingeniería en Energía,Proceso de Titulacion,9,Estadía Profesional I,2,Aprobada,83.3,,ordinario,Septiembre-Diciembre 2023,004,8
+IDS20200043,Yahir Montes Rodríguez,Ingeniería en Desarrollo de Software,Activo,3,Estadía Profesional I,1,Aprobada,87.3,,ordinario,Septiembre-Diciembre 2023,NME,8
+IAG20210043,Julio Ibarra Meza,Ingeniería Agroindustrial,Proceso de Titulacion,5,Estadía Profesional I,3,Aprobada,73.1,,ordinario,Mayo-Agosto 2023,004,8
+IBM20230043,Patricia Lara Reyes,Ingeniería Biomédica,Proceso de Titulacion,9,Circuitos Eléctricos,3,Reprobada,57.9,,repeticion,Septiembre-Diciembre 2023,004,5
+IEN20230043,Brandon Soto Castro,Ingeniería en Energía,Activo,9,Sistemas Eléctricos,3,Aprobada,87.5,,ordinario,Septiembre-Diciembre 2023,004,6
+IDS20210044,Remedios Cisneros Huerta,Ingeniería en Desarrollo de Software,Inscrito,5,Seguridad Informática,3,Reprobada,59.3,,ordinario,Enero-Abril 2023,004,7
+IAG20230044,Rubén Mendoza Huerta,Ingeniería Agroindustrial,Activo,9,Microbiología,2,Aprobada,82.3,,ordinario,Enero-Abril 2024,NME,6
+IBM20200044,Rafael Cisneros Nava,Ingeniería Biomédica,Activo,3,Bioquímica,3,Aprobada,85.1,,ordinario,Enero-Abril 2024,004,6
+IEN20210044,Emiliano Huerta Coronado,Ingeniería en Energía,Inactivo,7,Sistemas Eléctricos,2,Aprobada,73.9,,ordinario,Septiembre-Diciembre 2023,004,6
+IDS20230045,José Manuel Luna Rodríguez,Ingeniería en Desarrollo de Software,Desconocido,9,Desarrollo Web,1,Aprobada,74.7,,ordinario,Septiembre-Diciembre 2023,004,7
+IAG20220045,Uriel Calderón Espinoza,Ingeniería Agroindustrial,Activo,7,Biotecnología,1,Aprobada,94.2,,ordinario,Enero-Abril 2024,NME,8
+IBM20220045,Karla Soto Velázquez,Ingeniería Biomédica,Inscrito,8,Anatomía y Fisiología,2,Aprobada,97.2,,ordinario,Septiembre-Diciembre 2023,004,5
+IEN20220045,Mercedes Gómez Soto,Ingeniería en Energía,Inscrito,7,Energía Solar,3,Reprobada,57.4,,repeticion,Enero-Abril 2024,NME,7
+IDS20220046,Gael Fuentes Bautista,Ingeniería en Desarrollo de Software,Activo,8,Desarrollo Web,2,Aprobada,97.8,,ordinario,Enero-Abril 2024,004,7
+IAG20210046,Ángel Rodríguez Castillo,Ingeniería Agroindustrial,Activo,5,Conservación de Alimentos,2,Reprobada,57.0,,ordinario,Mayo-Agosto 2023,004,5
+IBM20200046,Karina Peña Bautista,Ingeniería Biomédica,Activo,4,Anatomía y Fisiología,1,Cursando,42.9,,ordinario,Enero-Abril 2023,NME,5
+IEN20230046,Verónica Orozco Maldonado,Ingeniería en Energía,Inactivo,9,Energía Eólica,1,Aprobada,81.7,,ordinario,Septiembre-Diciembre 2023,004,8
+IDS20200047,Teresa Ramos Díaz,Ingeniería en Desarrollo de Software,Activo,3,Bases de Datos,1,Reprobada,58.8,61.2,repeticion,Enero-Abril 2023,004,6
+IAG20230047,Dolores Ríos Gutiérrez,Ingeniería Agroindustrial,Activo,9,Estadía Profesional I,1,Reprobada,52.3,82.9,repeticion,Septiembre-Diciembre 2023,NME,8
+IBM20210047,Emilio Gómez García,Ingeniería Biomédica,Desconocido,5,Electrónica Analógica,2,Reprobada,51.5,70.7,repeticion,Mayo-Agosto 2023,NME,6
+IEN20210047,Uriel Coronado Suárez,Ingeniería en Energía,Activo,6,Mecánica de Fluidos,2,Cursando,55.7,,ordinario,Enero-Abril 2024,004,6
+IDS20230048,Julieta Espinoza Delgado,Ingeniería en Desarrollo de Software,Activo,9,Ingeniería de Software,1,Cursando,47.8,,ordinario,Mayo-Agosto 2023,NME,8
+IAG20200048,José Manuel Gutiérrez Reyes,Ingeniería Agroindustrial,Egresado,5,Operaciones Unitarias,2,Aprobada,60.5,,ordinario,Mayo-Agosto 2023,NME,6
+IBM20200048,Matías Martínez Soto,Ingeniería Biomédica,Activo,3,Ingeniería Clínica,1,Aprobada,72.4,,ordinario,Enero-Abril 2024,004,6
+IEN20210048,Nayeli Ortiz Vázquez,Ingeniería en Energía,Activo,6,Energía Solar,1,Reprobada,41.2,,repeticion,Mayo-Agosto 2023,004,7
+IDS20220049,Nicolás Reyes Ramos,Ingeniería en Desarrollo de Software,Activo,7,DevOps,3,Aprobada,86.0,,ordinario,Enero-Abril 2023,004,7
+IAG20210049,Efraín Sandoval Rivera,Ingeniería Agroindustrial,Activo,5,Gestión Ambiental,2,Aprobada,72.4,,ordinario,Septiembre-Diciembre 2023,NME,6
+IBM20230049,Miriam Martínez Camacho,Ingeniería Biomédica,Proceso de Titulacion,9,Estadía Profesional I,1,Aprobada,81.8,,ordinario,Enero-Abril 2024,NME,8
+IEN20220049,Donovan Ramírez Ponce,Ingeniería en Energía,Baja Temporal,7,Termodinámica,3,Reprobada,41.0,62.6,repeticion,Mayo-Agosto 2023,004,5
+IDS20230050,Jocelyn Montes González,Ingeniería en Desarrollo de Software,Inscrito,9,Redes de Computadoras,1,Aprobada,91.5,,ordinario,Septiembre-Diciembre 2023,NME,6
+IAG20230050,Darío Ramírez Ríos,Ingeniería Agroindustrial,Activo,9,Conservación de Alimentos,3,Aprobada,71.3,,ordinario,Septiembre-Diciembre 2023,004,5
+IBM20210050,Lucía Ríos Nava,Ingeniería Biomédica,Activo,6,Biomecánica,1,Aprobada,80.0,,ordinario,Septiembre-Diciembre 2023,004,7
+IEN20230050,Fernanda Hernández Medina,Ingeniería en Energía,Activo,9,Transferencia de Calor,1,Aprobada,65.6,,ordinario,Mayo-Agosto 2023,004,6
+IDS20220051,Valentina Campos Jiménez,Ingeniería en Desarrollo de Software,Activo,7,Gestión de Proyectos,2,Aprobada,81.7,,ordinario,Mayo-Agosto 2023,004,6
+IAG20220051,Isabel Cortés Ponce,Ingeniería Agroindustrial,Activo,7,Conservación de Alimentos,2,Reprobada,53.5,,ordinario,Enero-Abril 2023,NME,5
+IBM20210051,Sofía Medina Rodríguez,Ingeniería Biomédica,Activo,7,Procesamiento de Señales,1,Reprobada,40.1,,ordinario,Enero-Abril 2024,NME,8
+IEN20230051,Elena Luna Vargas,Ingeniería en Energía,Desconocido,9,Máquinas Eléctricas,2,Aprobada,60.4,,ordinario,Enero-Abril 2023,004,8
+IDS20220052,Remedios Soto Cortés,Ingeniería en Desarrollo de Software,Activo,7,Seguridad Informática,2,Aprobada,65.2,,ordinario,Septiembre-Diciembre 2023,004,7
+IAG20220052,Ramón López González,Ingeniería Agroindustrial,Activo,8,Biotecnología,3,Reprobada,49.7,,ordinario,Enero-Abril 2024,NME,8
+IBM20210052,Leonel González Vázquez,Ingeniería Biomédica,Inscrito,6,Biomecánica,3,Aprobada,78.4,,ordinario,Enero-Abril 2023,NME,7
+IEN20220052,Sandra Ponce Gutiérrez,Ingeniería en Energía,Inactivo,8,Máquinas Eléctricas,2,Aprobada,66.0,,ordinario,Enero-Abril 2023,NME,8
+IDS20220053,Damián Ruiz González,Ingeniería en Desarrollo de Software,Activo,8,DevOps,2,Aprobada,76.0,,ordinario,Mayo-Agosto 2023,NME,7
+IAG20200053,Araceli Maldonado Nava,Ingeniería Agroindustrial,Activo,5,Estadía Profesional I,3,Aprobada,83.7,,ordinario,Enero-Abril 2024,004,8
+IBM20210053,Consuelo Estrada Ramos,Ingeniería Biomédica,Desconocido,7,Imágenes Médicas,2,Reprobada,48.6,,ordinario,Enero-Abril 2023,004,7
+IEN20220053,Julio Ibarra Flores,Ingeniería en Energía,Activo,7,Máquinas Eléctricas,1,Aprobada,79.6,,ordinario,Septiembre-Diciembre 2023,004,8
+IDS20200054,Néstor Ramos Huerta,Ingeniería en Desarrollo de Software,Egresado,3,DevOps,3,Aprobada,68.0,,ordinario,Septiembre-Diciembre 2023,004,7
+IAG20230054,Santiago Calderón Castillo,Ingeniería Agroindustrial,Activo,9,Diseño de Plantas,3,Aprobada,85.8,,ordinario,Enero-Abril 2024,NME,7
+IBM20200054,Regina Herrera Castro,Ingeniería Biomédica,Activo,4,Ingeniería Clínica,2,Reprobada,49.4,58.6,ordinario,Enero-Abril 2023,004,6
+IEN20210054,Ian López Mendoza,Ingeniería en Energía,Activo,6,Gestión de la Energía,2,Aprobada,86.9,,ordinario,Enero-Abril 2024,NME,8
+IDS20220055,Carolina Guerrero Herrera,Ingeniería en Desarrollo de Software,Activo,8,DevOps,3,Aprobada,83.4,,ordinario,Enero-Abril 2023,NME,7
+IAG20210055,Elías Pacheco Mendoza,Ingeniería Agroindustrial,Egresado,6,Estadía Profesional I,1,Aprobada,96.2,,ordinario,Enero-Abril 2023,NME,8
+IBM20220055,Sandra Aguilar García,Ingeniería Biomédica,Baja Temporal,8,Procesamiento de Señales,1,Aprobada,62.9,,ordinario,Enero-Abril 2023,004,8
+IEN20230055,Hugo Valencia Delgado,Ingeniería en Energía,Activo,9,Máquinas Eléctricas,1,Aprobada,90.5,,ordinario,Septiembre-Diciembre 2023,004,8
+IDS20200056,Leticia Salazar Castillo,Ingeniería en Desarrollo de Software,Activo,5,Desarrollo Web,1,Aprobada,87.4,,ordinario,Septiembre-Diciembre 2023,NME,7
+IAG20230056,Pablo Padilla Pérez,Ingeniería Agroindustrial,Activo,9,Procesos Agroindustriales,3,Aprobada,67.9,,ordinario,Septiembre-Diciembre 2023,NME,7
+IBM20200056,Irma Coronado Ruiz,Ingeniería Biomédica,Proceso de Titulacion,5,Ingeniería Clínica,2,Aprobada,71.4,,ordinario,Enero-Abril 2023,NME,6
+IEN20230056,Ingrid Medina Montes,Ingeniería en Energía,Inscrito,9,Gestión de la Energía,3,Aprobada,78.9,,ordinario,Mayo-Agosto 2023,004,8
+IDS20210057,Dante Peña Velázquez,Ingeniería en Desarrollo de Software,Egresado,7,Inteligencia Artificial,3,Cursando,47.8,,ordinario,Enero-Abril 2024,NME,8
+IAG20230057,Lorena Salazar Velázquez,Ingeniería Agroindustrial,Desconocido,9,Biotecnología,2,Aprobada,99.6,,ordinario,Enero-Abril 2024,004,8
+IBM20200057,Rosario Ramírez Rivera,Ingeniería Biomédica,Activo,3,Estadía Profesional I,2,Aprobada,93.6,,ordinario,Mayo-Agosto 2023,NME,8
+IEN20220057,Leonel Vázquez Sandoval,Ingeniería en Energía,Activo,8,Circuitos Eléctricos,1,Aprobada,60.5,,ordinario,Enero-Abril 2023,NME,7
+IDS20200058,Sergio Mejía Castro,Ingeniería en Desarrollo de Software,Egresado,5,Estadía Profesional I,1,Aprobada,99.4,,ordinario,Mayo-Agosto 2023,004,8
+IAG20200058,Iván Sánchez Rivera,Ingeniería Agroindustrial,Inscrito,3,Gestión Ambiental,2,Aprobada,72.0,,ordinario,Septiembre-Diciembre 2023,NME,6
+IBM20230058,Teresa Medina Ramos,Ingeniería Biomédica,Activo,9,Estadía Profesional I,1,Aprobada,69.4,,ordinario,Septiembre-Diciembre 2023,NME,8
+IEN20220058,Martín García Vargas,Ingeniería en Energía,Activo,8,Mecánica de Fluidos,1,Cursando,51.0,,ordinario,Mayo-Agosto 2023,NME,6
+IDS20220059,Claudia Bautista Gallegos,Ingeniería en Desarrollo de Software,Activo,7,Gestión de Proyectos,1,Aprobada,63.4,,ordinario,Mayo-Agosto 2023,NME,6
+IAG20200059,Elisa Salazar Delgado,Ingeniería Agroindustrial,Baja Temporal,4,Química de Alimentos,2,Aprobada,86.1,,ordinario,Septiembre-Diciembre 2023,NME,5
+IBM20200059,Paola Solís Ortiz,Ingeniería Biomédica,Inscrito,4,Anatomía y Fisiología,2,Reprobada,54.6,57.6,repeticion,Enero-Abril 2024,004,5
+IEN20200059,Gerardo Gutiérrez Ibarra,Ingeniería en Energía,Proceso de Titulacion,3,Eficiencia Energética,3,Reprobada,45.4,77.9,ordinario,Septiembre-Diciembre 2023,NME,7
+IDS20220060,Ingrid Vargas Cortés,Ingeniería en Desarrollo de Software,Inactivo,7,Bases de Datos,3,Aprobada,95.3,,ordinario,Enero-Abril 2024,NME,6
+IAG20220060,Marlene Gallegos Guerrero,Ingeniería Agroindustrial,Activo,8,Biotecnología,2,Aprobada,63.3,,ordinario,Septiembre-Diciembre 2023,004,8
+IBM20200060,Estela Valencia Gómez,Ingeniería Biomédica,Activo,3,Equipos Médicos,3,Aprobada,80.8,,ordinario,Mayo-Agosto 2023,NME,8
+IEN20230060,Ian Cortés Romero,Ingeniería en Energía,Activo,9,Eficiencia Energética,2,Aprobada,65.2,,ordinario,Mayo-Agosto 2023,004,7
+IDS20230061,Saúl Hernández Orozco,Ingeniería en Desarrollo de Software,Egresado,9,Bases de Datos,2,Aprobada,81.3,,ordinario,Enero-Abril 2024,004,6
+IAG20220061,Uriel Sánchez Jiménez,Ingeniería Agroindustrial,Baja Temporal,7,Conservación de Alimentos,2,Aprobada,64.5,,ordinario,Mayo-Agosto 2023,004,5
+IBM20210061,Braulio Morales Soto,Ingeniería Biomédica,Desconocido,5,Equipos Médicos,3,Reprobada,47.6,,repeticion,Septiembre-Diciembre 2023,004,8
+IEN20200061,Esteban García Cruz,Ingeniería en Energía,Desconocido,4,Transferencia de Calor,1,Aprobada,77.3,,ordinario,Enero-Abril 2024,004,6
+IDS20210062,Efraín Romero Gutiérrez,Ingeniería en Desarrollo de Software,Activo,7,Gestión de Proyectos,1,Reprobada,59.6,73.8,repeticion,Enero-Abril 2023,004,6
+IAG20220062,Mercedes Herrera López,Ingeniería Agroindustrial,Proceso de Titulacion,7,Biotecnología,3,Reprobada,51.5,,ordinario,Enero-Abril 2024,NME,8
+IBM20200062,Miguel Ángel Rodríguez Jiménez,Ingeniería Biomédica,Activo,3,Anatomía y Fisiología,2,Reprobada,46.6,,ordinario,Mayo-Agosto 2023,NME,5
+IEN20230062,Manuel Huerta Álvarez,Ingeniería en Energía,Baja Temporal,9,Termodinámica,3,Aprobada,80.0,,ordinario,Enero-Abril 2024,NME,5
+IDS20210063,Ezequiel García Vargas,Ingeniería en Desarrollo de Software,Baja Temporal,5,Bases de Datos,1,Aprobada,64.9,,ordinario,Mayo-Agosto 2023,NME,6
+IAG20220063,Rubén Ríos Navarro,Ingeniería Agroindustrial,Egresado,7,Conservación de Alimentos,1,Aprobada,86.8,,ordinario,Enero-Abril 2024,004,5
+IBM20200063,César Vázquez Espinoza,Ingeniería Biomédica,Activo,4,Biomecánica,3,Aprobada,92.7,,ordinario,Mayo-Agosto 2023,004,7
+IEN20210063,Vicente Díaz Aguilar,Ingeniería en Energía,Activo,5,Cálculo Integral,2,Reprobada,42.2,62.5,repeticion,Enero-Abril 2024,004,5
+IDS20230064,Ximena Medina Pacheco,Ingeniería en Desarrollo de Software,Proceso de Titulacion,9,Programación,3,Aprobada,83.6,,ordinario,Septiembre-Diciembre 2023,NME,5
+IAG20210064,Citlali Maldonado Fuentes,Ingeniería Agroindustrial,Activo,6,Control de Calidad,2,Aprobada,89.0,,ordinario,Enero-Abril 2024,004,7
+IBM20210064,Ian Chávez Velázquez,Ingeniería Biomédica,Inscrito,6,Anatomía y Fisiología,2,Aprobada,61.6,,ordinario,Enero-Abril 2024,NME,5
+IEN20210064,Manuela Ibarra Ponce,Ingeniería en Energía,Inactivo,7,Estadía Profesional I,3,Cursando,53.7,,ordinario,Septiembre-Diciembre 2023,NME,8
+IDS20230065,Diego Herrera Nava,Ingeniería en Desarrollo de Software,Egresado,9,Ingeniería de Software,2,Reprobada,40.5,,ordinario,Enero-Abril 2024,NME,8
+IAG20220065,Jimena Díaz Martínez,Ingeniería Agroindustrial,Proceso de Titulacion,8,Operaciones Unitarias,2,Reprobada,41.6,,ordinario,Enero-Abril 2023,004,6
+IBM20210065,Margarita Maldonado García,Ingeniería Biomédica,Desconocido,7,Normatividad Sanitaria,1,Aprobada,66.2,,ordinario,Enero-Abril 2023,NME,8
+IEN20210065,Elías Navarro Coronado,Ingeniería en Energía,Activo,6,Sistemas Eléctricos,2,Aprobada,83.6,,ordinario,Mayo-Agosto 2023,004,6
+IDS20230066,Gabriel Salazar Ramos,Ingeniería en Desarrollo de Software,Activo,9,Minería de Datos,1,Reprobada,53.9,,repeticion,Enero-Abril 2024,NME,8
+IAG20200066,Ramón Castro Cervantes,Ingeniería Agroindustrial,Baja Temporal,4,Procesos Agroindustriales,3,Aprobada,85.2,,ordinario,Enero-Abril 2024,NME,7
+IBM20230066,Lorena Flores Rivera,Ingeniería Biomédica,Proceso de Titulacion,9,Electrónica Analógica,2,Cursando,57.4,,ordinario,Mayo-Agosto 2023,NME,6
+IEN20230066,Daniela Flores Jiménez,Ingeniería en Energía,Inscrito,9,Mecánica de Fluidos,1,Aprobada,60.7,,ordinario,Enero-Abril 2023,NME,6
+IDS20210067,Jonathan Acosta Domínguez,Ingeniería en Desarrollo de Software,Activo,5,DevOps,2,Aprobada,63.8,,ordinario,Enero-Abril 2024,004,7
+IAG20220067,María José Reyes Soto,Ingeniería Agroindustrial,Desconocido,8,Procesos Agroindustriales,1,Aprobada,63.3,,ordinario,Enero-Abril 2023,NME,7
+IBM20200067,Samuel Peña Aguilar,Ingeniería Biomédica,Activo,4,Bioquímica,3,Cursando,47.9,,ordinario,Enero-Abril 2023,004,6
+IEN20200067,Sofía Fuentes Salazar,Ingeniería en Energía,Egresado,4,Termodinámica,2,Aprobada,60.8,,ordinario,Septiembre-Diciembre 2023,004,5
+IDS20230068,Gabriel Ponce Castillo,Ingeniería en Desarrollo de Software,Proceso de Titulacion,9,DevOps,3,Aprobada,83.2,,ordinario,Enero-Abril 2024,004,7
+IAG20200068,Renato Villarreal López,Ingeniería Agroindustrial,Activo,4,Biotecnología,2,Aprobada,67.0,,ordinario,Enero-Abril 2024,NME,8
+IBM20230068,Elena González Cervantes,Ingeniería Biomédica,Inscrito,9,Anatomía y Fisiología,2,Reprobada,52.7,74.1,ordinario,Mayo-Agosto 2023,004,5
+IEN20210068,Karina Ortiz Sánchez,Ingeniería en Energía,Activo,6,Eficiencia Energética,1,Reprobada,51.5,,ordinario,Enero-Abril 2024,004,7
+IDS20220069,Donovan Ríos Villarreal,Ingeniería en Desarrollo de Software,Egresado,8,Sistemas Operativos,3,Reprobada,42.8,,ordinario,Enero-Abril 2024,004,5
+IAG20210069,Uriel Suárez Sánchez,Ingeniería Agroindustrial,Inscrito,6,Administración Agroindustrial,3,Aprobada,95.9,,ordinario,Septiembre-Diciembre 2023,NME,8
+IBM20200069,Roberto Cruz Gallegos,Ingeniería Biomédica,Egresado,4,Instrumentación Biomédica,1,Aprobada,74.5,,ordinario,Septiembre-Diciembre 2023,NME,7
+IEN20210069,Samuel Castillo García,Ingeniería en Energía,Activo,6,Estadía Profesional I,2,Aprobada,60.0,,ordinario,Septiembre-Diciembre 2023,NME,8
+IDS20200070,Soledad Romero Salazar,Ingeniería en Desarrollo de Software,Activo,3,Inteligencia Artificial,1,Reprobada,51.6,72.5,ordinario,Septiembre-Diciembre 2023,004,8
+IAG20210070,Fabián Gutiérrez Padilla,Ingeniería Agroindustrial,Proceso de Titulacion,5,Inocuidad Alimentaria,3,Reprobada,45.8,,ordinario,Mayo-Agosto 2023,004,8
+IBM20200070,Dolores Castro Medina,Ingeniería Biomédica,Desconocido,5,Equipos Médicos,2,Reprobada,51.7,57.4,ordinario,Enero-Abril 2024,004,8
+IEN20210070,Berenice Cortés Delgado,Ingeniería en Energía,Inscrito,6,Mecánica de Fluidos,3,Aprobada,84.5,,ordinario,Septiembre-Diciembre 2023,004,6
+IDS20220071,Ricardo Campos Castro,Ingeniería en Desarrollo de Software,Activo,7,Ingeniería de Software,2,Reprobada,48.7,,repeticion,Enero-Abril 2023,NME,8
+IAG20220071,Citlali Cisneros González,Ingeniería Agroindustrial,Activo,7,Inocuidad Alimentaria,3,Aprobada,79.8,,ordinario,Enero-Abril 2024,NME,8
+IBM20210071,Laura Valencia Álvarez,Ingeniería Biomédica,Proceso de Titulacion,7,Bioquímica,3,Reprobada,53.7,55.1,ordinario,Enero-Abril 2024,004,6
+IEN20230071,Renato González Castillo,Ingeniería en Energía,Activo,9,Cálculo Integral,3,Aprobada,75.6,,ordinario,Enero-Abril 2023,004,5
+IDS20230072,Ricardo Contreras Luna,Ingeniería en Desarrollo de Software,Egresado,9,Inteligencia Artificial,2,Aprobada,65.6,,ordinario,Enero-Abril 2024,NME,8
+IAG20230072,David Aguilar López,Ingeniería Agroindustrial,Inscrito,9,Diseño de Plantas,3,Aprobada,63.4,,ordinario,Enero-Abril 2024,NME,7
+IBM20220072,Rodrigo Torres Ramírez,Ingeniería Biomédica,Proceso de Titulacion,7,Normatividad Sanitaria,3,Reprobada,54.8,,repeticion,Enero-Abril 2023,NME,8
+IEN20230072,Ismael Contreras Maldonado,Ingeniería en Energía,Baja Temporal,9,Eficiencia Energética,3,Aprobada,87.5,,ordinario,Septiembre-Diciembre 2023,NME,7
+IDS20200073,Karla Rojas Sandoval,Ingeniería en Desarrollo de Software,Inscrito,5,Inteligencia Artificial,1,Reprobada,44.3,,repeticion,Enero-Abril 2024,NME,8
+IAG20230073,Dafne Vargas Chávez,Ingeniería Agroindustrial,Desconocido,9,Estadía Profesional I,3,Aprobada,63.1,,ordinario,Enero-Abril 2023,004,8
+IBM20220073,Hugo Acosta Torres,Ingeniería Biomédica,Activo,7,Estadía Profesional I,1,Reprobada,41.0,54.5,repeticion,Enero-Abril 2024,NME,8
+IEN20230073,Dante Cervantes Gallegos,Ingeniería en Energía,Activo,9,Energía Solar,3,Aprobada,97.4,,ordinario,Enero-Abril 2024,NME,7
+IDS20230074,Arturo Jiménez Rodríguez,Ingeniería en Desarrollo de Software,Activo,9,Inteligencia Artificial,3,Aprobada,66.4,,ordinario,Septiembre-Diciembre 2023,004,8
+IAG20230074,Gloria Suárez Padilla,Ingeniería Agroindustrial,Inactivo,9,Inocuidad Alimentaria,2,Aprobada,64.4,,ordinario,Septiembre-Diciembre 2023,004,8
+IBM20210074,Gabriel Soto Estrada,Ingeniería Biomédica,Proceso de Titulacion,6,Procesamiento de Señales,1,Aprobada,82.8,,ordinario,Septiembre-Diciembre 2023,004,8
+IEN20200074,Alejandra González Mendoza,Ingeniería en Energía,Activo,4,Gestión de la Energía,1,Aprobada,82.6,,ordinario,Mayo-Agosto 2023,NME,8
+IDS20230075,Rodrigo Vargas Jiménez,Ingeniería en Desarrollo de Software,Baja Temporal,9,Programación,1,Aprobada,68.9,,ordinario,Mayo-Agosto 2023,NME,5
+IAG20230075,Leonel Bautista Torres,Ingeniería Agroindustrial,Inscrito,9,Biotecnología,2,Reprobada,45.4,62.0,ordinario,Septiembre-Diciembre 2023,NME,8
+IBM20220075,Nayeli Flores Suárez,Ingeniería Biomédica,Activo,7,Biomecánica,1,Reprobada,59.0,,ordinario,Mayo-Agosto 2023,004,7
+IEN20200075,Ernesto Nava López,Ingeniería en Energía,Desconocido,5,Energía Eólica,3,Aprobada,71.3,,ordinario,Mayo-Agosto 2023,004,8
+IDS20220076,Fátima Huerta Cortés,Ingeniería en Desarrollo de Software,Inscrito,7,Bases de Datos,2,Aprobada,85.8,,ordinario,Enero-Abril 2023,004,6
+IAG20200076,Trinidad Zamora Herrera,Ingeniería Agroindustrial,Egresado,5,Diseño de Plantas,2,Aprobada,71.1,,ordinario,Septiembre-Diciembre 2023,NME,7
+IBM20220076,Lucía Calderón Valencia,Ingeniería Biomédica,Proceso de Titulacion,7,Ingeniería Clínica,2,Reprobada,44.2,,repeticion,Septiembre-Diciembre 2023,004,6
+IEN20220076,Amparo Ibarra Vázquez,Ingeniería en Energía,Inscrito,8,Gestión de la Energía,1,Aprobada,71.3,,ordinario,Septiembre-Diciembre 2023,NME,8
+IDS20200077,Julieta Díaz Gutiérrez,Ingeniería en Desarrollo de Software,Inscrito,5,Bases de Datos,3,Aprobada,85.0,,ordinario,Mayo-Agosto 2023,NME,6
+IAG20230077,Gonzalo Ramírez Aguilar,Ingeniería Agroindustrial,Inscrito,9,Control de Calidad,3,Reprobada,42.1,,repeticion,Septiembre-Diciembre 2023,004,7
+IBM20230077,Aurora Reyes Trejo,Ingeniería Biomédica,Proceso de Titulacion,9,Equipos Médicos,3,Aprobada,63.7,,ordinario,Enero-Abril 2023,004,8
+IEN20230077,Isabel Espinoza López,Ingeniería en Energía,Inscrito,9,Termodinámica,3,Reprobada,51.5,72.9,ordinario,Enero-Abril 2024,NME,5
+IDS20200078,Iván Navarro Gallegos,Ingeniería en Desarrollo de Software,Activo,3,Gestión de Proyectos,3,Aprobada,92.0,,ordinario,Mayo-Agosto 2023,NME,6
+IAG20230078,Alfredo Jiménez Ávila,Ingeniería Agroindustrial,Proceso de Titulacion,9,Procesos Agroindustriales,1,Reprobada,58.3,75.1,ordinario,Enero-Abril 2024,NME,7
+IBM20230078,Rebeca Reyes Ruiz,Ingeniería Biomédica,Activo,9,Equipos Médicos,3,Aprobada,92.4,,ordinario,Mayo-Agosto 2023,004,8
+IEN20220078,Leticia Lara Ochoa,Ingeniería en Energía,Desconocido,8,Sistemas Eléctricos,3,Aprobada,82.8,,ordinario,Mayo-Agosto 2023,004,6
+IDS20200079,Paola Fuentes Maldonado,Ingeniería en Desarrollo de Software,Inscrito,4,DevOps,3,Reprobada,52.1,71.3,repeticion,Mayo-Agosto 2023,NME,7
+IAG20210079,Mónica Delgado Domínguez,Ingeniería Agroindustrial,Inscrito,6,Gestión Ambiental,3,Reprobada,52.7,,ordinario,Enero-Abril 2023,NME,6
+IBM20220079,Catalina Díaz Ibarra,Ingeniería Biomédica,Desconocido,8,Bioquímica,3,Cursando,59.6,,ordinario,Septiembre-Diciembre 2023,NME,6
+IEN20230079,Lucía Chávez Delgado,Ingeniería en Energía,Activo,9,Energía Eólica,3,Reprobada,59.7,,ordinario,Enero-Abril 2023,004,8
+IDS20220080,Helena Castillo Medina,Ingeniería en Desarrollo de Software,Activo,8,Sistemas Operativos,3,Aprobada,65.5,,ordinario,Enero-Abril 2023,NME,5
+IAG20220080,Esmeralda Martínez Cisneros,Ingeniería Agroindustrial,Baja Temporal,7,Biotecnología,1,Aprobada,85.8,,ordinario,Enero-Abril 2023,NME,8
+IBM20230080,Emiliano Navarro Hernández,Ingeniería Biomédica,Activo,9,Imágenes Médicas,2,Reprobada,57.0,81.2,ordinario,Enero-Abril 2023,004,7
+IEN20200080,Teresa Reyes Solís,Ingeniería en Energía,Activo,4,Energía Eólica,2,Aprobada,73.1,,ordinario,Mayo-Agosto 2023,NME,8
+IDS20200081,Irma Rivera Gutiérrez,Ingeniería en Desarrollo de Software,Activo,3,Sistemas Operativos,3,Aprobada,95.6,,ordinario,Mayo-Agosto 2023,004,5
+IAG20230081,Patricio Zamora Huerta,Ingeniería Agroindustrial,Activo,9,Operaciones Unitarias,2,Aprobada,63.8,,ordinario,Septiembre-Diciembre 2023,NME,6
+IBM20210081,Gerardo Romero Ruiz,Ingeniería Biomédica,Inscrito,6,Biomecánica,3,Aprobada,68.2,,ordinario,Septiembre-Diciembre 2023,NME,7
+IEN20230081,Josefina Ávila Díaz,Ingeniería en Energía,Activo,9,Estadía Profesional I,3,Aprobada,94.1,,ordinario,Enero-Abril 2024,004,8
+IDS20230082,Ramón Luna Cervantes,Ingeniería en Desarrollo de Software,Baja Temporal,9,Estadía Profesional I,3,Reprobada,48.7,,repeticion,Septiembre-Diciembre 2023,NME,8
+IAG20220082,Ariadna Villarreal Cisneros,Ingeniería Agroindustrial,Activo,8,Administración Agroindustrial,3,Aprobada,80.0,,ordinario,Septiembre-Diciembre 2023,004,8
+IBM20200082,Sofía Padilla Flores,Ingeniería Biomédica,Activo,3,Estadía Profesional I,1,Reprobada,44.0,67.9,ordinario,Mayo-Agosto 2023,004,8
+IEN20230082,Raymundo Gallegos Maldonado,Ingeniería en Energía,Inscrito,9,Mecánica de Fluidos,2,Reprobada,47.3,,ordinario,Mayo-Agosto 2023,NME,6
+IDS20210083,Brandon Díaz Martínez,Ingeniería en Desarrollo de Software,Activo,5,Gestión de Proyectos,2,Reprobada,52.8,,repeticion,Enero-Abril 2023,NME,6
+IAG20200083,Alejandra Mendoza Vázquez,Ingeniería Agroindustrial,Egresado,3,Procesos Agroindustriales,3,Reprobada,50.1,,ordinario,Septiembre-Diciembre 2023,NME,7
+IBM20230083,Rocío Álvarez Castro,Ingeniería Biomédica,Activo,9,Circuitos Eléctricos,1,Aprobada,70.0,,ordinario,Septiembre-Diciembre 2023,NME,5
+IEN20210083,Josefina Rodríguez Cervantes,Ingeniería en Energía,Egresado,5,Transferencia de Calor,1,Reprobada,44.3,,ordinario,Enero-Abril 2024,NME,6
+IDS20200084,Gael Valencia Herrera,Ingeniería en Desarrollo de Software,Activo,5,Redes de Computadoras,2,Aprobada,71.3,,ordinario,Mayo-Agosto 2023,004,6
+IAG20210084,Elsa Sánchez Castillo,Ingeniería Agroindustrial,Baja Temporal,7,Química de Alimentos,1,Aprobada,68.0,,ordinario,Enero-Abril 2023,004,5
+IBM20210084,David Flores Orozco,Ingeniería Biomédica,Activo,7,Electrónica Analógica,1,Reprobada,50.0,,ordinario,Enero-Abril 2023,004,6
+IEN20220084,Roberto Solís Ortiz,Ingeniería en Energía,Inscrito,7,Estadía Profesional I,2,Aprobada,70.7,,ordinario,Mayo-Agosto 2023,004,8
+IDS20210085,Pedro Guerrero Díaz,Ingeniería en Desarrollo de Software,Egresado,6,Programación,1,Aprobada,74.2,,ordinario,Enero-Abril 2023,004,5
+IAG20210085,Alejandro Velázquez Camacho,Ingeniería Agroindustrial,Activo,6,Biotecnología,3,Aprobada,63.4,,ordinario,Septiembre-Diciembre 2023,004,8
+IBM20210085,Martín Torres Ramírez,Ingeniería Biomédica,Activo,5,Circuitos Eléctricos,1,Aprobada,80.5,,ordinario,Mayo-Agosto 2023,004,5
+IEN20220085,Patricio Espinoza Chávez,Ingeniería en Energía,Desconocido,8,Transferencia de Calor,2,Aprobada,81.6,,ordinario,Enero-Abril 2024,004,6
+IDS20220086,Samuel Velázquez Coronado,Ingeniería en Desarrollo de Software,Inscrito,8,Estadía Profesional I,2,Aprobada,70.0,,ordinario,Mayo-Agosto 2023,NME,8
+IAG20220086,Raymundo Huerta Acosta,Ingeniería Agroindustrial,Egresado,7,Gestión Ambiental,3,Aprobada,75.3,,ordinario,Enero-Abril 2023,004,6
+IBM20210086,Gisela Gutiérrez Castro,Ingeniería Biomédica,Activo,6,Anatomía y Fisiología,2,Reprobada,52.5,,ordinario,Mayo-Agosto 2023,004,5
+IEN20210086,Hugo Ibarra Herrera,Ingeniería en Energía,Activo,5,Mecánica de Fluidos,3,Aprobada,85.4,,ordinario,Septiembre-Diciembre 2023,004,6
+IDS20200087,Graciela Orozco Lara,Ingeniería en Desarrollo de Software,Activo,5,Ingeniería de Software,2,Aprobada,60.4,,ordinario,Enero-Abril 2023,NME,8
+IAG20200087,Patricio Rodríguez Medina,Ingeniería Agroindustrial,Desconocido,5,Diseño de Plantas,1,Aprobada,73.6,,ordinario,Mayo-Agosto 2023,NME,7
+IBM20220087,Ian Nava López,Ingeniería Biomédica,Activo,8,Ingeniería Clínica,1,Reprobada,55.8,,ordinario,Enero-Abril 2023,004,6
+IEN20230087,Pedro Nava Sánchez,Ingeniería en Energía,Activo,9,Transferencia de Calor,1,Aprobada,94.2,,ordinario,Enero-Abril 2024,NME,6
+IDS20230088,Andrea Rojas Coronado,Ingeniería en Desarrollo de Software,Inactivo,9,Gestión de Proyectos,3,Reprobada,46.8,,repeticion,Enero-Abril 2024,NME,6
+IAG20210088,Bianca Ibarra López,Ingeniería Agroindustrial,Activo,7,Control de Calidad,3,Reprobada,52.5,55.4,ordinario,Enero-Abril 2023,004,7
+IBM20200088,Iker Vázquez Nava,Ingeniería Biomédica,Activo,4,Bioquímica,2,Aprobada,89.2,,ordinario,Septiembre-Diciembre 2023,004,6
+IEN20200088,Paola Gutiérrez Domínguez,Ingeniería en Energía,Inactivo,5,Eficiencia Energética,3,Aprobada,94.1,,ordinario,Septiembre-Diciembre 2023,004,7
+IDS20230089,Donovan Ríos Ramírez,Ingeniería en Desarrollo de Software,Proceso de Titulacion,9,Estadía Profesional I,1,Aprobada,86.9,,ordinario,Mayo-Agosto 2023,004,8
+IAG20230089,Araceli Ibarra González,Ingeniería Agroindustrial,Activo,9,Operaciones Unitarias,1,Aprobada,62.1,,ordinario,Enero-Abril 2024,004,6
+IBM20210089,Bianca Calderón Pacheco,Ingeniería Biomédica,Inscrito,6,Anatomía y Fisiología,1,Aprobada,87.3,,ordinario,Mayo-Agosto 2023,004,5
+IEN20200089,Trinidad Gutiérrez Hernández,Ingeniería en Energía,Baja Temporal,5,Estadía Profesional I,1,Reprobada,47.0,73.8,ordinario,Enero-Abril 2024,NME,8
+IDS20220090,Lorena Acosta Romero,Ingeniería en Desarrollo de Software,Inscrito,7,Estadía Profesional I,2,Reprobada,48.9,57.8,ordinario,Enero-Abril 2024,NME,8
+IAG20200090,Rodrigo Vázquez Chávez,Ingeniería Agroindustrial,Inscrito,4,Microbiología,3,Reprobada,44.9,,repeticion,Enero-Abril 2023,004,6
+IBM20230090,Gerardo Solís Peña,Ingeniería Biomédica,Desconocido,9,Anatomía y Fisiología,3,Reprobada,47.6,,repeticion,Septiembre-Diciembre 2023,NME,5
+IEN20200090,Virginia Mendoza Martínez,Ingeniería en Energía,Inactivo,3,Energía Eólica,2,Aprobada,91.6,,ordinario,Septiembre-Diciembre 2023,004,8
+IDS20230091,Ignacio Ávila Rodríguez,Ingeniería en Desarrollo de Software,Activo,9,Minería de Datos,1,Aprobada,98.6,,ordinario,Mayo-Agosto 2023,NME,8
+IAG20200091,Trinidad Salazar Montes,Ingeniería Agroindustrial,Activo,3,Microbiología,3,Aprobada,82.9,,ordinario,Septiembre-Diciembre 2023,004,6
+IBM20200091,Ingrid González Rodríguez,Ingeniería Biomédica,Activo,5,Electrónica Analógica,3,Aprobada,71.3,,ordinario,Enero-Abril 2024,004,6
+IEN20230091,Ángel Figueroa Orozco,Ingeniería en Energía,Baja Temporal,9,Gestión de la Energía,2,Reprobada,53.5,82.3,ordinario,Enero-Abril 2024,004,8
+IDS20230092,Jorge Contreras Zamora,Ingeniería en Desarrollo de Software,Activo,9,Gestión de Proyectos,1,Aprobada,71.3,,ordinario,Mayo-Agosto 2023,004,6
+IAG20220092,Ignacio Coronado Peña,Ingeniería Agroindustrial,Activo,7,Estadía Profesional I,2,Cursando,47.8,,ordinario,Enero-Abril 2023,004,8
+IBM20220092,Alfredo Rivera Ponce,Ingeniería Biomédica,Desconocido,8,Procesamiento de Señales,3,Reprobada,42.5,83.7,ordinario,Mayo-Agosto 2023,NME,8
+IEN20210092,Patricia Mendoza Chávez,Ingeniería en Energía,Activo,5,Sistemas Eléctricos,3,Aprobada,84.8,,ordinario,Septiembre-Diciembre 2023,004,6
+IDS20200093,Rubén Montes Cruz,Ingeniería en Desarrollo de Software,Activo,3,Minería de Datos,3,Aprobada,84.2,,ordinario,Enero-Abril 2024,004,8
+IAG20200093,Abel Gallegos Solís,Ingeniería Agroindustrial,Egresado,4,Control de Calidad,1,Aprobada,90.3,,ordinario,Enero-Abril 2023,004,7
+IBM20200093,Mariana Trejo Ruiz,Ingeniería Biomédica,Desconocido,4,Electrónica Analógica,1,Reprobada,40.7,,ordinario,Enero-Abril 2024,004,6
+IEN20200093,Manuel Herrera Gutiérrez,Ingeniería en Energía,Activo,5,Máquinas Eléctricas,1,Aprobada,61.7,,ordinario,Enero-Abril 2024,004,8
+IDS20230094,Camila Herrera Delgado,Ingeniería en Desarrollo de Software,Inscrito,9,Sistemas Operativos,1,Aprobada,61.1,,ordinario,Mayo-Agosto 2023,NME,5
+IAG20220094,Darío Jiménez Orozco,Ingeniería Agroindustrial,Activo,8,Biotecnología,1,Aprobada,94.5,,ordinario,Enero-Abril 2023,004,8
+IBM20220094,Josué Gómez Cisneros,Ingeniería Biomédica,Activo,7,Circuitos Eléctricos,1,Aprobada,70.7,,ordinario,Mayo-Agosto 2023,NME,5
+IEN20230094,Salvador Pérez Maldonado,Ingeniería en Energía,Proceso de Titulacion,9,Eficiencia Energética,2,Aprobada,87.9,,ordinario,Enero-Abril 2023,NME,7
+IDS20200095,Darío Reyes Salazar,Ingeniería en Desarrollo de Software,Baja Temporal,5,Seguridad Informática,1,Aprobada,72.5,,ordinario,Enero-Abril 2023,NME,7
+IAG20220095,Leandro Reyes Luna,Ingeniería Agroindustrial,Desconocido,7,Diseño de Plantas,2,Aprobada,80.9,,ordinario,Septiembre-Diciembre 2023,004,7
+IBM20200095,Laura Cisneros Luna,Ingeniería Biomédica,Inscrito,4,Circuitos Eléctricos,1,Aprobada,72.3,,ordinario,Mayo-Agosto 2023,NME,5
+IEN20200095,Dolores Orozco Maldonado,Ingeniería en Energía,Activo,3,Máquinas Eléctricas,2,Aprobada,79.2,,ordinario,Enero-Abril 2024,NME,8
+IDS20210096,Mercedes Ramírez Lara,Ingeniería en Desarrollo de Software,Inactivo,5,DevOps,3,Reprobada,47.2,,ordinario,Mayo-Agosto 2023,NME,7
+IAG20200096,Paola Padilla Ortiz,Ingeniería Agroindustrial,Activo,3,Operaciones Unitarias,3,Reprobada,52.9,75.9,ordinario,Enero-Abril 2024,NME,6
+IBM20230096,Remedios González Meza,Ingeniería Biomédica,Inscrito,9,Biomecánica,1,Aprobada,97.1,,ordinario,Septiembre-Diciembre 2023,004,7
+IEN20230096,Sebastián Acosta Espinoza,Ingeniería en Energía,Proceso de Titulacion,9,Energía Eólica,2,Aprobada,62.5,,ordinario,Mayo-Agosto 2023,NME,8
+IDS20210097,Gabriela Torres Vázquez,Ingeniería en Desarrollo de Software,Activo,7,Sistemas Operativos,3,Aprobada,92.5,,ordinario,Septiembre-Diciembre 2023,NME,5
+IAG20230097,Citlali Gómez Nava,Ingeniería Agroindustrial,Activo,9,Biotecnología,2,Reprobada,49.3,73.9,repeticion,Septiembre-Diciembre 2023,NME,8
+IBM20200097,Roberto Cisneros Díaz,Ingeniería Biomédica,Activo,4,Equipos Médicos,1,Aprobada,66.2,,ordinario,Septiembre-Diciembre 2023,NME,8
+IEN20210097,Carlos Valencia Domínguez,Ingeniería en Energía,Baja Temporal,5,Máquinas Eléctricas,3,Aprobada,98.0,,ordinario,Septiembre-Diciembre 2023,NME,8
+IDS20230098,Andrés Navarro Díaz,Ingeniería en Desarrollo de Software,Activo,9,Estadía Profesional I,1,Cursando,58.2,,ordinario,Septiembre-Diciembre 2023,NME,8
+IAG20230098,Patricio Ramos Luna,Ingeniería Agroindustrial,Inscrito,9,Control de Calidad,3,Reprobada,57.0,,ordinario,Enero-Abril 2024,NME,7
+IBM20220098,Raymundo Camacho Vargas,Ingeniería Biomédica,Inactivo,7,Procesamiento de Señales,2,Cursando,53.3,,ordinario,Mayo-Agosto 2023,NME,8
+IEN20200098,Renato Meza Villarreal,Ingeniería en Energía,Inscrito,5,Termodinámica,2,Aprobada,86.1,,ordinario,Mayo-Agosto 2023,004,5
+IDS20210099,Rogelio Camacho Morales,Ingeniería en Desarrollo de Software,Activo,5,Gestión de Proyectos,3,Aprobada,87.6,,ordinario,Septiembre-Diciembre 2023,004,6
+IAG20230099,Diana Huerta Rodríguez,Ingeniería Agroindustrial,Activo,9,Estadía Profesional I,2,Aprobada,61.8,,ordinario,Enero-Abril 2024,NME,8
+IBM20220099,Óscar Lara Ávila,Ingeniería Biomédica,Inscrito,8,Biomecánica,2,Aprobada,93.6,,ordinario,Septiembre-Diciembre 2023,004,7
+IEN20220099,Arturo Coronado Sandoval,Ingeniería en Energía,Inactivo,7,Energía Solar,1,Reprobada,49.9,,repeticion,Septiembre-Diciembre 2023,NME,7
+IDS20200100,Karla Jiménez Ponce,Ingeniería en Desarrollo de Software,Activo,3,DevOps,3,Aprobada,81.9,,ordinario,Enero-Abril 2023,NME,7
+IAG20200100,Frida Campos Morales,Ingeniería Agroindustrial,Inactivo,4,Inocuidad Alimentaria,2,Aprobada,73.8,,ordinario,Enero-Abril 2023,004,8
+IBM20210100,Raymundo Pérez Fuentes,Ingeniería Biomédica,Activo,6,Normatividad Sanitaria,1,Aprobada,88.0,,ordinario,Septiembre-Diciembre 2023,004,8
+IEN20210100,Enrique Guerrero Rivera,Ingeniería en Energía,Inscrito,7,Mecánica de Fluidos,3,Aprobada,89.8,,ordinario,Enero-Abril 2024,004,6
+IDS20210101,Adriana Pérez Torres,Ingeniería en Desarrollo de Software,Inscrito,6,Inteligencia Artificial,3,Aprobada,63.2,,ordinario,Mayo-Agosto 2023,NME,8
+IAG20220101,Guillermo Fuentes Zamora,Ingeniería Agroindustrial,Inactivo,7,Administración Agroindustrial,3,Aprobada,73.9,,ordinario,Mayo-Agosto 2023,004,8
+IBM20200101,Montserrat Castro Luna,Ingeniería Biomédica,Activo,3,Equipos Médicos,3,Aprobada,88.5,,ordinario,Septiembre-Diciembre 2023,NME,8
+IEN20200101,Mónica Pérez Villarreal,Ingeniería en Energía,Inactivo,4,Máquinas Eléctricas,2,Reprobada,51.6,83.1,repeticion,Enero-Abril 2024,NME,8
+IDS20210102,Camilo García Acosta,Ingeniería en Desarrollo de Software,Activo,5,DevOps,3,Cursando,44.5,,ordinario,Mayo-Agosto 2023,NME,7
+IAG20230102,Roberto Campos Ramos,Ingeniería Agroindustrial,Inscrito,9,Gestión Ambiental,2,Reprobada,55.9,74.6,ordinario,Enero-Abril 2024,004,6
+IBM20210102,Samantha Nava Domínguez,Ingeniería Biomédica,Inactivo,5,Bioquímica,3,Aprobada,64.2,,ordinario,Mayo-Agosto 2023,004,6
+IEN20220102,Lizbeth Villarreal Delgado,Ingeniería en Energía,Inscrito,8,Termodinámica,3,Reprobada,54.9,,repeticion,Septiembre-Diciembre 2023,NME,5
+IDS20210103,Itzel Díaz Fuentes,Ingeniería en Desarrollo de Software,Inactivo,5,Desarrollo Web,2,Aprobada,76.3,,ordinario,Enero-Abril 2023,NME,7
+IAG20200103,Sofía Flores Torres,Ingeniería Agroindustrial,Inscrito,3,Química de Alimentos,3,Reprobada,59.2,,repeticion,Septiembre-Diciembre 2023,004,5
+IBM20210103,Julieta Pérez Peña,Ingeniería Biomédica,Inscrito,5,Instrumentación Biomédica,2,Reprobada,41.4,,repeticion,Septiembre-Diciembre 2023,004,7
+IEN20200103,Esteban Ochoa Rivera,Ingeniería en Energía,Baja Temporal,4,Sistemas Eléctricos,1,Aprobada,95.8,,ordinario,Enero-Abril 2023,004,6
+IDS20210104,Margarita Vázquez Lara,Ingeniería en Desarrollo de Software,Desconocido,7,Sistemas Operativos,1,Aprobada,89.3,,ordinario,Septiembre-Diciembre 2023,004,5
+IAG20220104,Ignacio Mejía Reyes,Ingeniería Agroindustrial,Activo,8,Procesos Agroindustriales,2,Aprobada,70.3,,ordinario,Septiembre-Diciembre 2023,004,7
+IBM20220104,Ricardo Campos Cervantes,Ingeniería Biomédica,Inscrito,7,Estadía Profesional I,3,Aprobada,97.2,,ordinario,Enero-Abril 2023,004,8
+IEN20210104,Rogelio Ramos Lara,Ingeniería en Energía,Activo,7,Cálculo Integral,3,Aprobada,80.6,,ordinario,Septiembre-Diciembre 2023,NME,5
+IDS20220105,Braulio Huerta Cisneros,Ingeniería en Desarrollo de Software,Activo,7,Seguridad Informática,1,Reprobada,57.8,,repeticion,Mayo-Agosto 2023,004,7
+IAG20210105,Saúl Soto Gutiérrez,Ingeniería Agroindustrial,Inscrito,6,Química de Alimentos,3,Aprobada,77.3,,ordinario,Mayo-Agosto 2023,NME,5
+IBM20230105,Ignacio Calderón Estrada,Ingeniería Biomédica,Activo,9,Circuitos Eléctricos,2,Aprobada,95.6,,ordinario,Enero-Abril 2024,NME,5
+IEN20220105,Nayeli Rojas Cisneros,Ingeniería en Energía,Desconocido,7,Termodinámica,2,Aprobada,99.5,,ordinario,Enero-Abril 2023,004,5
+IDS20220106,Josué Ríos Jiménez,Ingeniería en Desarrollo de Software,Proceso de Titulacion,7,Ingeniería de Software,1,Aprobada,91.4,,ordinario,Enero-Abril 2024,NME,8
+IAG20220106,Bruno Gómez Guerrero,Ingeniería Agroindustrial,Inactivo,7,Conservación de Alimentos,1,Reprobada,46.1,,repeticion,Enero-Abril 2023,NME,5
+IBM20200106,Pedro Villarreal Romero,Ingeniería Biomédica,Inactivo,4,Ingeniería Clínica,2,Reprobada,47.1,,repeticion,Enero-Abril 2023,NME,6
+IEN20220106,Alejandra Pacheco Castillo,Ingeniería en Energía,Inscrito,8,Circuitos Eléctricos,1,Aprobada,66.2,,ordinario,Mayo-Agosto 2023,004,7
+IDS20230107,Hugo Gallegos Cortés,Ingeniería en Desarrollo de Software,Activo,9,Redes de Computadoras,2,Aprobada,85.6,,ordinario,Enero-Abril 2023,NME,6
+IAG20220107,Diego Calderón Ponce,Ingeniería Agroindustrial,Desconocido,7,Control de Calidad,3,Aprobada,90.9,,ordinario,Mayo-Agosto 2023,NME,7
+IBM20230107,Soledad Huerta Medina,Ingeniería Biomédica,Inactivo,9,Bioquímica,3,Aprobada,96.4,,ordinario,Septiembre-Diciembre 2023,004,6
+IEN20200107,Miguel Ángel Salazar Camacho,Ingeniería en Energía,Egresado,3,Termodinámica,1,Cursando,59.6,,ordinario,Mayo-Agosto 2023,004,5
+IDS20220108,Catalina Cervantes Suárez,Ingeniería en Desarrollo de Software,Proceso de Titulacion,7,Sistemas Operativos,3,Aprobada,81.3,,ordinario,Enero-Abril 2023,004,5
+IAG20210108,Pilar Velázquez Villarreal,Ingeniería Agroindustrial,Desconocido,6,Microbiología,1,Aprobada,76.9,,ordinario,Enero-Abril 2024,004,6
+IBM20200108,Alejandra Gómez Morales,Ingeniería Biomédica,Activo,4,Procesamiento de Señales,2,Aprobada,76.7,,ordinario,Enero-Abril 2023,NME,8
+IEN20230108,Francisco Soto Romero,Ingeniería en Energía,Activo,9,Estadía Profesional I,3,Reprobada,48.8,,ordinario,Mayo-Agosto 2023,004,8
+IDS20230109,Sofía Ortiz Soto,Ingeniería en Desarrollo de Software,Inactivo,9,DevOps,2,Aprobada,72.8,,ordinario,Enero-Abril 2024,004,7
+IAG20220109,Lourdes Medina Lara,Ingeniería Agroindustrial,Desconocido,7,Inocuidad Alimentaria,1,Aprobada,65.9,,ordinario,Septiembre-Diciembre 2023,004,8
+IBM20210109,Iván Martínez Navarro,Ingeniería Biomédica,Activo,5,Imágenes Médicas,1,Aprobada,78.5,,ordinario,Septiembre-Diciembre 2023,004,7
+IEN20200109,Eduardo Ramírez Romero,Ingeniería en Energía,Activo,5,Transferencia de Calor,3,Aprobada,80.7,,ordinario,Mayo-Agosto 2023,004,6
+IDS20220110,Claudia Espinoza Pacheco,Ingeniería en Desarrollo de Software,Desconocido,7,Minería de Datos,1,Reprobada,54.6,,repeticion,Mayo-Agosto 2023,NME,8
+IAG20230110,Martha Romero Acosta,Ingeniería Agroindustrial,Activo,9,Administración Agroindustrial,1,Reprobada,58.1,,ordinario,Septiembre-Diciembre 2023,004,8
+IBM20200110,Gabriel Nava Rivera,Ingeniería Biomédica,Activo,5,Imágenes Médicas,2,Aprobada,61.8,,ordinario,Septiembre-Diciembre 2023,NME,7
+IEN20220110,Susana Gómez Velázquez,Ingeniería en Energía,Inscrito,7,Energía Solar,3,Aprobada,86.9,,ordinario,Septiembre-Diciembre 2023,NME,7
+IDS20200111,Noemí Calderón Díaz,Ingeniería en Desarrollo de Software,Activo,5,Bases de Datos,3,Aprobada,96.6,,ordinario,Enero-Abril 2024,NME,6
+IAG20210111,Ana Vargas Luna,Ingeniería Agroindustrial,Desconocido,7,Diseño de Plantas,2,Aprobada,70.7,,ordinario,Mayo-Agosto 2023,NME,7
+IBM20200111,Alejandro Pacheco Vargas,Ingeniería Biomédica,Desconocido,4,Ingeniería Clínica,1,Aprobada,90.7,,ordinario,Mayo-Agosto 2023,004,6
+IEN20230111,Jonathan Acosta Campos,Ingeniería en Energía,Desconocido,9,Sistemas Eléctricos,3,Aprobada,95.9,,ordinario,Mayo-Agosto 2023,004,6
+IDS20200112,Elisa Romero Coronado,Ingeniería en Desarrollo de Software,Desconocido,4,Seguridad Informática,3,Cursando,45.5,,ordinario,Enero-Abril 2023,NME,7
+IAG20220112,Rodrigo Morales Villarreal,Ingeniería Agroindustrial,Desconocido,8,Gestión Ambiental,3,Reprobada,45.8,,repeticion,Enero-Abril 2023,004,6
+IBM20210112,Elena Ponce Espinoza,Ingeniería Biomédica,Activo,7,Circuitos Eléctricos,3,Aprobada,88.1,,ordinario,Enero-Abril 2023,NME,5
+IEN20220112,Tomás Nava Sandoval,Ingeniería en Energía,Baja Temporal,8,Energía Solar,1,Reprobada,59.8,,ordinario,Enero-Abril 2024,004,7
+IDS20210113,Alfredo Cervantes Rodríguez,Ingeniería en Desarrollo de Software,Baja Temporal,6,Gestión de Proyectos,2,Aprobada,81.2,,ordinario,Mayo-Agosto 2023,004,6
+IAG20220113,Alejandro Villarreal García,Ingeniería Agroindustrial,Inactivo,8,Control de Calidad,1,Aprobada,76.1,,ordinario,Enero-Abril 2024,NME,7
+IBM20230113,Israel Cervantes Gallegos,Ingeniería Biomédica,Inscrito,9,Estadía Profesional I,2,Reprobada,41.1,,ordinario,Mayo-Agosto 2023,NME,8
+IEN20230113,Jonathan Morales Nava,Ingeniería en Energía,Inscrito,9,Sistemas Eléctricos,1,Aprobada,93.7,,ordinario,Septiembre-Diciembre 2023,004,6
+IDS20230114,Fátima Morales Bautista,Ingeniería en Desarrollo de Software,Proceso de Titulacion,9,Inteligencia Artificial,3,Cursando,41.7,,ordinario,Enero-Abril 2023,NME,8
+IAG20230114,José Manuel Sánchez Ibarra,Ingeniería Agroindustrial,Baja Temporal,9,Microbiología,3,Reprobada,59.1,,repeticion,Mayo-Agosto 2023,NME,6
+IBM20200114,Marco Antonio González Torres,Ingeniería Biomédica,Activo,5,Biomecánica,3,Cursando,47.9,,ordinario,Enero-Abril 2023,004,7
+IEN20230114,Rafael González Pacheco,Ingeniería en Energía,Activo,9,Estadía Profesional I,3,Aprobada,82.3,,ordinario,Enero-Abril 2023,NME,8
+IDS20200115,Ivonne Medina Domínguez,Ingeniería en Desarrollo de Software,Activo,3,DevOps,3,Aprobada,82.4,,ordinario,Enero-Abril 2023,NME,7
+IAG20230115,Raquel Ávila Delgado,Ingeniería Agroindustrial,Inscrito,9,Inocuidad Alimentaria,2,Aprobada,63.5,,ordinario,Mayo-Agosto 2023,004,8
+IBM20200115,Alejandra Cisneros Herrera,Ingeniería Biomédica,Inscrito,4,Bioquímica,3,Aprobada,79.0,,ordinario,Mayo-Agosto 2023,NME,6
+IEN20230115,Mariana Velázquez Gutiérrez,Ingeniería en Energía,Inscrito,9,Sistemas Eléctricos,1,Aprobada,80.7,,ordinario,Enero-Abril 2024,004,6
+IDS20230116,Ramón García Campos,Ingeniería en Desarrollo de Software,Activo,9,Inteligencia Artificial,1,Aprobada,69.4,,ordinario,Enero-Abril 2023,004,8
+IAG20230116,Ian Meza Vargas,Ingeniería Agroindustrial,Desconocido,9,Conservación de Alimentos,1,Aprobada,72.7,,ordinario,Mayo-Agosto 2023,004,5
+IBM20220116,Eduardo Pérez Peña,Ingeniería Biomédica,Inactivo,7,Imágenes Médicas,3,Aprobada,92.1,,ordinario,Septiembre-Diciembre 2023,NME,7
+IEN20200116,Héctor Torres Cortés,Ingeniería en Energía,Egresado,5,Cálculo Integral,1,Aprobada,64.7,,ordinario,Enero-Abril 2024,004,5
+IDS20210117,Efraín Lara Acosta,Ingeniería en Desarrollo de Software,Inactivo,7,Desarrollo Web,1,Aprobada,67.5,,ordinario,Enero-Abril 2024,004,7
+IAG20200117,Cristian Vázquez Ochoa,Ingeniería Agroindustrial,Egresado,4,Química de Alimentos,3,Cursando,41.5,,ordinario,Enero-Abril 2024,NME,5
+IBM20200117,Manuela Sánchez Huerta,Ingeniería Biomédica,Activo,5,Ingeniería Clínica,1,Aprobada,83.1,,ordinario,Septiembre-Diciembre 2023,NME,6
+IEN20220117,Silvia Cruz Trejo,Ingeniería en Energía,Activo,7,Circuitos Eléctricos,1,Aprobada,88.7,,ordinario,Mayo-Agosto 2023,004,7
+IDS20210118,Claudia Gallegos Coronado,Ingeniería en Desarrollo de Software,Egresado,6,DevOps,2,Aprobada,81.1,,ordinario,Septiembre-Diciembre 2023,NME,7
+IAG20200118,Daniel Ruiz Maldonado,Ingeniería Agroindustrial,Baja Temporal,4,Microbiología,1,Reprobada,55.0,77.1,repeticion,Septiembre-Diciembre 2023,004,6
+IBM20230118,Rafael Maldonado Torres,Ingeniería Biomédica,Inactivo,9,Bioquímica,2,Reprobada,59.9,,repeticion,Mayo-Agosto 2023,004,6
+IEN20220118,Dante Orozco Delgado,Ingeniería en Energía,Desconocido,7,Transferencia de Calor,2,Aprobada,95.2,,ordinario,Enero-Abril 2023,NME,6
+IDS20210119,Soledad Soto Jiménez,Ingeniería en Desarrollo de Software,Baja Temporal,7,Estadía Profesional I,1,Aprobada,82.3,,ordinario,Mayo-Agosto 2023,004,8
+IAG20210119,Marlene Montes Hernández,Ingeniería Agroindustrial,Inactivo,6,Conservación de Alimentos,1,Aprobada,72.1,,ordinario,Mayo-Agosto 2023,NME,5
+IBM20200119,Luis Estrada Guerrero,Ingeniería Biomédica,Egresado,4,Estadía Profesional I,1,Aprobada,80.3,,ordinario,Enero-Abril 2023,NME,8
+IEN20210119,Regina Peña Calderón,Ingeniería en Energía,Activo,6,Energía Solar,2,Aprobada,80.8,,ordinario,Mayo-Agosto 2023,004,7
+IDS20220120,Karla Nava Orozco,Ingeniería en Desarrollo de Software,Desconocido,8,Sistemas Operativos,2,Aprobada,76.3,,ordinario,Septiembre-Diciembre 2023,004,5
+IAG20200120,Jorge Cruz Gutiérrez,Ingeniería Agroindustrial,Desconocido,3,Administración Agroindustrial,3,Aprobada,67.8,,ordinario,Mayo-Agosto 2023,NME,8
+IBM20210120,Alberto Mejía Cisneros,Ingeniería Biomédica,Inactivo,7,Procesamiento de Señales,3,Aprobada,91.6,,ordinario,Mayo-Agosto 2023,004,8
+IEN20230120,Isabella Vázquez Lara,Ingeniería en Energía,Egresado,9,Cálculo Integral,3,Reprobada,44.0,58.3,repeticion,Enero-Abril 2024,004,5
+IDS20230121,Santiago Díaz Espinoza,Ingeniería en Desarrollo de Software,Baja Temporal,9,Bases de Datos,3,Aprobada,72.4,,ordinario,Septiembre-Diciembre 2023,NME,6
+IAG20220121,Ian Suárez Gallegos,Ingeniería Agroindustrial,Activo,7,Química de Alimentos,3,Reprobada,46.5,76.3,repeticion,Mayo-Agosto 2023,NME,5
+IBM20210121,Fidel Ibarra Montes,Ingeniería Biomédica,Activo,5,Bioquímica,3,Aprobada,94.8,,ordinario,Septiembre-Diciembre 2023,004,6
+IEN20200121,Clara López Montes,Ingeniería en Energía,Activo,5,Estadía Profesional I,2,Reprobada,46.8,72.1,ordinario,Septiembre-Diciembre 2023,004,8
+IDS20220122,Josefina Cervantes Álvarez,Ingeniería en Desarrollo de Software,Inactivo,7,DevOps,2,Aprobada,68.4,,ordinario,Mayo-Agosto 2023,NME,7
+IAG20200122,Ximena Cruz Vargas,Ingeniería Agroindustrial,Egresado,4,Inocuidad Alimentaria,1,Reprobada,54.3,,repeticion,Enero-Abril 2023,NME,8
+IBM20230122,Uriel Hernández Salazar,Ingeniería Biomédica,Proceso de Titulacion,9,Bioquímica,2,Aprobada,93.7,,ordinario,Septiembre-Diciembre 2023,NME,6
+IEN20230122,Luisa Álvarez Herrera,Ingeniería en Energía,Inactivo,9,Transferencia de Calor,2,Reprobada,48.3,,ordinario,Mayo-Agosto 2023,NME,6
+IDS20220123,Alan Medina Sánchez,Ingeniería en Desarrollo de Software,Baja Temporal,8,Desarrollo Web,2,Aprobada,80.9,,ordinario,Enero-Abril 2024,NME,7
+IAG20210123,Amelia Vargas Bautista,Ingeniería Agroindustrial,Desconocido,7,Biotecnología,3,Reprobada,56.0,,ordinario,Enero-Abril 2023,NME,8
+IBM20230123,Renato Romero Camacho,Ingeniería Biomédica,Inscrito,9,Anatomía y Fisiología,3,Aprobada,90.6,,ordinario,Enero-Abril 2023,004,5
+IEN20200123,Gonzalo Luna Navarro,Ingeniería en Energía,Activo,4,Gestión de la Energía,3,Reprobada,49.9,,ordinario,Septiembre-Diciembre 2023,NME,8
+IDS20230124,Josefina Suárez Ruiz,Ingeniería en Desarrollo de Software,Inactivo,9,Seguridad Informática,1,Aprobada,96.1,,ordinario,Enero-Abril 2024,NME,7
+IAG20210124,Ana López Figueroa,Ingeniería Agroindustrial,Inactivo,6,Biotecnología,1,Aprobada,68.4,,ordinario,Enero-Abril 2024,NME,8
+IBM20220124,Braulio Herrera Gómez,Ingeniería Biomédica,Activo,7,Electrónica Analógica,3,Reprobada,51.4,,ordinario,Mayo-Agosto 2023,004,6
+IEN20210124,Consuelo Ramos López,Ingeniería en Energía,Desconocido,7,Energía Eólica,3,Aprobada,75.8,,ordinario,Septiembre-Diciembre 2023,004,8
+IDS20230125,Luisa Suárez Peña,Ingeniería en Desarrollo de Software,Activo,9,Desarrollo Web,2,Reprobada,40.3,,ordinario,Mayo-Agosto 2023,NME,7
+IAG20210125,Adrián Cortés Jiménez,Ingeniería Agroindustrial,Activo,5,Conservación de Alimentos,3,Reprobada,45.8,,ordinario,Mayo-Agosto 2023,004,5
+IBM20200125,Gabriela Cruz Castro,Ingeniería Biomédica,Activo,3,Normatividad Sanitaria,2,Aprobada,66.3,,ordinario,Septiembre-Diciembre 2023,NME,8
+IEN20230125,Lorena Rojas Ramírez,Ingeniería en Energía,Activo,9,Cálculo Integral,2,Aprobada,89.1,,ordinario,Enero-Abril 2024,NME,5

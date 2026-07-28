@@ -48,7 +48,7 @@ def wait_for_ollama(process: subprocess.Popen[bytes]) -> None:
         try:
             with urlopen(OLLAMA_TAGS_URL, timeout=2):
                 return
-        except URLError:
+        except (URLError, TimeoutError, OSError):
             time.sleep(1)
     raise RuntimeError("Ollama no inicio dentro del tiempo esperado.")
 

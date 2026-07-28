@@ -62,10 +62,13 @@ def enqueue_job(
 
 def get_job(execution_id: str, context: SecurityContext) -> dict[str, Any]:
     repository = SupabaseRepository()
+    filters: dict[str, str] = {"execution_id": f"eq.{execution_id}"}
+    if context.tenant_id:
+        filters["tenant_id"] = f"eq.{context.tenant_id}"
     rows = repository.fetch_table(
         "ml_model_runs",
         select="*",
-        filters={"execution_id": f"eq.{execution_id}"},
+        filters=filters,
         limit=1,
     )
     if not rows:
@@ -87,11 +90,14 @@ def cancel_job(execution_id: str, context: SecurityContext) -> dict[str, Any]:
     return get_job(execution_id, context)
 
 
-def active_model() -> dict[str, Any]:
+def active_model(tenant_id: str | None = None) -> dict[str, Any]:
+    filters: dict[str, str] = {"is_active": "eq.true"}
+    if tenant_id:
+        filters["tenant_id"] = f"eq.{tenant_id}"
     rows = SupabaseRepository().fetch_table(
         "ml_model_versions",
         select="*",
-        filters={"is_active": "eq.true"},
+        filters=filters,
         limit=1,
     )
     if not rows:

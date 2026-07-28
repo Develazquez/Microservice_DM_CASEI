@@ -66,3 +66,33 @@ def test_worker_marks_failure_without_hiding_exception(monkeypatch):
 
     assert repository.rpc_calls[-1][0] == "fail_ml_run"
     assert repository.rpc_calls[-1][1]["final_status"] == "failed"
+
+
+def test_worker_propagates_tenant_to_candidate_training(monkeypatch):
+    repository = FakeRepository()
+    captured = {}
+    monkeypatch.setattr(worker, "sync_from_supabase", lambda **kwargs: {"source_hash": "a" * 64})
+    monkeypatch.setattr(worker, "promote_supabase_preview", lambda *args, **kwargs: {"status": "promoted"})
+
+    def fake_train_candidate_model(**kwargs):
+        captured.update(kwargs)
+        return {
+            "status": "review_required",
+            "candidate_model_version": "model-v2",
+            "comparison": {"decision": "candidate_for_manual_review"},
+        }
+
+    monkeypatch.setattr(worker, "train_candidate_model", fake_train_candidate_model)
+
+    result = worker.process_claimed_job(
+        repository,
+        {
+            "execution_id": "run-tenant",
+            "run_type": "retrain",
+            "requested_by": "director-1",
+            "tenant_id": "tenant-1",
+        },
+    )
+
+    assert result["status"] == "review_required"
+    assert captured["tenant_id"] == "tenant-1"

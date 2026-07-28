@@ -46,10 +46,10 @@ def supabase_sync_status() -> dict[str, Any]:
     }
 
 
-def sync_from_supabase(limit: int = 1000, write_preview: bool = True) -> dict[str, Any]:
+def sync_from_supabase(limit: int = 1000, write_preview: bool = True, tenant_id: str | None = None) -> dict[str, Any]:
     repository = SupabaseRepository()
     started_at = utc_now()
-    source = repository.fetch_academic_source_data(limit=limit)
+    source = repository.fetch_academic_source_data(limit=limit, tenant_id=tenant_id)
     snapshot_hash = source_hash(source)
     preview = build_student_period_preview(source)
     validation = validate_against_local_sources(source=source, preview=preview, source_hash=snapshot_hash)

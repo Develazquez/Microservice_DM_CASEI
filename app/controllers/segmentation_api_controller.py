@@ -201,7 +201,7 @@ def sync_from_supabase_endpoint(payload: SupabaseSyncRequest, request: Request) 
     try:
         context = security_context_from_request(request)
         require_roles(context, "director")
-        return sync_from_supabase(limit=payload.limit, write_preview=payload.write_preview)
+        return sync_from_supabase(limit=payload.limit, write_preview=payload.write_preview, tenant_id=context.tenant_id)
     except Exception as exc:
         raise http_error(exc) from exc
 
@@ -315,6 +315,7 @@ def sync_to_supabase_endpoint(payload: SupabaseResultsSyncRequest, request: Requ
             max_rag_documents=payload.max_rag_documents,
             batch_size=payload.batch_size,
             notes=payload.notes,
+            tenant_id=context.tenant_id,
         )
     except Exception as exc:
         raise http_error(exc) from exc
